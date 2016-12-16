@@ -1,4 +1,5 @@
 This is an example of using the railroad library. It provides the SQLITE CREATE TABLE case.
+![alt-tag](http://htmlpreview.github.io/?https://github.com/gbrault/railroad-diagrams/blob/gh-pages/SQLITE%20CREATE%20TABLE.html)
 
 ```javascript
 Diagram(
