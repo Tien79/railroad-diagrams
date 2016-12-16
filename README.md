@@ -12,7 +12,7 @@ in a form that is more readable than using regular expressions or BNF.
 They can easily represent any context-free grammar, and some more powerful grammars.
 There are several railroad-diagram generators out there, but none of them had the visual appeal I wanted, so I wrote my own.
 
-[Here's an online dingus for you to play with and get SVG code from!](http://htmlpreview.github.com/?generator.html)
+[Here's an online dingus for you to play with and get SVG code from!](http://htmlpreview.github.com/?https://github.com/gbrault/railroad-diagrams/blob/gh-pages/generator.html)
 
 Details
 -------
