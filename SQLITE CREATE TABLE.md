@@ -14,7 +14,7 @@ Stack(Sequence(
  Terminal('TABLE'),
   Choice(0,Skip(),Sequence(Terminal('IF',"javascript:doc('if')"),Terminal('NOT'),Terminal('EXISTS'))
  ) // sequence
-),Sequence(Optional(NonTerminal('schema-name'),Terminal(".")),NonTerminal('table-name')), // sequence
+),Sequence(Optional(Sequence(NonTerminal('schema-name'),Terminal("."))),NonTerminal('table-name')), // sequence
 Sequence(
  Choice(0,
   Sequence(Terminal("("),OneOrMore(NonTerminal("column-def"),Terminal(",")),ZeroOrMore(Terminal(","),NonTerminal("table-constraint")),Terminal(")"),Optional(Sequence(Terminal("WITHOUT"),Terminal("ROWID")))),
