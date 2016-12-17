@@ -2,7 +2,7 @@ This is an example of using the railroad library. It provides the SQLITE CREATE 
 
 [Result ScreenShot](http://htmlpreview.github.com/?https://github.com/gbrault/railroad-diagrams/blob/gh-pages/SQLITE CREATE TABLE.html)
 
-or test it live [live](http://htmlpreview.github.com/?https://github.com/gbrault/railroad-diagrams/blob/gh-pages/CREATE%20TABLE%20rail-road.html)
+or test it live [live](http://htmlpreview.github.com/?https://raw.githubusercontent.com/gbrault/railroad-diagrams/gh-pages/live.htm)
 
 ```javascript
 Diagram(
