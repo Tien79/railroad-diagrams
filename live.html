@@ -993,21 +993,24 @@ At runtime, these constants can be found on the Diagram class.
 */
 
 var root;
+
 if (typeof define === 'function' && define.amd) {
 	// AMD. Register as an anonymous module.
-		root = {};
-		define([], function() {
-			return root;
+	root = {};
+	define([], function() {
+		return root;
 	});
 } else if (typeof exports === 'object') {
 	// CommonJS for node
-		root = exports;
+	root = exports;
 } else {
 	// Browser globals (root is window)
-		root = this;
+	root = this;
 }
 
-root.Railroad = function(options) {
+
+root.Railroad = function(root, options, context) {
+
 	function subclassOf(baseClass, superClass) {
 		baseClass.prototype = Object.create(superClass.prototype);
 		baseClass.prototype.$super = superClass.prototype;
@@ -1159,7 +1162,9 @@ root.Railroad = function(options) {
 	}
 
 	function Diagram(items) {
-		if(!(this instanceof Diagram)) return new Diagram([].slice.call(arguments));
+		if(!(this instanceof Diagram)) {
+			return new Diagram([].slice.call(arguments));
+		}
 		FakeSVG.call(this, 'svg', {class: Diagram.DIAGRAM_CLASS});
 		this.items = items.map(wrapString);
 		this.items.unshift(new Start);
@@ -1847,20 +1852,37 @@ root.Railroad = function(options) {
 		return this;
 	}
 
-	var root;
-	if (typeof define === 'function' && define.amd) {
-	// AMD. Register as an anonymous module.
-		root = {};
-		define([], function() {
-			return root;
-		});
-	} else if (typeof exports === 'object') {
-	// CommonJS for node
-		root = exports;
-	} else {
-	// Browser globals (root is window)
-		root = this;
+	function Title(text, href) {
+		if(!(this instanceof Title)) return new Title(text, href);
+		FakeSVG.call(this, 'g');
+		context.title=text;
+		this.text = text;
+		this.href = href;
+		this.width = text.length * 7 + 10;
+		this.height = 0;
+		this.up = 11;
+		this.down = 11;
+		if(Diagram.DEBUG) {
+			this.attrs['data-updown'] = this.up + " " + this.height + " " + this.down
+			this.attrs['data-type'] = "title"
+		}
 	}
+	subclassOf(Title, FakeSVG);
+	Title.prototype.needsSpace = true;
+	Title.prototype.format = function(x, y, width) {
+		// Hook up the two sides if this is narrower than its stated width.
+		var gaps = determineGaps(width, this.width);
+		Path(x,y).h(gaps[0]).addTo(this);
+		Path(x+gaps[0]+this.width,y+this.height).h(gaps[1]).addTo(this);
+		x += gaps[0];
+
+		var text = FakeSVG('text', {x:x+this.width/2, y:y+5, class:'comment'}, this.text);
+		if(this.href)
+			FakeSVG('a', {'xlink:href': this.href}, [text]).addTo(this);
+		else
+			text.addTo(this);
+		return this;
+	}	
 
 	root.Railroad.SetExports = SetExports;
 
@@ -1870,15 +1892,16 @@ root.Railroad = function(options) {
 			These are the names that the internal classes are exported as.
 			If you would like different names, adjust them here.
 		*/
-		['Diagram', 'ComplexDiagram', 'Sequence', 'Stack', 'OptionalSequence', 'Choice', 'MultipleChoice', 'Optional', 'OneOrMore', 'ZeroOrMore', 'Terminal', 'NonTerminal', 'Comment', 'Skip'].forEach(
+		['Title','Diagram', 'ComplexDiagram', 'Sequence', 'Stack', 'OptionalSequence', 'Choice', 'MultipleChoice', 'Optional', 'OneOrMore', 'ZeroOrMore', 'Terminal', 'NonTerminal', 'Comment', 'Skip'].forEach(
 			function(e,i){ root[e] = fnx[i]; });
 	}
 
-	var graphing = [Diagram, ComplexDiagram, Sequence, Stack, OptionalSequence, Choice, MultipleChoice, Optional, OneOrMore, ZeroOrMore, Terminal, NonTerminal, Comment, Skip];
+	var graphing = [Title,Diagram, ComplexDiagram, Sequence, Stack, OptionalSequence, Choice, MultipleChoice, Optional, OneOrMore, ZeroOrMore, Terminal, NonTerminal, Comment, Skip];
 	SetExports(graphing);
     root.Railroad.graphing=graphing;
 
     // walking functions
+    function pTitle(){context.title=arguments[0];return {Title:arguments};};
     function pDiagram(){return {Diagram:arguments};};
     function pComplexDiagram(){return {ComplexDiagram:arguments};};
     function pSequence(){return {Sequence:arguments};};
@@ -1894,19 +1917,26 @@ root.Railroad = function(options) {
     function pComment(){return {Comment:arguments};};
     function pSkip(){return {Skip:arguments};};
 
-    var walking = [pDiagram, pComplexDiagram, pSequence, pStack, pOptionalSequence, pChoice, pMultipleChoice, pOptional, pOneOrMore, pZeroOrMore, pTerminal, pNonTerminal, pComment, pSkip];
+    var walking = [pTitle,pDiagram, pComplexDiagram, pSequence, pStack, pOptionalSequence, pChoice, pMultipleChoice, pOptional, pOneOrMore, pZeroOrMore, pTerminal, pNonTerminal, pComment, pSkip];
     root.Railroad.walking = walking;
 }
 
-root.Railroad.call(this,
+/* user application */
+var context =	{
+		title:"notset"
+	};
+root.Railroad.call(this,root,
 	{ // those will be Diagram options
 	VERTICAL_SEPARATION: 8,
 	ARC_RADIUS: 10,
 	DIAGRAM_CLASS: 'railroad-diagram',
 	STROKE_ODD_PIXEL_LENGTH: true,
 	INTERNAL_ALIGNMENT: 'center',
-	}
+	},
+	context
 );
+
+
 
 </script>
 <style>
@@ -1951,7 +1981,9 @@ svg.railroad-diagram path.diagram-text {
 svg.railroad-diagram g.diagram-text:hover path.diagram-text {
     fill: #eee;
 }
-
+input[type=checkbox]:checked + div {
+  display: none;
+}
 header,
 section,
 aside,
@@ -1989,12 +2021,10 @@ footer {
 <button id="refresh" onclick="refresh();">refresh</button>
 </nav>
 <section>
-<aside id="graphout"></aside>
-<article id="walkout"></article>
 <article>
-<textarea id="graphin" cols='75' rows='25'>
-Diagram(
-Stack(Comment("BEGIN CREATE TABLE"),Sequence(
+<input type='checkbox'/>+/-<div>
+<textarea id="graphin" cols='80' rows='25'>
+Diagram(Stack(Title("CREATE TABLE"),Sequence(
  Terminal('CREATE',"/doc/create"),
   Choice(0,
     Skip(),
@@ -2004,34 +2034,124 @@ Stack(Comment("BEGIN CREATE TABLE"),Sequence(
  Terminal('TABLE'),
   Choice(0,Skip(),Sequence(Terminal('IF',"javascript:doc('if')"),Terminal('NOT'),Terminal('EXISTS'))
  ) // sequence
-),Sequence(Optional(Sequence(NonTerminal('schema-name'),Terminal("."))),NonTerminal('table-name')), // sequence
+),Sequence(Optional(Sequence(NonTerminal('schema-name','#schema-name'),Terminal("."))),NonTerminal('table-name','#table-name')), // sequence
 Sequence(
  Choice(0,
-  Sequence(Terminal("("),OneOrMore(NonTerminal("column-def"),Terminal(",")),ZeroOrMore(Terminal(","),NonTerminal("table-constraint")),Terminal(")"),Optional(Sequence(Terminal("WITHOUT"),Terminal("ROWID")))),
+  Sequence(Terminal("("),OneOrMore(NonTerminal("column-def","#column-def"),Terminal(",")),ZeroOrMore(Terminal(","),NonTerminal("table-constraint")),Terminal(")"),Optional(Sequence(Terminal("WITHOUT"),Terminal("ROWID")))),
   Sequence(Terminal("AS"),NonTerminal("select-stm"))
  ) // choice
 ),
 Comment("END CREATE TABLE")) // Stack
+) // Create Table
+
+Diagram(
+Sequence(Title("schema-name"),
+NonTerminal('name','#name'),
+Comment("END schema-name")
+)
+) // schema name
+
+Diagram(
+Sequence(Title("table-name"),NonTerminal('name','#name'),
+Comment("END table-name")
+)
+) // tables name
+
+Diagram(
+Sequence(Title("column-def"),NonTerminal("column-name","#column-name"),Optional(NonTerminal("type-name")),ZeroOrMore(NonTerminal("column-constraint")),
+Comment("END column-def")
+)
+) // column def
+
+Diagram(
+Sequence(Title("column-name"),NonTerminal('name','#name'),
+Comment("END column-name")
+)
+) // column name
+
+
+Diagram(
+Sequence(Title("name"),
+Choice(0,
+	Terminal('(^[A-Za-z][A-Za-z0-9_]*)'),
+	Terminal('(^\\"[A-Za-z][A-Za-z0-9_\\s]*)\\"/'),
+        Terminal("(^\\'[A-Za-z][A-Za-z0-9_\\s]*)\\'/")
+),
+Comment("END name")
+)
+) // name
+
+</textarea>
+<textarea cols="50" rows="25">
+CREATE TABLE "Customer" (
+  "IdCustomer" text NULL,
+  "CompanyName" text NULL,
+  "ContactName" text NULL,
+  "ContactTitle" text NULL,
+  "Address" text NULL,
+  "City" text NULL,
+  "Region" text NULL,
+  "PostalCode" text NULL,
+  "Country" text NULL,
+  "Phone" text NULL,
+  "Fax" text NULL,
+  PRIMARY KEY ("IdCustomer")
 )
 </textarea>
-</article>
+</div>
+</aside>
 </section>
+<div id="result">
+</div>
 <footer>Copyright &copy; Gilbert Brault 2016</footer>
 <script>
-function refresh(){
-	root.Railroad.SetExports(root.Railroad.graphing);
+function refresh(){	
 	var graphin=document.getElementById('graphin');
-	var graphout=document.getElementById('graphout');
-	var walkout =document.getElementById('walkout');
-	var graph = eval(graphin.value).format();  // all the function exists has they are exported in Railroad script
-	graphout.innerHTML="";
-	walkout.innerHTML="";
-	graphout.appendChild(graph.toSVG());
-	root.Railroad.SetExports(root.Railroad.walking);
-	var walk = eval(graphin.value);
-	// walk = JSON.stringify(walk);
-	const formatter = new JSONFormatter(walk);
-	walkout.appendChild(formatter.render());
+	var result=document.getElementById('result');
+	result.innerHTML="";
+    var diags = graphin.value.split("Diagram");
+
+    for(var i=0; i< diags.length; i++){
+    	var section = document.createElement('section');
+    	if(diags[i].length>0){
+    		context.title="notset";
+    		// graphing
+    		root.Railroad.SetExports(root.Railroad.graphing);
+			var graph = eval("Diagram"+diags[i]).format();  // all the function exists as they are exported in Railroad script
+			var graphout = document.createElement('aside');
+			var gcheckbox = document.createElement('input');
+			gcheckbox.type = "checkbox";
+			graphout.appendChild(gcheckbox);
+			var gclabel= ((context.title!=="notset")?context.title:"")+" (+/-)";
+            var glabel=document.createTextNode(gclabel);
+            if(context.title!=="notset"){
+            	gcheckbox.setAttribute("id",context.title);
+            }            
+            graphout.appendChild(glabel);
+            var gdiv = document.createElement("div");
+            gdiv.appendChild(graph.toSVG());
+            graphout.appendChild(gdiv);
+            section.appendChild(graphout);          
+
+            // now json	
+            root.Railroad.SetExports(root.Railroad.walking);
+	        var walk = eval("Diagram"+diags[i]);
+	        const formatter = new JSONFormatter(walk);
+            var elt = formatter.render();
+            var walkout = document.createElement('article');
+            var checkbox = document.createElement('input');
+            checkbox.type = "checkbox";
+            walkout.appendChild(checkbox);
+            var clabel= ((context.title!=="notset")?context.title:"")+" (+/-)";
+            var label=document.createTextNode(clabel);
+            walkout.appendChild(label);
+            var div = document.createElement("div");
+            div.appendChild(elt);
+            walkout.appendChild(div);
+            section.appendChild(walkout);   
+    	}
+    	result.appendChild(section);
+    }    
 }
 </script>
 </body>
