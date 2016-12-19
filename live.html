@@ -1,5 +1,15 @@
 <html>
 <head>
+<link rel="stylesheet" href="https://codemirror.net/lib/codemirror.css">
+<link rel="stylesheet" href="https://codemirror.net/addon/fold/foldgutter.css">
+<script src="https://codemirror.net/lib/codemirror.js"></script>
+<script src="https://codemirror.net/addon/edit/matchbrackets.js"></script>
+<script src="https://codemirror.net/addon/comment/continuecomment.js"></script>
+<script src="https://codemirror.net/addon/comment/comment.js"></script>
+<script src="https://codemirror.net/addon/fold/foldcode.js"></script>
+<script src="https://codemirror.net/mode/javascript/javascript.js"></script>
+<script src="https://codemirror.net/addon/fold/foldgutter.js"></script>
+<script src="https://codemirror.net/addon/fold/brace-fold.js"></script>
 <script>
 // JSON Formatter
 // http://azimi.me/json-formatter-js/
@@ -2023,7 +2033,7 @@ footer {
 <section>
 <article>
 <input type='checkbox'/>+/-<div>
-<textarea id="graphin" cols='80' rows='25'>
+<textarea id="graphin" cols='150' rows='25'>
 Diagram(Stack(Title("CREATE TABLE"),Sequence(
  Terminal('CREATE',"/doc/create"),
   Choice(0,
@@ -2080,8 +2090,8 @@ Choice(0,
 Comment("END name")
 )
 ) // name
-
 </textarea>
+<!--
 <textarea cols="50" rows="25">
 CREATE TABLE "Customer" (
   "IdCustomer" text NULL,
@@ -2098,6 +2108,7 @@ CREATE TABLE "Customer" (
   PRIMARY KEY ("IdCustomer")
 )
 </textarea>
+-->
 </div>
 </aside>
 </section>
@@ -2105,11 +2116,22 @@ CREATE TABLE "Customer" (
 </div>
 <footer>Copyright &copy; Gilbert Brault 2016</footer>
 <script>
+
+var editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
+		mode: "javascript",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter",       
+});
+    
 function refresh(){	
-	var graphin=document.getElementById('graphin');
 	var result=document.getElementById('result');
 	result.innerHTML="";
-    var diags = graphin.value.split("Diagram");
+    var diags = editor.getValue().split("Diagram");
 
     for(var i=0; i< diags.length; i++){
     	var section = document.createElement('section');
