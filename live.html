@@ -2030,8 +2030,7 @@ footer {
 <nav>
 <button id="refresh" onclick="refresh();">refresh</button>
 </nav>
-<section>
-<article>
+<div>
 <input type='checkbox'/>+/-<div>
 <textarea id="graphin" cols='150' rows='25'>
 Diagram(Stack(Title("CREATE TABLE"),Sequence(
@@ -2110,8 +2109,6 @@ CREATE TABLE "Customer" (
 </textarea>
 -->
 </div>
-</aside>
-</section>
 <div id="result">
 </div>
 <footer>Copyright &copy; Gilbert Brault 2016</footer>
@@ -2134,45 +2131,43 @@ function refresh(){
     var diags = editor.getValue().split("Diagram");
 
     for(var i=0; i< diags.length; i++){
-    	var section = document.createElement('section');
     	if(diags[i].length>0){
     		context.title="notset";
-    		// graphing
+    		var section = document.createElement('section');
+			
+			// prepare graphing
     		root.Railroad.SetExports(root.Railroad.graphing);
 			var graph = eval("Diagram"+diags[i]).format();  // all the function exists as they are exported in Railroad script
-			var graphout = document.createElement('aside');
-			var gcheckbox = document.createElement('input');
-			gcheckbox.type = "checkbox";
-			graphout.appendChild(gcheckbox);
-			var gclabel= ((context.title!=="notset")?context.title:"")+" (+/-)";
-            var glabel=document.createTextNode(gclabel);
-            if(context.title!=="notset"){
-            	gcheckbox.setAttribute("id",context.title);
-            }            
-            graphout.appendChild(glabel);
-            var gdiv = document.createElement("div");
-            gdiv.appendChild(graph.toSVG());
-            graphout.appendChild(gdiv);
-            section.appendChild(graphout);          
+
+            // show/hide            
+    		var checkbox = document.createElement('input');
+			checkbox.type = "checkbox";
+			section.appendChild(checkbox);
+			var clabel= ((context.title!=="notset")?context.title:"")+" (+/-)";
+			if(context.title!=="notset"){
+            	checkbox.setAttribute("id",context.title);
+        	} 
+        	var label=document.createTextNode(clabel);
+        	section.appendChild(label);
+        	var div = document.createElement('div');
+        	section.appendChild(div);
+    		
+    		// graphing
+			var graphout = document.createElement('aside');           
+            graphout.appendChild(graph.toSVG());           
+            div.appendChild(graphout);          
 
             // now json	
             root.Railroad.SetExports(root.Railroad.walking);
 	        var walk = eval("Diagram"+diags[i]);
 	        const formatter = new JSONFormatter(walk);
             var elt = formatter.render();
-            var walkout = document.createElement('article');
-            var checkbox = document.createElement('input');
-            checkbox.type = "checkbox";
-            walkout.appendChild(checkbox);
-            var clabel= ((context.title!=="notset")?context.title:"")+" (+/-)";
-            var label=document.createTextNode(clabel);
-            walkout.appendChild(label);
-            var div = document.createElement("div");
-            div.appendChild(elt);
-            walkout.appendChild(div);
-            section.appendChild(walkout);   
-    	}
-    	result.appendChild(section);
+            var walkout = document.createElement('article');                       
+            walkout.appendChild(elt);
+            div.appendChild(walkout);
+            
+            result.appendChild(section);
+    	}    	
     }    
 }
 </script>
