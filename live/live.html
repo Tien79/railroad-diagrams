@@ -14,7 +14,7 @@
 <script src="railroad.js"></script>
 <script>
 /* user application */
-var context =	{
+root.context =	{
 		title:"notset"
 	};
 root.Railroad.call(this,root,
@@ -25,7 +25,7 @@ root.Railroad.call(this,root,
 	STROKE_ODD_PIXEL_LENGTH: true,
 	INTERNAL_ALIGNMENT: 'center',
 	},
-	context
+	root.context
 );
 
 
@@ -219,17 +219,17 @@ function injectjs(content){
 }
 
 function _Show(){
-	if(this.state==="graphing"){
-		this.context.title="notset";
+	if(this.state==="graphing"){		
 		this.graph.push ((new Diagram([].slice.call(arguments))).format());
 		this.title.push(this.context.title);
+		this.context.title="notset";
 	} else if(this.state==="walking"){
 		this.walk.push (Diagram(arguments[0]));
 	}
 }
 
 function refresh(){
-	var results={title:[],graph:[],walk:[],context:window.context,state:"notset"};
+	var results={title:[],graph:[],walk:[],context:root.context,state:"notset"};
 	window.Show=_Show.bind(results);
 	var error=document.getElementById('error');
 	var result=document.getElementById('result');
