@@ -1,0 +1,297 @@
+<html>
+<head>
+<link rel="stylesheet" href="codemirror.css">
+<link rel="stylesheet" href="foldgutter.css">
+<script src="codemirror.js"></script>
+<script src="matchbrackets.js"></script>
+<script src="continuecomment.js"></script>
+<script src="comment.js"></script>
+<script src="foldcode.js"></script>
+<script src="javascript.js"></script>
+<script src="foldgutter.js"></script>
+<script src="brace-fold.js"></script>
+<script src="json-formatter-js.js"></script>
+<script src="railroad.js"></script>
+<script>
+/* user application */
+var context =	{
+		title:"notset"
+	};
+root.Railroad.call(this,root,
+	{ // those will be Diagram options
+	VERTICAL_SEPARATION: 8,
+	ARC_RADIUS: 10,
+	DIAGRAM_CLASS: 'railroad-diagram',
+	STROKE_ODD_PIXEL_LENGTH: true,
+	INTERNAL_ALIGNMENT: 'center',
+	},
+	context
+);
+
+
+
+</script>
+<style>
+svg.railroad-diagram {
+    background-color: hsl(30,20%,95%);
+}
+svg.railroad-diagram path {
+    stroke-width: 3;
+    stroke: black;
+    fill: rgba(0,0,0,0);
+}
+svg.railroad-diagram text {
+    font: bold 14px monospace;
+    text-anchor: middle;
+}
+svg.railroad-diagram text.diagram-text {
+    font-size: 12px;
+}
+svg.railroad-diagram text.diagram-arrow {
+    font-size: 16px;
+}
+svg.railroad-diagram text.label {
+    text-anchor: start;
+}
+svg.railroad-diagram text.comment {
+    font: italic 12px monospace;
+}
+svg.railroad-diagram g.non-terminal text {
+    /*font-style: italic;*/
+}
+svg.railroad-diagram rect {
+    stroke-width: 3;
+    stroke: black;
+    fill: hsl(120,100%,90%);
+}
+svg.railroad-diagram path.diagram-text {
+    stroke-width: 3;
+    stroke: black;
+    fill: white;
+    cursor: help;
+}
+svg.railroad-diagram g.diagram-text:hover path.diagram-text {
+    fill: #eee;
+}
+input[type=checkbox]:checked + div {
+  display: none;
+}
+header,
+section,
+aside,
+nav,
+footer {
+  margin: 0 1.5% 24px 1.5%;
+}
+section {
+  float: left;
+  width: 63%;
+}
+aside {
+  float: right;
+  width: 30%;
+}
+header{
+  color:white;
+  background-color:lightgrey;	
+}
+footer {
+  clear: both;
+  margin-bottom: 0;
+  color:white;
+  background-color:grey;
+}
+</style>
+</head>
+<body  onload="refresh()">
+<div class="container">
+
+<header>
+<h1>railroad-diagram</h1>
+</header>
+<nav>
+<button id="refresh" onclick="refresh();">refresh</button>
+</nav>
+<div>
+<input type='checkbox'/>+/-<div>
+<textarea id="graphin" cols='150' rows='25'>
+Show(Stack(Title("CREATE TABLE"),Sequence(
+ Terminal('CREATE',"/doc/create"),
+  Choice(0,
+    Skip(),
+    Terminal('TEMP'),
+    Terminal('TEMPORARY')
+  ),
+ Terminal('TABLE'),
+  Choice(0,Skip(),Sequence(Terminal('IF',"javascript:doc('if')"),Terminal('NOT'),Terminal('EXISTS'))
+ ) /* sequence */
+),Sequence(Optional(Sequence(NonTerminal('schema-name','#schema-name'),Terminal("."))),NonTerminal('table-name','#table-name')), /* sequence */
+Sequence(
+ Choice(0,
+  Sequence(Terminal("("),OneOrMore(NonTerminal("column-def","#column-def"),Terminal(",")),ZeroOrMore(Terminal(","),NonTerminal("table-constraint")),Terminal(")"),Optional(Sequence(Terminal("WITHOUT"),Terminal("ROWID")))),
+  Sequence(Terminal("AS"),NonTerminal("select-stm"))
+ ) /* choice */
+),
+Comment("END CREATE TABLE")) /* Stack */
+); /* Create Table */
+
+Show(
+Sequence(Title("schema-name"),
+NonTerminal('name','#name'),
+Comment("END schema-name")
+) 
+); /* schema name */
+
+Show(
+Sequence(Title("table-name"),NonTerminal('name','#name'),
+Comment("END table-name")
+)
+); /* tables name */
+
+Show(
+Sequence(Title("column-def"),NonTerminal("column-name","#column-name"),Optional(NonTerminal("type-name")),ZeroOrMore(NonTerminal("column-constraint")),
+Comment("END column-def")
+)
+); /* column def */
+
+Show(
+Sequence(Title("column-name"),NonTerminal('name','#name'),
+Comment("END column-name")
+)
+); /* column name */
+
+
+Show(
+Sequence(Title("name"),
+Choice(0,
+	Terminal('(^[A-Za-z][A-Za-z0-9_]*)'),
+	Terminal('(^\\"[A-Za-z][A-Za-z0-9_\\s]*)\\"/'),
+        Terminal("(^\\'[A-Za-z][A-Za-z0-9_\\s]*)\\'/")
+),
+Comment("END name")
+)
+); /* name */
+</textarea>
+<!--
+<textarea cols="50" rows="25">
+CREATE TABLE "Customer" (
+  "IdCustomer" text NULL,
+  "CompanyName" text NULL,
+  "ContactName" text NULL,
+  "ContactTitle" text NULL,
+  "Address" text NULL,
+  "City" text NULL,
+  "Region" text NULL,
+  "PostalCode" text NULL,
+  "Country" text NULL,
+  "Phone" text NULL,
+  "Fax" text NULL,
+  PRIMARY KEY ("IdCustomer")
+)
+</textarea>
+-->
+</div>
+<div id="error">
+</div>
+<div id="result">
+</div>
+<footer>Copyright &copy; Gilbert Brault 2016</footer>
+<script>
+
+var editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
+		mode: "javascript",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter",       
+});
+
+function injectjs(content){
+    var scriptref=document.createElement('script');
+    scriptref.setAttribute("type","text/javascript");
+    scriptref.innerText= content;
+    if ((typeof scriptref!="undefined") && scriptref!=null)
+        document.getElementsByTagName("head")[0].appendChild(scriptref);
+    return scriptref;
+}
+
+function _Show(){
+	if(this.state==="graphing"){
+		this.context.title="notset";
+		this.graph.push ((new Diagram([].slice.call(arguments))).format());
+		this.title.push(this.context.title);
+	} else if(this.state==="walking"){
+		this.walk.push (Diagram(arguments[0]));
+	}
+}
+
+function refresh(){
+	var results={title:[],graph:[],walk:[],context:window.context,state:"notset"};
+	window.Show=_Show.bind(results);
+	var error=document.getElementById('error');
+	var result=document.getElementById('result');
+	result.innerHTML="";
+	error.innerHTML="";
+	var diags = editor.getValue();
+	var scriptref;
+
+	// prepare graphing
+	results.state='graphing';
+	root.Railroad.SetExports(root.Railroad.graphing);
+	// comments should be within /* */  double // don't work
+	try{
+		scriptref = injectjs(diags);
+	} catch(e){
+		error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+	}      
+	scriptref.outerHTML="";
+
+	// prepare json
+	results.state='walking';
+    root.Railroad.SetExports(root.Railroad.walking);
+    	try{
+		scriptref = injectjs(diags);
+	} catch(e){
+		error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+	}
+	scriptref.outerHTML="";
+
+    // render results
+    for(var i=0; i<results.graph.length;i++){
+    		var section = document.createElement('section');
+	        // show/hide            
+    		var checkbox = document.createElement('input');
+			checkbox.type = "checkbox";
+			section.appendChild(checkbox);
+			var clabel= ((results.title[i]!=="notset")?results.title[i]:"")+" (+/-)";
+			if(context.title!=="notset"){
+            	checkbox.setAttribute("id",context.title);
+        	} 
+        	var label=document.createTextNode(clabel);
+        	section.appendChild(label);
+        	var div = document.createElement('div');
+        	section.appendChild(div);
+
+    		// graphing
+			var graphout = document.createElement('aside');           
+            graphout.appendChild(results.graph[i].toSVG());           
+            div.appendChild(graphout);    	
+			// json tree
+		    const formatter = new JSONFormatter(results.walk[i]);
+            var elt = formatter.render();
+            var walkout = document.createElement('article');                       
+            walkout.appendChild(elt);
+            div.appendChild(walkout);
+			result.appendChild(section);
+    }          
+}
+</script>
+</body>
+</html>
