@@ -769,6 +769,9 @@ root.Railroad = function(root, options, context) {
 	}
 
 	function Terminal(text, href) {
+		if((href===undefined)&&context.href){
+			href="javascript:"+context.dochref+"('Terminal','"+text+"')";
+		}
 		if(!(this instanceof Terminal)) return new Terminal(text, href);
 		FakeSVG.call(this, 'g', {'class': 'terminal'});
 		this.text = text;
@@ -801,6 +804,9 @@ root.Railroad = function(root, options, context) {
 	}
 
 	function NonTerminal(text, href) {
+		if((href===undefined)&&context.href){
+			href="javascript:"+context.dochref+"('NonTerminal','"+text+"')";
+		}
 		if(!(this instanceof NonTerminal)) return new NonTerminal(text, href);
 		FakeSVG.call(this, 'g', {'class': 'non-terminal'});
 		this.text = text;

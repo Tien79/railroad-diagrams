@@ -16,7 +16,9 @@
 <script>
 /* user application */
 root.context =	{
-		title:"notset"
+		title:"notset",
+		href:true,
+		dochref:"doc"
 	};
 root.Railroad.call(this,root,
 	{ // those will be Diagram options
@@ -74,6 +76,11 @@ svg.railroad-diagram g.diagram-text:hover path.diagram-text {
 input[type=checkbox]:checked + div {
   display: none;
 }
+.homeLink{
+  background-color: #E4F5F8;
+  border:1px solid #C0DEED; 
+  text-decoration:none; 
+}
 header,
 section,
 aside,
@@ -109,19 +116,21 @@ footer {
 </header>
 <nav>
 <button id="refresh" onclick="refresh();">refresh</button>
+<button id="showhide" onclick="showhide();">show/hide</button>
+<select id="items" onchange="goToItem()"></select>
 </nav>
 <div>
-<input type='checkbox'/>+/-<div>
+<input type='checkbox' id='home'/>home(+/-)<div>
 <textarea id="graphin" cols='150' rows='25'>
 /********************************************************************************************************************************/
 Show(Stack(Title("CREATE TABLE"),
-  Sequence(Terminal('CREATE',"/doc/create"),Choice(0,Skip(),Terminal('TEMP'),Terminal('TEMPORARY')),Terminal('TABLE'),
-           Choice(0,Skip(),Sequence(Terminal('IF',"javascript:doc('if')"),Terminal('NOT'),Terminal('EXISTS'))
+  Sequence(Terminal('CREATE'),Choice(0,Skip(),Terminal('TEMP'),Terminal('TEMPORARY')),Terminal('TABLE'),
+           Choice(0,Skip(),Sequence(Terminal('IF'),Terminal('NOT'),Terminal('EXISTS'))
   ) /* sequence */
-),Sequence(Optional(Sequence(NonTerminal('schema-name','#schema-name'),Terminal("."))),NonTerminal('table-name','#table-name')), /* sequence */
+),Sequence(Optional(Sequence(NonTerminal('schema-name'),Terminal("."))),NonTerminal('table-name')), /* sequence */
 Sequence(
  Choice(0,
-  Sequence(Terminal("("),OneOrMore(NonTerminal("column-def","#column-def"),Terminal(",")),ZeroOrMore(Terminal(","),NonTerminal("table-constraint")),Terminal(")"),Optional(Sequence(Terminal("WITHOUT"),Terminal("ROWID")))),
+  Sequence(Terminal("("),OneOrMore(NonTerminal("column-def"),Terminal(",")),ZeroOrMore(Terminal(","),NonTerminal("table-constraint")),Terminal(")"),Optional(Sequence(Terminal("WITHOUT"),Terminal("ROWID")))),
   Sequence(Terminal("AS"),NonImplemented("select-stm"))
  ) /* choice */
 ),
@@ -130,26 +139,23 @@ Comment("END CREATE TABLE")) /* Stack */
 /********************************************************************************************************************************/
 Show(
 Sequence(Title("schema-name"),
-NonTerminal('name','#name'),
-Comment("END schema-name")
+NonTerminal('name'),Comment("END schema-name")
 ) 
 ); /* schema name */
 /********************************************************************************************************************************/
 Show(
-Sequence(Title("table-name"),NonTerminal('name','#name'),
-Comment("END table-name")
+Sequence(Title("table-name"),NonTerminal('name'),Comment('END table-name')
 )
 ); /* tables name */
 /********************************************************************************************************************************/
 Show(
-Sequence(Title("column-def"),NonTerminal("column-name","#column-name"),Optional(NonTerminal("type-name")),ZeroOrMore(NonTerminal("column-constraint","#column-constraint")),
+Sequence(Title("column-def"),NonTerminal("column-name"),Optional(NonTerminal("type-name")),ZeroOrMore(NonTerminal("column-constraint")),
 Comment("END column-def")
 )
 ); /* column def */
 /********************************************************************************************************************************/
 Show(
-Sequence(Title("column-name"),NonTerminal('name','#name'),
-Comment("END column-name")
+Sequence(Title("column-name"),NonTerminal('name'),Comment('END column-name')
 )
 ); /* column name */
 /********************************************************************************************************************************/
@@ -166,15 +172,60 @@ Comment("END name")
 /********************************************************************************************************************************/
 Show(Stack(
   Title("column-constraint"),
-  Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name","#name"))),
+  Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name"))),
   Choice(0,
-         Sequence(Terminal("PRIMARY"),Terminal("KEY"),Choice(0,Skip(),Terminal("ASC"),Terminal("DESC")),NonTerminal("conflict-cause"),Optional(Terminal("AUTOINCREMENT"))),
-         Sequence(Terminal("NOT"),Terminal("NULL"),NonTerminal("conflict-cause")),
-         Sequence(Terminal("UNIQUE"),NonTerminal("conflict-cause"))
+         Sequence(Terminal("PRIMARY"),Terminal("KEY"),Choice(0,Skip(),Terminal("ASC"),Terminal("DESC")),NonTerminal("conflict-clause"),Optional(Terminal("AUTOINCREMENT"))),
+         Sequence(Terminal("NOT"),Terminal("NULL"),NonTerminal("conflict-clause")),
+         Sequence(Terminal("UNIQUE"),NonTerminal("conflict-clause")),
+         Sequence(Terminal("CHECK"),Terminal("("),NonImplemented("expr"),Terminal(")")),
+         Sequence(Terminal("DEFAULT"),Choice(0,NonTerminal("signed-number"),NonTerminal("literal-value"),Sequence(Terminal("("),NonImplemented("expr"),Terminal(")")))),
+         Sequence(Terminal("COLLATE"),Terminal("collation-name")),
+         NonTerminal("foreign-key-clause")
         ),
   Comment("END column-constraint")
   )
 ); /* column-constraint */
+/********************************************************************************************************************************/
+Show(Title("conflict-clause"),
+     Optional(Sequence(Terminal("ON"),Terminal("CONFLICT"),
+                                                Choice(0,
+                                                       Terminal("ROLLBACK"),
+                                                       Terminal("ABORT"),
+                                                       Terminal("FAIL"),
+                                                       Terminal("IGNORE"),
+                                                       Terminal("REPLACE"))
+                                               )
+                                      ),Comment("END conflict-clause")
+    ); /* conflict-clause */
+/********************************************************************************************************************************/
+Show(Stack(Title("table-constraint"),Stack(Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name"))),
+                                     Choice(0,Sequence(Choice(0,Sequence(Terminal("PRIMARY"),Terminal("Key")),Terminal("UNIQUE")),Terminal("("),
+                                                       OneOrMore(NonTerminal("indexed-column"),Terminal(",")),Terminal(")"),NonTerminal("conflict-clause")),
+                                            Sequence(Terminal("CHECK"),Terminal("("),NonImplemented("expr"),Terminal(")")),
+                                            Sequence(Terminal("FOREIGN"),Terminal("KEY"),Terminal("("),
+                                                     OneOrMore(NonTerminal("column-name"),Terminal(",")),Terminal(")"),
+                                                     NonTerminal("foreign-key-clause"))
+                                           )                                          
+     ),
+     Comment("END table-constrainte"))
+); /* table-constraint */
+/********************************************************************************************************************************/
+Show(Stack(Title("indexed-column"),
+     Sequence(Choice(0,NonTerminal("column-name"),NonImplemented("expr")),
+              Optional(Sequence(Terminal("COLLATE"),NonTerminal("collation-name"))),
+              Choice(0,Skip(),Terminal("ASC"),Terminal("DESC"))),
+     Comment("END indexed-column"))
+    ); /* indexed-column */
+/********************************************************************************************************************************/
+Show(Stack(Title("type-name"),
+           Sequence(NonTerminal("name"),Choice(0,
+                                                       Skip(),
+                                                       Sequence(Terminal("("),NonTerminal("signed-number"),Terminal(")")),
+                                                       Sequence(Terminal("("),NonTerminal("signed-number"),Terminal(","),NonTerminal("signed-number"),Terminal(")"))
+                                                      )
+                   ),
+           Comment("END type-name"))
+    ); /* type-name */  
 </textarea>
 <!--
 <textarea cols="50" rows="25">
@@ -248,10 +299,12 @@ function _Show(){
 function refresh(){
 	var error=document.getElementById('error');
 	var result=document.getElementById('result');
-	var results={title:[],graph:[],walk:[],context:root.context,state:"notset",error:error};
-	window.Show=_Show.bind(results);
+	var select=document.getElementById('items');
+	window.results={title:[],graph:[],walk:[],context:root.context,state:"notset",error:error};
+	window.Show=_Show.bind(window.results);
 	result.innerHTML="";
 	error.innerHTML="";
+	select.innerHTML="";
 	var diags = editor.getValue();
 	var scriptref;
 
@@ -293,18 +346,31 @@ function refresh(){
     // render results
     for(var i=0; i<results.graph.length;i++){
     		var section = document.createElement('section');
-	        // show/hide            
+	        // show/hide
+	        var home=document.createElement('a');
+	        home.setAttribute("href","#");
+	        home.setAttribute("onclick","home()");
+	        home.setAttribute("class","homeLink");
+	        home.setAttribute("title","jump to top");
+	        var lhome=document.createTextNode("^");
+	        home.appendChild(lhome);
+	        section.appendChild(home);           
     		var checkbox = document.createElement('input');
 			checkbox.type = "checkbox";
 			section.appendChild(checkbox);
 			var clabel= ((results.title[i]!=="notset")?results.title[i]:"")+" (+/-)";
 			if(context.title!=="notset"){
             	checkbox.setAttribute("id",results.title[i]);
+            	var option = document.createElement("option");
+				option.text = results.title[i];
+				select.add(option);
         	} 
         	var label=document.createTextNode(clabel);
         	section.appendChild(label);
         	var div = document.createElement('div');
         	section.appendChild(div);
+        	if(i<results.graph.length-1)
+        		checkbox.checked=true;
 
     		// graphing
 			var graphout = document.createElement('aside');           
@@ -328,6 +394,45 @@ function refresh(){
 		content+="</pre>";
 		error.innerHTML=content;
 	}        
+}
+
+function showhide(){
+	for(var i=0; i< window.results.title.length; i++){
+		var chkbx = document.getElementById(window.results.title[i]);
+		chkbx.checked = ! chkbx.checked;
+	}
+}
+
+function home(){
+	document.getElementById("home").scrollIntoView();  
+}
+
+function scrollto(h){
+	document.getElementById(h).scrollIntoView();  
+}
+
+function goToItem(){
+	var select = document.getElementById("items");
+	var item = select.value;
+	_goToItem(item);
+}
+
+function _goToItem(item){
+	for(var i=0; i< window.results.title.length; i++){
+		var chkbx = document.getElementById(window.results.title[i]);
+		if(item!=window.results.title[i]){
+			chkbx.checked = true;
+		} else {
+			chkbx.checked = false;
+		}
+		
+	}	
+}
+
+function doc(type,node){
+	if(type==="NonTerminal"){
+		_goToItem(node);
+	}
 }
 </script>
 </body>
