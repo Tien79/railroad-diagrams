@@ -832,6 +832,38 @@ root.Railroad = function(root, options, context) {
 		return this;
 	}
 
+	function NonImplemented(text, href) {
+		if(!(this instanceof NonImplemented)) return new NonImplemented("ni("+text+")", href);
+		FakeSVG.call(this, 'g', {'class': 'non-terminal'});
+		this.text = text;
+		this.href = href;
+		this.width = text.length * 8 + 20;
+		this.height = 0;
+		this.up = 11;
+		this.down = 11;
+		if(Diagram.DEBUG) {
+			this.attrs['data-updown'] = this.up + " " + this.height + " " + this.down
+			this.attrs['data-type'] = "nonterminal"
+		}
+	}
+	subclassOf(NonImplemented, FakeSVG);
+	NonImplemented.prototype.needsSpace = true;
+	NonImplemented.prototype.format = function(x, y, width) {
+		// Hook up the two sides if this is narrower than its stated width.
+		var gaps = determineGaps(width, this.width);
+		Path(x,y).h(gaps[0]).addTo(this);
+		Path(x+gaps[0]+this.width,y).h(gaps[1]).addTo(this);
+		x += gaps[0];
+
+		FakeSVG('rect', {x:x, y:y-11, width:this.width, height:this.up+this.down}).addTo(this);
+		var text = FakeSVG('text', {x:x+this.width/2, y:y+4}, this.text);
+		if(this.href)
+			FakeSVG('a', {'xlink:href': this.href}, [text]).addTo(this);
+		else
+			text.addTo(this);
+		return this;
+	}
+
 	function Comment(text, href) {
 		if(!(this instanceof Comment)) return new Comment(text, href);
 		FakeSVG.call(this, 'g');
@@ -915,18 +947,20 @@ root.Railroad = function(root, options, context) {
 
 	root.Railroad.SetExports = SetExports;
 
-	function SetExports(fnx){
+	function SetExports(fnx,fnames){
 
 		/*
-			These are the names that the internal classes are exported as.
+			fnames are the names that the internal classes are exported as.
 			If you would like different names, adjust them here.
 		*/
-		['Title','Diagram', 'ComplexDiagram', 'Sequence', 'Stack', 'OptionalSequence', 'Choice', 'MultipleChoice', 'Optional', 'OneOrMore', 'ZeroOrMore', 'Terminal', 'NonTerminal', 'Comment', 'Skip'].forEach(
+		fnames.forEach(
 			function(e,i){ root[e] = fnx[i]; });
 	}
 
-	var graphing = [Title,Diagram, ComplexDiagram, Sequence, Stack, OptionalSequence, Choice, MultipleChoice, Optional, OneOrMore, ZeroOrMore, Terminal, NonTerminal, Comment, Skip];
-	SetExports(graphing);
+	var fnames=['Title','Diagram', 'ComplexDiagram', 'Sequence', 'Stack', 'OptionalSequence', 'Choice', 'MultipleChoice', 'Optional', 'OneOrMore', 'ZeroOrMore', 'Terminal', 'NonTerminal', 'Comment', 'Skip','NonImplemented'];
+	root.Railroad.fnames=fnames;
+	var graphing = [Title,Diagram, ComplexDiagram, Sequence, Stack, OptionalSequence, Choice, MultipleChoice, Optional, OneOrMore, ZeroOrMore, Terminal, NonTerminal, Comment, Skip, NonImplemented];
+	SetExports(graphing,fnames);
     root.Railroad.graphing=graphing;
 
     // walking functions
@@ -945,7 +979,8 @@ root.Railroad = function(root, options, context) {
     function pNonTerminal(){return {NonTerminal:arguments};};
     function pComment(){return {Comment:arguments};};
     function pSkip(){return {Skip:arguments};};
+    function pNonImplemented(){return {NonImplemented:arguments};};
 
-    var walking = [pTitle,pDiagram, pComplexDiagram, pSequence, pStack, pOptionalSequence, pChoice, pMultipleChoice, pOptional, pOneOrMore, pZeroOrMore, pTerminal, pNonTerminal, pComment, pSkip];
+    var walking = [pTitle,pDiagram, pComplexDiagram, pSequence, pStack, pOptionalSequence, pChoice, pMultipleChoice, pOptional, pOneOrMore, pZeroOrMore, pTerminal, pNonTerminal, pComment, pSkip, pNonImplemented];
     root.Railroad.walking = walking;
 }

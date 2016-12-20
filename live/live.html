@@ -12,6 +12,7 @@
 <script src="brace-fold.js"></script>
 <script src="json-formatter-js.js"></script>
 <script src="railroad.js"></script>
+<script src="jslint.js"></script>
 <script>
 /* user application */
 root.context =	{
@@ -27,9 +28,6 @@ root.Railroad.call(this,root,
 	},
 	root.context
 );
-
-
-
 </script>
 <style>
 svg.railroad-diagram {
@@ -81,7 +79,7 @@ section,
 aside,
 nav,
 footer {
-  margin: 0 1.5% 24px 1.5%;
+  /* margin: 0 1.5% 24px 1.5%; */
 }
 section {
   float: left;
@@ -115,52 +113,46 @@ footer {
 <div>
 <input type='checkbox'/>+/-<div>
 <textarea id="graphin" cols='150' rows='25'>
-Show(Stack(Title("CREATE TABLE"),Sequence(
- Terminal('CREATE',"/doc/create"),
-  Choice(0,
-    Skip(),
-    Terminal('TEMP'),
-    Terminal('TEMPORARY')
-  ),
- Terminal('TABLE'),
-  Choice(0,Skip(),Sequence(Terminal('IF',"javascript:doc('if')"),Terminal('NOT'),Terminal('EXISTS'))
- ) /* sequence */
+/********************************************************************************************************************************/
+Show(Stack(Title("CREATE TABLE"),
+  Sequence(Terminal('CREATE',"/doc/create"),Choice(0,Skip(),Terminal('TEMP'),Terminal('TEMPORARY')),Terminal('TABLE'),
+           Choice(0,Skip(),Sequence(Terminal('IF',"javascript:doc('if')"),Terminal('NOT'),Terminal('EXISTS'))
+  ) /* sequence */
 ),Sequence(Optional(Sequence(NonTerminal('schema-name','#schema-name'),Terminal("."))),NonTerminal('table-name','#table-name')), /* sequence */
 Sequence(
  Choice(0,
   Sequence(Terminal("("),OneOrMore(NonTerminal("column-def","#column-def"),Terminal(",")),ZeroOrMore(Terminal(","),NonTerminal("table-constraint")),Terminal(")"),Optional(Sequence(Terminal("WITHOUT"),Terminal("ROWID")))),
-  Sequence(Terminal("AS"),NonTerminal("select-stm"))
+  Sequence(Terminal("AS"),NonImplemented("select-stm"))
  ) /* choice */
 ),
 Comment("END CREATE TABLE")) /* Stack */
 ); /* Create Table */
-
+/********************************************************************************************************************************/
 Show(
 Sequence(Title("schema-name"),
 NonTerminal('name','#name'),
 Comment("END schema-name")
 ) 
 ); /* schema name */
-
+/********************************************************************************************************************************/
 Show(
 Sequence(Title("table-name"),NonTerminal('name','#name'),
 Comment("END table-name")
 )
 ); /* tables name */
-
+/********************************************************************************************************************************/
 Show(
-Sequence(Title("column-def"),NonTerminal("column-name","#column-name"),Optional(NonTerminal("type-name")),ZeroOrMore(NonTerminal("column-constraint")),
+Sequence(Title("column-def"),NonTerminal("column-name","#column-name"),Optional(NonTerminal("type-name")),ZeroOrMore(NonTerminal("column-constraint","#column-constraint")),
 Comment("END column-def")
 )
 ); /* column def */
-
+/********************************************************************************************************************************/
 Show(
 Sequence(Title("column-name"),NonTerminal('name','#name'),
 Comment("END column-name")
 )
 ); /* column name */
-
-
+/********************************************************************************************************************************/
 Show(
 Sequence(Title("name"),
 Choice(0,
@@ -171,6 +163,18 @@ Choice(0,
 Comment("END name")
 )
 ); /* name */
+/********************************************************************************************************************************/
+Show(Stack(
+  Title("column-constraint"),
+  Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name","#name"))),
+  Choice(0,
+         Sequence(Terminal("PRIMARY"),Terminal("KEY"),Choice(0,Skip(),Terminal("ASC"),Terminal("DESC")),NonTerminal("conflict-cause"),Optional(Terminal("AUTOINCREMENT"))),
+         Sequence(Terminal("NOT"),Terminal("NULL"),NonTerminal("conflict-cause")),
+         Sequence(Terminal("UNIQUE"),NonTerminal("conflict-cause"))
+        ),
+  Comment("END column-constraint")
+  )
+); /* column-constraint */
 </textarea>
 <!--
 <textarea cols="50" rows="25">
@@ -209,18 +213,31 @@ var editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
         continueComments: "Enter",       
 });
 
-function injectjs(content){
+function injectjs(content,error){
     var scriptref=document.createElement('script');
     scriptref.setAttribute("type","text/javascript");
     scriptref.innerText= content;
-    if ((typeof scriptref!="undefined") && scriptref!=null)
-        document.getElementsByTagName("head")[0].appendChild(scriptref);
+    if ((typeof scriptref!="undefined") && scriptref!=null){
+    	try{
+        	document.getElementsByTagName("head")[0].appendChild(scriptref);
+    	} 	catch(e){
+		error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+	    }    
+    }
     return scriptref;
 }
 
 function _Show(){
-	if(this.state==="graphing"){		
-		this.graph.push ((new Diagram([].slice.call(arguments))).format());
+	if(this.state==="graphing"){
+		try{		
+			this.graph.push ((new Diagram([].slice.call(arguments))).format());
+		}  	catch(e){
+			this.error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+	    }    
 		this.title.push(this.context.title);
 		this.context.title="notset";
 	} else if(this.state==="walking"){
@@ -229,21 +246,31 @@ function _Show(){
 }
 
 function refresh(){
-	var results={title:[],graph:[],walk:[],context:root.context,state:"notset"};
-	window.Show=_Show.bind(results);
 	var error=document.getElementById('error');
 	var result=document.getElementById('result');
+	var results={title:[],graph:[],walk:[],context:root.context,state:"notset",error:error};
+	window.Show=_Show.bind(results);
 	result.innerHTML="";
 	error.innerHTML="";
 	var diags = editor.getValue();
 	var scriptref;
 
+	//jslint for errors
+	var source = diags;
+	source+="\nfunction Show(){}\n";
+	for(var fn=0; fn<root.Railroad.fnames.length;fn++){
+		source+="\nfunction "+root.Railroad.fnames[fn]+"(){}\n";
+	}
+	var jscheck = jslint(source);
+
+	if(!jscheck.stop){
+
 	// prepare graphing
 	results.state='graphing';
-	root.Railroad.SetExports(root.Railroad.graphing);
+	root.Railroad.SetExports(root.Railroad.graphing,root.Railroad.fnames);
 	// comments should be within /* */  double // don't work
 	try{
-		scriptref = injectjs(diags);
+		scriptref = injectjs(diags,error);
 	} catch(e){
 		error.innerHTML="<pre>"+
 					    e.stack+"\n"+
@@ -253,7 +280,7 @@ function refresh(){
 
 	// prepare json
 	results.state='walking';
-    root.Railroad.SetExports(root.Railroad.walking);
+    root.Railroad.SetExports(root.Railroad.walking,root.Railroad.fnames);
     	try{
 		scriptref = injectjs(diags);
 	} catch(e){
@@ -272,7 +299,7 @@ function refresh(){
 			section.appendChild(checkbox);
 			var clabel= ((results.title[i]!=="notset")?results.title[i]:"")+" (+/-)";
 			if(context.title!=="notset"){
-            	checkbox.setAttribute("id",context.title);
+            	checkbox.setAttribute("id",results.title[i]);
         	} 
         	var label=document.createTextNode(clabel);
         	section.appendChild(label);
@@ -290,7 +317,17 @@ function refresh(){
             walkout.appendChild(elt);
             div.appendChild(walkout);
 			result.appendChild(section);
-    }          
+    } 
+	} else {
+		// display warnings
+		var content="<pre>";		
+		for(var i=0; i<jscheck.warnings.length; i++){
+			var w = jscheck.warnings[i];
+			content+=w.line+":"+w.column+" "+w.message+"\n";
+		}
+		content+="</pre>";
+		error.innerHTML=content;
+	}        
 }
 </script>
 </body>
