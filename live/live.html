@@ -8,6 +8,7 @@
 <script src="comment.js"></script>
 <script src="foldcode.js"></script>
 <script src="javascript.js"></script>
+<script src="sql.js"></script>
 <script src="foldgutter.js"></script>
 <script src="brace-fold.js"></script>
 <script src="json-formatter-js.js"></script>
@@ -32,6 +33,9 @@ root.Railroad.call(this,root,
 );
 </script>
 <style>
+.hidden{
+	display: none;
+}
 a.svg {
   position: relative;
   display: inline-block;
@@ -119,12 +123,15 @@ footer {
 <h1>railroad-diagram</h1>
 </header>
 <nav>
-<button id="refresh" onclick="refresh();">refresh</button>
 <button id="showhide" onclick="showhide();">show/hide</button>
 <select id="items" onchange="goToItem()"></select>
+<button id="switch" onclick="doswitch();">switch</button>
+<button id="validate" onclick="dovalidate();">validate</button>
+<button id="refresh" onclick="refresh();">refresh</button>
 </nav>
 <div>
 <input type='checkbox' id='home'/>home(+/-)<div>
+<div id="editor">
 <textarea id="graphin" cols='150' rows='25'>
 /********************************************************************************************************************************/
 Show(Stack(Title("CREATE TABLE"),
@@ -179,7 +186,7 @@ Comment("END name")
 Show(Stack(
   Title("column-constraint"),
   Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name"))),
-  Choice(0,
+  Sequence(Choice(0,
          Sequence(Terminal("PRIMARY"),Terminal("KEY"),Choice(0,Skip(),Terminal("ASC"),Terminal("DESC")),NonTerminal("conflict-clause"),Optional(Terminal("AUTOINCREMENT"))),
          Sequence(Terminal("NOT"),Terminal("NULL"),NonTerminal("conflict-clause")),
          Sequence(Terminal("UNIQUE"),NonTerminal("conflict-clause")),
@@ -187,7 +194,7 @@ Show(Stack(
          Sequence(Terminal("DEFAULT"),Choice(0,NonTerminal("signed-number"),NonTerminal("literal-value"),Sequence(Terminal("("),NonImplemented("expr"),Terminal(")")))),
          Sequence(Terminal("COLLATE"),Terminal("collation-name")),
          NonTerminal("foreign-key-clause")
-        ),
+        )),
   Comment("END column-constraint")
   )
 ); /* column-constraint */
@@ -283,8 +290,9 @@ Show(Sequence(Title("foreign-table"),NonTerminal("table-name"),Comment("END fore
     ); /* foreign-table */
               
 </textarea>
-<!--
-<textarea cols="50" rows="25">
+</div >
+<div id="sql">
+<textarea id="sqleditor" cols="50" rows="25">
 CREATE TABLE "Customer" (
   "IdCustomer" text NULL,
   "CompanyName" text NULL,
@@ -300,7 +308,7 @@ CREATE TABLE "Customer" (
   PRIMARY KEY ("IdCustomer")
 )
 </textarea>
--->
+</div>
 </div>
 <div id="error">
 </div>
@@ -309,7 +317,7 @@ CREATE TABLE "Customer" (
 <footer>Copyright &copy; Gilbert Brault 2016</footer>
 <script>
 
-var editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
+window.editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
 		mode: "javascript",
         lineNumbers: true,
         lineWrapping: true,
@@ -319,6 +327,23 @@ var editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
         extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
         continueComments: "Enter",       
 });
+
+window.sql = CodeMirror.fromTextArea(document.getElementById("sqleditor"), {
+		mode: "sql",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter",       
+});
+
+var cmsql = document.getElementById("sql");
+cmsql.setAttribute("class","hidden");
+window.showstate="editor";
+var validate=document.getElementById("validate");
+validate.setAttribute("class","hidden");
 
 function injectjs(content,error){
     var scriptref=document.createElement('script');
@@ -361,7 +386,7 @@ function refresh(){
 	result.innerHTML="";
 	error.innerHTML="";
 	select.innerHTML="";
-	var diags = editor.getValue();
+	var diags = window.editor.getValue();
 	var scriptref;
 
 	//jslint for errors
@@ -488,6 +513,100 @@ function _goToItem(item){
 function doc(type,node){
 	if(type==="NonTerminal"){
 		_goToItem(node);
+	}
+}
+
+function tokenizer(str){
+const regex = /"(?:\w|\s)+"|'(?:\w|\s)+'|\w+|[,.()]/gm;
+var m;
+var results=[];
+
+while ((m = regex.exec(str)) !== null) {
+    // This is necessary to avoid infinite loops with zero-width matches
+    if (m.index === regex.lastIndex) {
+        regex.lastIndex++;
+    }
+    
+    // The result can be accessed through the `m`-variable.
+    m.forEach((match, groupIndex) => {
+        // console.log(`Found match, group ${groupIndex}: ${match}`);
+        results.push(match);
+    });
+}
+return results;	
+}
+
+function doswitch(){
+	var cmsql=document.getElementById("sql");
+	var cmrailroad=document.getElementById("editor");
+	var validate=document.getElementById("validate");
+	var refresh=document.getElementById("refresh");
+
+    if(window.showstate==="editor"){
+		cmsql.setAttribute("class","");
+		cmrailroad.setAttribute("class","hidden");
+		validate.setAttribute("class","");
+		refresh.setAttribute("class","hidden");
+		window.showstate="sql";
+	} else if(window.showstate==="sql"){
+		cmsql.setAttribute("class","hidden");
+		cmrailroad.setAttribute("class","");
+		validate.setAttribute("class","hidden");
+		refresh.setAttribute("class","");	
+		window.showstate="editor";		
+	}
+}
+
+function dovalidate(){
+	var sql = window.sql.getValue();
+	var tokens = tokenizer(sql);
+	var i;
+	var walk;
+	// now check if the path i.e. the tokens list is compatible with the selected graph
+	// find the entry graph
+    var select = document.getElementById("items");
+	var item = select.value;
+	for(i=0; i<window.results.title.length;i++){
+		if(item===window.results.title[i]) break;
+	}
+	if(i<window.results.title.length){
+		walk = window.results.walk[i];
+		var walkindex = 0;
+		var pathindex = 0;
+		var context = {path:tokens,pathindex:pathindex,walk:walk,walkindex:walkindex};
+		dowalk(context);
+		return context;
+	}
+	return false;
+}
+
+function dowalk(context){
+	if (context.walkindex>Object.keys(context.walk).length) return;
+	var walknodetype = Object.keys(context.walk)[context.walkindex];
+	switch(walknodetype){
+		case 'Diagram':
+		    if (context.stack===undefined){
+		    	context.stack = [];
+		    }
+		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
+		    context.walkindex=0;
+		    context.walk=context.walk['Diagram'];		    
+		    dowalk(context);
+		    var restore = context.stack.pop();
+		    context.walk=restore.walk;
+		    context.walkindex=restore.walkindex++;
+		    return;
+			break;
+		case 'Title':
+		    if(context.titles===undefined){
+		    	context.titles=[];
+		    }
+		    context.titles.push(context.walk['Title']);
+		    context.walkindex++;
+		    break;
+		 default:
+		    context.error={state:true,message:"wrong walk node type"};
+		 	return;
 	}
 }
 </script>
