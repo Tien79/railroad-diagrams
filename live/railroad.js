@@ -366,14 +366,26 @@ root.Railroad = function(root, options, context) {
 			item.format(x, y, innerWidth).addTo(this);
 			x += innerWidth;
 			y += item.height;
-
+            
 			if(i !== this.items.length-1) {
+				/*
 				Path(x, y)
 					.arc('ne').down(Math.max(0, item.down + Diagram.VERTICAL_SEPARATION - Diagram.ARC_RADIUS*2))
 					.arc('es').left(innerWidth)
 					.arc('nw').down(Math.max(0, this.items[i+1].up + Diagram.VERTICAL_SEPARATION - Diagram.ARC_RADIUS*2))
 					.arc('ws').addTo(this);
-				y += Math.max(item.down + Diagram.VERTICAL_SEPARATION, Diagram.ARC_RADIUS*2) + Math.max(this.items[i+1].up + Diagram.VERTICAL_SEPARATION, Diagram.ARC_RADIUS*2);
+				*/
+				var temp =y;
+				Path(x, y).arc('ne').down(Math.max(0, item.down + Diagram.VERTICAL_SEPARATION - Diagram.ARC_RADIUS*2)).addTo(this);
+				y+=Diagram.ARC_RADIUS+Math.max(0, item.down + Diagram.VERTICAL_SEPARATION - Diagram.ARC_RADIUS*2); 
+				x+=Diagram.ARC_RADIUS;
+				Path(x, y).arc('es').left(innerWidth).addTo(this);
+				y+=Diagram.ARC_RADIUS;x=x-innerWidth-Diagram.ARC_RADIUS;;
+				Path(x, y).arc('nw').down(Math.max(0, this.items[i+1].up + Diagram.VERTICAL_SEPARATION - Diagram.ARC_RADIUS*2)).addTo(this);
+				y+=Diagram.ARC_RADIUS+Math.max(0, this.items[i+1].up + Diagram.VERTICAL_SEPARATION - Diagram.ARC_RADIUS*2);
+				x=x-Diagram.ARC_RADIUS;
+				Path(x, y).arc('ws').addTo(this);
+				y = temp + Math.max(item.down + Diagram.VERTICAL_SEPARATION, Diagram.ARC_RADIUS*2) + Math.max(this.items[i+1].up + Diagram.VERTICAL_SEPARATION, Diagram.ARC_RADIUS*2);
 				//y += Math.max(Diagram.ARC_RADIUS*4, item.down + Diagram.VERTICAL_SEPARATION*2 + this.items[i+1].up)
 				x = xInitial+Diagram.ARC_RADIUS;
 			}
@@ -839,7 +851,10 @@ root.Railroad = function(root, options, context) {
 	}
 
 	function NonImplemented(text, href) {
-		if(!(this instanceof NonImplemented)) return new NonImplemented("ni("+text+")", href);
+		if((href===undefined)&&context.href){
+			href="javascript:"+context.dochref+"('NonImplemented','"+text+"')";
+		}
+		if(!(this instanceof NonImplemented)) return new NonImplemented("<"+text+">", href);
 		FakeSVG.call(this, 'g', {'class': 'non-terminal'});
 		this.text = text;
 		this.href = href;

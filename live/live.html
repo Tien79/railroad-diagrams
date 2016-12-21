@@ -32,6 +32,10 @@ root.Railroad.call(this,root,
 );
 </script>
 <style>
+a.svg {
+  position: relative;
+  display: inline-block;
+}
 svg.railroad-diagram {
     background-color: hsl(30,20%,95%);
 }
@@ -225,7 +229,24 @@ Show(Stack(Title("type-name"),
                                                       )
                    ),
            Comment("END type-name"))
-    ); /* type-name */  
+    ); /* type-name */ 
+/********************************************************************************************************************************/
+Show(Stack(Title("numeric-literal"),
+           Sequence(Choice(0,Choice(0,Sequence(Choice(0,Sequence(Terminal("/[0-9]+/"),Optional(Sequence(Terminal("."),Terminal("/[0-9]+/")))),
+                                                      Sequence(Terminal("."),Terminal("/[0-9]+/"))
+                                                     ),
+                                               Optional(Sequence(Terminal("E"),
+                                                                 Choice(0,Skip(),Terminal("+"),Terminal("-")),Terminal("/[0-9]+/")))
+                                              )
+                                   ),
+                           Sequence(Terminal("0x"),Terminal("/[A-Za-z0-9]+)/"))
+                          )
+                   ),
+           Comment("END numeric-literal"))
+    ); /* numeric-literal */
+/********************************************************************************************************************************/
+Show(Sequence(Title("signed-number"),Optional(Choice(0,Terminal("+"),Terminal("-"))),NonTerminal("numeric-literal"),Comment("END signed-number"))
+    ); /* signed-number */        
 </textarea>
 <!--
 <textarea cols="50" rows="25">
