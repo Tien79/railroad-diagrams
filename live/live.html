@@ -192,7 +192,7 @@ Show(Stack(
   )
 ); /* column-constraint */
 /********************************************************************************************************************************/
-Show(Title("conflict-clause"),
+Show(Sequence(Title("conflict-clause"),
      Optional(Sequence(Terminal("ON"),Terminal("CONFLICT"),
                                                 Choice(0,
                                                        Terminal("ROLLBACK"),
@@ -201,7 +201,7 @@ Show(Title("conflict-clause"),
                                                        Terminal("IGNORE"),
                                                        Terminal("REPLACE"))
                                                )
-                                      ),Comment("END conflict-clause")
+                                      ),Comment("END conflict-clause"))
     ); /* conflict-clause */
 /********************************************************************************************************************************/
 Show(Stack(Title("table-constraint"),Stack(Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name"))),
