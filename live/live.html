@@ -588,21 +588,70 @@ function dowalk(context){
 		    if (context.stack===undefined){
 		    	context.stack = [];
 		    }
+		    if(context.results===undefined){
+		    	context.results=[];
+		    }
 		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    context.walkindex=0;
-		    context.walk=context.walk['Diagram'];		    
+		    context.walk=context.walk['Diagram'][0];		    
 		    dowalk(context);
 		    var restore = context.stack.pop();
 		    context.walk=restore.walk;
-		    context.walkindex=restore.walkindex++;
+		    context.walkindex=restore.walkindex;
+		    context.walkindex++;
 		    return;
 			break;
 		case 'Title':
 		    if(context.titles===undefined){
 		    	context.titles=[];
 		    }
-		    context.titles.push(context.walk['Title']);
+		    context.titles.push(context.walk['Title'][0]);
 		    context.walkindex++;
+		    break;
+		 case 'Terminal':
+		    if(context.pathindex<context.path.length){
+		    	context.results={type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]};
+		    	context.pathindex++;
+		    	if(context.walk.Terminal[0].startsWith("/")){
+                  	const regex = new RegExp(context.walk.Terminal[0]);
+					var m;
+
+					if ((m = regex.exec(context.path[context.pathindex])) !== null) {
+    					// The result can be accessed through the `m`-variable.
+    					// m.forEach((match, groupIndex) => {
+        					// console.log(`Found match, group ${groupIndex}: ${match}`);
+    					// });    				
+					} else {
+						context.error={state:true,message:"Terminal not matching see results for more information"};
+					}
+		    	} else {
+		    		var feedback = context.results.walkvalue==context.results.pathvalue;
+		    		if(!feedback){
+		    			context.error={state:true,message:"Terminal not matching see results for more information"};
+		    		}
+		    	}
+		    } else {
+		    	context.results={type:'Terminal',walkvalue:context.walk.Terminal[0]}
+		    	context.error={state:true,message:"ended prematurely"};
+		    }
+		    break;
+		 case 'Stack':
+		 case 'Sequence':
+		    for(var i=0; i<context.walk[walknodetype].length;i++){
+		    	context.stack.push({walk:context.walk,walkindex:context.walkindex});
+		    	context.walkindex=0;
+		    	context.walk=context.walk[walknodetype][i];
+		    	dowalk(context);
+		        var restore = context.stack.pop();
+		    	context.walk=restore.walk;
+		    	context.walkindex=restore.walkindex;
+		    	context.walkindex++;
+		    	if(context.error!==undefined) break;
+		    }
+		    break;
+		 case 'Choice':
+		    for(var i=0; i<context.walk[walknodetype].length;i++){
+		    }
 		    break;
 		 default:
 		    context.error={state:true,message:"wrong walk node type"};
