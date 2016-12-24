@@ -650,8 +650,28 @@ function dowalk(context){
 		    }
 		    break;
 		 case 'Choice':
-		    for(var i=0; i<context.walk[walknodetype].length;i++){
+		    var skip=false;
+		    for(var i=1; i<context.walk[walknodetype].length;i++){
+		    	context.stack.push({walk:context.walk,walkindex:context.walkindex});
+		    	context.walkindex=0;
+		    	context.walk=context.walk[walknodetype][i];
+		    	if(context.walk.Skip===undefined){
+					dowalk(context);
+					if(context.error){
+						delete context.error;
+					} else {
+						break;
+					}
+		    	} else{
+		    		skip = true;
+		    	}		    	
+		        var restore = context.stack.pop();
+		    	context.walk=restore.walk;
+		    	context.walkindex=restore.walkindex;
+		    	context.walkindex++;		    	
 		    }
+		    if(skip) return;
+		    context.error={state:true,message:"choice not satisfyed near"+context.path[context.pathindex]};
 		    break;
 		 default:
 		    context.error={state:true,message:"wrong walk node type"};
