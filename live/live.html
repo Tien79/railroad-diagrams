@@ -175,9 +175,9 @@ Sequence(Title("column-name"),NonTerminal('name'),Comment('END column-name')
 Show(
 Sequence(Title("name"),
 Choice(0,
-	Terminal('(^[A-Za-z][A-Za-z0-9_]*)'),
-	Terminal('(^\\"[A-Za-z][A-Za-z0-9_\\s]*)\\"/'),
-        Terminal("(^\\'[A-Za-z][A-Za-z0-9_\\s]*)\\'/")
+	Terminal('/(^[A-Za-z][A-Za-z0-9_]*)/'),
+	Terminal('/(^\\"[A-Za-z][A-Za-z0-9_\\s]*)\\"/'),
+        Terminal("/(^\\'[A-Za-z][A-Za-z0-9_\\s]*)\\'/")
 ),
 Comment("END name")
 )
@@ -610,8 +610,7 @@ function dowalk(context){
 		    break;
 		 case 'Terminal':
 		    if(context.pathindex<context.path.length){
-		    	context.results={type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]};
-		    	context.pathindex++;
+		    	context.results={type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]};		    	
 		    	if(context.walk.Terminal[0].startsWith("/")){
                   	const regex = new RegExp(context.walk.Terminal[0]);
 					var m;
@@ -634,6 +633,7 @@ function dowalk(context){
 		    	context.results={type:'Terminal',walkvalue:context.walk.Terminal[0]}
 		    	context.error={state:true,message:"ended prematurely"};
 		    }
+		    context.pathindex++;
 		    break;
 		 case 'Stack':
 		 case 'Sequence':
@@ -658,6 +658,7 @@ function dowalk(context){
 		    	if(context.walk.Skip===undefined){
 					dowalk(context);
 					if(context.error){
+						context.pathindex--;
 						delete context.error;
 					} else {
 						break;
