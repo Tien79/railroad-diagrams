@@ -574,6 +574,10 @@ function dovalidate(){
 		var walkindex = 0;
 		var pathindex = 0;
 		var context = {path:tokens,pathindex:pathindex,walk:walk,walkindex:walkindex};
+		context.nonTerminals={};
+		for(i=0; i<window.results.title.length;i++){
+			context.nonTerminals[window.results.title[i]]=window.results.walk[i];
+		}
 		dowalk(context);
 		return context;
 	}
@@ -657,7 +661,7 @@ function dowalk(context){
 		    	context.walk=context.walk[walknodetype][i];
 		    	if(context.walk.Skip===undefined){
 					dowalk(context);
-					if(context.error){
+					if(context.error!==undefined){
 						context.pathindex--;
 						delete context.error;
 					} else {
@@ -674,8 +678,37 @@ function dowalk(context){
 		    if(skip) return;
 		    context.error={state:true,message:"choice not satisfyed near"+context.path[context.pathindex]};
 		    break;
+		 case 'Optional':
+		    var skip=false; 
+		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
+		    context.walkindex=0;
+		    context.walk=context.walk[walknodetype][0];
+			dowalk(context);
+			if(context.error!==undefined){
+				context.pathindex--;
+				delete context.error;
+				skip=true;
+			}	    	
+	    	var restore = context.stack.pop();
+		    context.walk=restore.walk;
+		    context.walkindex=restore.walkindex;
+		    if(!skip) context.walkindex++;		    			   	 
+		 	break;
+		 case 'NonTerminal':
+		    if(context.nonTerminals[context.walk["NonTerminal"][0]]===undefined){
+		    	context.error={state:true,message:"not existing NonTerminal"+context.walk["NonTerminal"][0]};
+		    }
+		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
+		    context.walk=context.nonTerminals[context.walk["NonTerminal"][0]];
+		    dowalk(context);
+		    var restore = context.stack.pop();
+		    context.walk=restore.walk;
+		    context.walkindex=restore.walkindex;
+		    context.walkindex++;
+		    if(context.error!==undefined) break;		    
+		 	break;
 		 default:
-		    context.error={state:true,message:"wrong walk node type"};
+		    context.error={state:true,message:"wrong walk node type :"+walknodetype};
 		 	return;
 	}
 }
