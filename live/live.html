@@ -288,7 +288,6 @@ Show(Stack(Title("foreign-key-clause"),
 /********************************************************************************************************************************/
 Show(Sequence(Title("foreign-table"),NonTerminal("table-name"),Comment("END foreign-table"))
     ); /* foreign-table */
-              
 </textarea>
 </div >
 <div id="sql">
@@ -612,29 +611,35 @@ function dowalk(context){
 		    context.titles.push(context.walk['Title'][0]);
 		    context.walkindex++;
 		    break;
+		 case 'Comment':
+		    context.walkindex++;
+		    break;		 	
 		 case 'Terminal':
 		    if(context.pathindex<context.path.length){
-		    	context.results={type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]};		    	
 		    	if(context.walk.Terminal[0].startsWith("/")){
-                  	const regex = new RegExp(context.walk.Terminal[0]);
+		    		var l = context.walk.Terminal[0].length;
+                  	const regex = new RegExp(context.walk.Terminal[0].substring(1,l-1));
 					var m;
 
 					if ((m = regex.exec(context.path[context.pathindex])) !== null) {
     					// The result can be accessed through the `m`-variable.
     					// m.forEach((match, groupIndex) => {
         					// console.log(`Found match, group ${groupIndex}: ${match}`);
-    					// });    				
+    					// });
+    					context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});   				
 					} else {
 						context.error={state:true,message:"Terminal not matching see results for more information"};
 					}
 		    	} else {
-		    		var feedback = context.results.walkvalue==context.results.pathvalue;
+		    		var feedback = context.walk.Terminal[0]==context.path[context.pathindex];
 		    		if(!feedback){
 		    			context.error={state:true,message:"Terminal not matching see results for more information"};
+		    		} else{
+		    			context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});		    	
 		    		}
 		    	}
 		    } else {
-		    	context.results={type:'Terminal',walkvalue:context.walk.Terminal[0]}
+		    	context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0]});
 		    	context.error={state:true,message:"ended prematurely"};
 		    }
 		    context.pathindex++;
@@ -660,12 +665,17 @@ function dowalk(context){
 		    	context.walkindex=0;
 		    	context.walk=context.walk[walknodetype][i];
 		    	if(context.walk.Skip===undefined){
+		    		var pathindex=context.pathindex;
 					dowalk(context);
 					if(context.error!==undefined){
-						context.pathindex--;
+						context.pathindex=pathindex;
 						delete context.error;
-					} else {
-						break;
+					} else{
+		        		var restore = context.stack.pop();
+		    			context.walk=restore.walk;
+		    			context.walkindex=restore.walkindex;
+		    			context.walkindex++;
+		    			break;							
 					}
 		    	} else{
 		    		skip = true;
@@ -675,17 +685,19 @@ function dowalk(context){
 		    	context.walkindex=restore.walkindex;
 		    	context.walkindex++;		    	
 		    }
-		    if(skip) return;
-		    context.error={state:true,message:"choice not satisfyed near"+context.path[context.pathindex]};
+		    if((skip)||(context.error===undefined)) 
+		    	return;
+		    context.error={state:true,message:"choice not satisfied near "+context.path[context.pathindex]};
 		    break;
 		 case 'Optional':
 		    var skip=false; 
 		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    context.walkindex=0;
 		    context.walk=context.walk[walknodetype][0];
+		    var pathindex = context.pathindex;
 			dowalk(context);
 			if(context.error!==undefined){
-				context.pathindex--;
+				context.pathindex=pathindex;
 				delete context.error;
 				skip=true;
 			}	    	
