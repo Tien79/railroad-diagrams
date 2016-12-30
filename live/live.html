@@ -599,6 +599,9 @@ function dowalk(context){
 	// context.errorstack=[];  // reset errorstack as it's relevant just for the current case (not global)
 	switch(walknodetype){
 		case 'Diagram':
+			if(context.compiled===undefined){
+				context.compiled = [];
+			}
 		    if (context.stack===undefined){
 		    	context.stack = [];
 		    }
@@ -629,23 +632,32 @@ function dowalk(context){
 		    context.walkindex++;
 		    break;	
 		 case 'NonTerminal':
+		  	var compiled = context.compiled;	
+		  	var ntname=context.walk["NonTerminal"][0];
 		    if(context.nonTerminals[context.walk["NonTerminal"][0]]===undefined){
 		    	context.error={state:true,message:"not existing NonTerminal"+context.walk["NonTerminal"][0]};
 		    	break;
 		    }
 		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    context.walk=context.nonTerminals[context.walk["NonTerminal"][0]];
+		    var nt ={};
+		    nt[ntname]=context.compiled=[];		    
 		    dowalk(context);
 		    var restore = context.stack.pop();
 		    context.walk=restore.walk;
 		    context.walkindex=restore.walkindex;
 		    context.walkindex++;
-		    if(context.error!==undefined) break; else{
+		    if(context.error===undefined) {
 		    	context.results.push({type:'NonTerminal',walkvalue:context.walk.NonTerminal[0],pathvalue:context.path[context.pathindex]});
-		    	// console.log(walknodetype+" "+context.walk["NonTerminal"][0]);	    
+		    	// console.log(walknodetype+" "+context.walk["NonTerminal"][0]);
+		    	if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
+		    		compiled.push(nt);
+		    	}		    		
 		    }
+		    context.compiled=compiled;
 		 	break;		    	 	
 		 case 'Terminal':
+		 	var compiled = context.compiled;	
 		    if(context.pathindex<context.path.length){
 		    	if(context.walk.Terminal[0].startsWith("/")){
 		    		var l = context.walk.Terminal[0].length;
@@ -658,7 +670,9 @@ function dowalk(context){
         					// console.log(`Found match, group ${groupIndex}: ${match}`);
     					// });
     					// console.log(walknodetype+" "+context.path[context.pathindex]);	   
-    					context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});   				
+    					context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});
+    					// context.compiled.push({"Terminal":context.path[context.pathindex]});
+    					 context.compiled.push(context.path[context.pathindex]);
 					} else {
 						context.error={state:true,message:"Terminal "+context.path[context.pathindex]+" not matching Regexp: "+context.walk.Terminal[0]};
 					}
@@ -669,6 +683,8 @@ function dowalk(context){
 		    		} else{
 		    			// console.log(walknodetype+" "+context.walk["Terminal"][0]);	   
 		    			context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});		    	
+		    			// context.compiled.push({"Terminal":context.path[context.pathindex]});
+		    			context.compiled.push(context.path[context.pathindex]);
 		    		}
 		    	}
 		    } else {
@@ -679,30 +695,38 @@ function dowalk(context){
 		    break;
 		 case 'Stack':
 		 case 'Sequence':
+		 	var compiled = context.compiled;
 		    for(var i=0; i<context.walk[walknodetype].length;i++){
+		    	context.compiled=[];
 		    	// console.log(walknodetype+" "+i);
 		    	context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    	context.walkindex=0;
 		    	context.walk=context.walk[walknodetype][i];
 		    	dowalk(context);
+		    	if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
+		    		compiled.push(context.compiled);
+		    	}		    	
 		        var restore = context.stack.pop();
 		    	context.walk=restore.walk;
 		    	context.walkindex=restore.walkindex;
 		    	context.walkindex++;
 		    	if(context.error!==undefined) break;
 		    }
+		    context.compiled=compiled;
 		    break;
 		 case 'Choice':
 		    var skip=false;		    
 		    var error=false;
 		    var esindex=context.errorstack.length;
 		    var resultsindex = context.results.length;
+		    var compiled = context.compiled;		 
 		    for(var i=1; i<context.walk[walknodetype].length;i++){
 		    	context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    	context.walkindex=0;
 		    	context.walk=context.walk[walknodetype][i];
 		    	if(context.walk.Skip===undefined){
 		    		var pathindex=context.pathindex;
+		    		context.compiled=[];
 					dowalk(context);
 					if(context.error!==undefined){
 						context.pathindex=pathindex;
@@ -721,6 +745,9 @@ function dowalk(context){
 		    			context.walkindex=restore.walkindex;
 		    			context.walkindex++;
 		    			error=false;
+		    			if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
+		    				compiled.push(context.compiled);
+		    			}		    	
 		    			break;							
 					}
 		    	} else{
@@ -731,6 +758,7 @@ function dowalk(context){
 		    	context.walkindex=restore.walkindex;
 		    	context.walkindex++;		    	
 		    }
+		    context.compiled=compiled;
 		    if((skip)||(!error)){
 		    	if(esindex==0){
 					context.errorstack=[];
@@ -744,10 +772,12 @@ function dowalk(context){
 		 case 'Optional':
 		    var skip=false;
 		    var resultsindex = context.results.length;
+		    var compiled = context.compiled;	
 		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    context.walkindex=0;
 		    context.walk=context.walk[walknodetype][0];
 		    var pathindex = context.pathindex;
+		    context.compiled=[];
 			dowalk(context);
 			if(context.error!==undefined){
 				context.pathindex=pathindex;
@@ -758,21 +788,29 @@ function dowalk(context){
 				} else{
 					context.results=context.results.slice(0,resultsindex);
 				}
+			} else{
+				// success
+		    	if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
+		    		compiled.push(context.compiled);
+		    	}		    	
 			}	    	
 	    	var restore = context.stack.pop();
 		    context.walk=restore.walk;
 		    context.walkindex=restore.walkindex;
+		    context.compiled=compiled;
 		    if(!skip) context.walkindex++;		    			   	 
 		 	break;
 		 case 'OneOrMore':
 		 case 'ZeroOrMore':
 		    var more = true;
+		    var compiled = context.compiled;
 		    do{
 		    	for(var i=0; i<context.walk[walknodetype].length;i++){
 		    		var pathindex=context.pathindex;
 		        	context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    		context.walkindex=0;
 		    		context.walk=context.walk[walknodetype][i];
+		    		context.compiled=[];
 		    		dowalk(context);
 		        	var restore = context.stack.pop();
 		    		context.walk=restore.walk;
@@ -788,11 +826,16 @@ function dowalk(context){
 		    				} else {
 		    					// just the end = success
 		    					// console.log(walknodetype+" "+i);
+		    					if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
+		    						compiled.push(context.compiled);
+		    					}		    	
 								context.pathindex=pathindex;
 								delete context.error;
 		    					more=false;
 		    					break;		    					
 		    				}
+		    			} else{
+		    				compiled.push(context.compiled);
 		    			}
 		    		} else if(i==1){		    			
 		    			// just the end	    			
@@ -802,10 +845,16 @@ function dowalk(context){
 							delete context.error;
 		    				more=false;
 		    				break;
+		    			} else{
+		    				// success: another one!
+		    				if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
+		    					compiled.push(context.compiled);
+		    				}		    	
 		    			}
 		    		}
 		    	}
 		    } while(more);
+		    context.compiled=compiled;
 		    break;
 		 default:
 		    context.error={state:true,message:"wrong walk node type :"+walknodetype};
