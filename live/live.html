@@ -188,7 +188,7 @@ Show(Stack(
   Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name"))),
   Sequence(Choice(0,
          Sequence(Terminal("PRIMARY"),Terminal("KEY"),Choice(0,Skip(),Terminal("ASC"),Terminal("DESC")),NonTerminal("conflict-clause"),Optional(Terminal("AUTOINCREMENT"))),
-         Sequence(Terminal("NOT"),Terminal("NULL"),NonTerminal("conflict-clause")),
+         Sequence(Optional(Terminal("NOT")),Terminal("NULL"),NonTerminal("conflict-clause")),
          Sequence(Terminal("UNIQUE"),NonTerminal("conflict-clause")),
          Sequence(Terminal("CHECK"),Terminal("("),NonImplemented("expr"),Terminal(")")),
          Sequence(Terminal("DEFAULT"),Choice(0,NonTerminal("signed-number"),NonTerminal("literal-value"),Sequence(Terminal("("),NonImplemented("expr"),Terminal(")")))),
@@ -293,7 +293,7 @@ Show(Sequence(Title("foreign-table"),NonTerminal("table-name"),Comment("END fore
 <div id="sql">
 <textarea id="sqleditor" cols="50" rows="25">
 CREATE TABLE "Customer" (
-  "IdCustomer" text NULL,
+  "IdCustomer" text NULL PRIMARY KEY,
   "CompanyName" text NULL,
   "ContactName" text NULL,
   "ContactTitle" text NULL,
@@ -303,8 +303,7 @@ CREATE TABLE "Customer" (
   "PostalCode" text NULL,
   "Country" text NULL,
   "Phone" text NULL,
-  "Fax" text NULL,
-  PRIMARY KEY ("IdCustomer")
+  "Fax" text NULL
 )
 </textarea>
 </div>
@@ -535,6 +534,17 @@ while ((m = regex.exec(str)) !== null) {
 return results;	
 }
 
+function fillerrorstack(context){
+	if(context.error!==undefined){
+		var esindex = context.errorstack.length-1;
+		if( (esindex!==-1) &&
+		   (context.errorstack[esindex].state==context.error.state) &&
+		   (context.errorstack[esindex].message==context.error.message)
+		  ) return;
+		context.errorstack.push({state:context.error.state,message:context.error.message});
+	}
+}
+
 function doswitch(){
 	var cmsql=document.getElementById("sql");
 	var cmrailroad=document.getElementById("editor");
@@ -586,10 +596,14 @@ function dovalidate(){
 function dowalk(context){
 	if (context.walkindex>Object.keys(context.walk).length) return;
 	var walknodetype = Object.keys(context.walk)[context.walkindex];
+	// context.errorstack=[];  // reset errorstack as it's relevant just for the current case (not global)
 	switch(walknodetype){
 		case 'Diagram':
 		    if (context.stack===undefined){
 		    	context.stack = [];
+		    }
+		    if (context.errorstack===undefined){
+		    	context.errorstack = [];
 		    }
 		    if(context.results===undefined){
 		    	context.results=[];
@@ -613,7 +627,24 @@ function dowalk(context){
 		    break;
 		 case 'Comment':
 		    context.walkindex++;
-		    break;		 	
+		    break;	
+		 case 'NonTerminal':
+		    if(context.nonTerminals[context.walk["NonTerminal"][0]]===undefined){
+		    	context.error={state:true,message:"not existing NonTerminal"+context.walk["NonTerminal"][0]};
+		    	break;
+		    }
+		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
+		    context.walk=context.nonTerminals[context.walk["NonTerminal"][0]];
+		    dowalk(context);
+		    var restore = context.stack.pop();
+		    context.walk=restore.walk;
+		    context.walkindex=restore.walkindex;
+		    context.walkindex++;
+		    if(context.error!==undefined) break; else{
+		    	context.results.push({type:'NonTerminal',walkvalue:context.walk.NonTerminal[0],pathvalue:context.path[context.pathindex]});
+		    	// console.log(walknodetype+" "+context.walk["NonTerminal"][0]);	    
+		    }
+		 	break;		    	 	
 		 case 'Terminal':
 		    if(context.pathindex<context.path.length){
 		    	if(context.walk.Terminal[0].startsWith("/")){
@@ -626,15 +657,17 @@ function dowalk(context){
     					// m.forEach((match, groupIndex) => {
         					// console.log(`Found match, group ${groupIndex}: ${match}`);
     					// });
+    					// console.log(walknodetype+" "+context.path[context.pathindex]);	   
     					context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});   				
 					} else {
-						context.error={state:true,message:"Terminal not matching see results for more information"};
+						context.error={state:true,message:"Terminal "+context.path[context.pathindex]+" not matching Regexp: "+context.walk.Terminal[0]};
 					}
 		    	} else {
 		    		var feedback = context.walk.Terminal[0]==context.path[context.pathindex];
 		    		if(!feedback){
-		    			context.error={state:true,message:"Terminal not matching see results for more information"};
+		    			context.error={state:true,message:"Terminal "+context.path[context.pathindex]+" not matching: "+context.walk.Terminal[0]};
 		    		} else{
+		    			// console.log(walknodetype+" "+context.walk["Terminal"][0]);	   
 		    			context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});		    	
 		    		}
 		    	}
@@ -647,6 +680,7 @@ function dowalk(context){
 		 case 'Stack':
 		 case 'Sequence':
 		    for(var i=0; i<context.walk[walknodetype].length;i++){
+		    	// console.log(walknodetype+" "+i);
 		    	context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    	context.walkindex=0;
 		    	context.walk=context.walk[walknodetype][i];
@@ -659,7 +693,10 @@ function dowalk(context){
 		    }
 		    break;
 		 case 'Choice':
-		    var skip=false;
+		    var skip=false;		    
+		    var error=false;
+		    var esindex=context.errorstack.length;
+		    var resultsindex = context.results.length;
 		    for(var i=1; i<context.walk[walknodetype].length;i++){
 		    	context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    	context.walkindex=0;
@@ -669,12 +706,21 @@ function dowalk(context){
 					dowalk(context);
 					if(context.error!==undefined){
 						context.pathindex=pathindex;
+						fillerrorstack(context);
 						delete context.error;
-					} else{
+						error=true;
+						if(resultsindex==0){
+							context.results=[];
+						} else{
+							context.results=context.results.slice(0,resultsindex);
+						}
+					} else{ // success
+						// console.log(walknodetype+" "+i);
 		        		var restore = context.stack.pop();
 		    			context.walk=restore.walk;
 		    			context.walkindex=restore.walkindex;
 		    			context.walkindex++;
+		    			error=false;
 		    			break;							
 					}
 		    	} else{
@@ -685,12 +731,19 @@ function dowalk(context){
 		    	context.walkindex=restore.walkindex;
 		    	context.walkindex++;		    	
 		    }
-		    if((skip)||(context.error===undefined)) 
+		    if((skip)||(!error)){
+		    	if(esindex==0){
+					context.errorstack=[];
+		    	} else {
+		    		context.errorstack = context.errorstack.slice(0,esindex);
+		    	}				
 		    	return;
+		    }		    	
 		    context.error={state:true,message:"choice not satisfied near "+context.path[context.pathindex]};
 		    break;
 		 case 'Optional':
-		    var skip=false; 
+		    var skip=false;
+		    var resultsindex = context.results.length;
 		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    context.walkindex=0;
 		    context.walk=context.walk[walknodetype][0];
@@ -700,25 +753,60 @@ function dowalk(context){
 				context.pathindex=pathindex;
 				delete context.error;
 				skip=true;
+				if(resultsindex==0){
+					context.results=[];
+				} else{
+					context.results=context.results.slice(0,resultsindex);
+				}
 			}	    	
 	    	var restore = context.stack.pop();
 		    context.walk=restore.walk;
 		    context.walkindex=restore.walkindex;
 		    if(!skip) context.walkindex++;		    			   	 
 		 	break;
-		 case 'NonTerminal':
-		    if(context.nonTerminals[context.walk["NonTerminal"][0]]===undefined){
-		    	context.error={state:true,message:"not existing NonTerminal"+context.walk["NonTerminal"][0]};
-		    }
-		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
-		    context.walk=context.nonTerminals[context.walk["NonTerminal"][0]];
-		    dowalk(context);
-		    var restore = context.stack.pop();
-		    context.walk=restore.walk;
-		    context.walkindex=restore.walkindex;
-		    context.walkindex++;
-		    if(context.error!==undefined) break;		    
-		 	break;
+		 case 'OneOrMore':
+		 case 'ZeroOrMore':
+		    var more = true;
+		    do{
+		    	for(var i=0; i<context.walk[walknodetype].length;i++){
+		    		var pathindex=context.pathindex;
+		        	context.stack.push({walk:context.walk,walkindex:context.walkindex});
+		    		context.walkindex=0;
+		    		context.walk=context.walk[walknodetype][i];
+		    		dowalk(context);
+		        	var restore = context.stack.pop();
+		    		context.walk=restore.walk;
+		    		context.walkindex=restore.walkindex;
+		    		context.walkindex++;
+		    		if(i==0){		    			
+		    			if(context.error!==undefined) {
+		    				fillerrorstack(context);
+		    				// this is an error if context.walk[walknodetype].length == 2
+		    				if((context.walk[walknodetype].length==2)&&(walknodetype=='OneOrMore')){
+		    					more=false;
+		    					break;		    					
+		    				} else {
+		    					// just the end = success
+		    					// console.log(walknodetype+" "+i);
+								context.pathindex=pathindex;
+								delete context.error;
+		    					more=false;
+		    					break;		    					
+		    				}
+		    			}
+		    		} else if(i==1){		    			
+		    			// just the end	    			
+		    			if(context.error!==undefined) {
+		    				fillerrorstack(context);
+							context.pathindex=pathindex;
+							delete context.error;
+		    				more=false;
+		    				break;
+		    			}
+		    		}
+		    	}
+		    } while(more);
+		    break;
 		 default:
 		    context.error={state:true,message:"wrong walk node type :"+walknodetype};
 		 	return;
