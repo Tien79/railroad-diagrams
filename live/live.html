@@ -15,6 +15,182 @@
 <script src="railroad.js"></script>
 <script src="jslint.js"></script>
 <script>
+window.expressionsource="/********************************************************************************************************************************/ \n \
+ Show(Sequence(Title('expression'),OneOrMore(NonTerminal('term'),Terminal('+')), Comment('END expression')) /* Sequence */ \n \
+ ); /* expression */ \n \
+/********************************************************************************************************************************/ \n \
+ Show(Sequence(Title('term'),OneOrMore(NonTerminal('factor'),Terminal('*')), Comment('END term')) /* Sequence */ \n \
+ ); /* term */ \n \
+/********************************************************************************************************************************/ \n \
+ Show(Stack(Title('factor'),Sequence(Choice(0, \n \
+                                   NonTerminal('constant'), \n \
+                                   NonTerminal('variable'), \n \
+                                   Sequence(Terminal('('),NonTerminal('expression'),Terminal(')')) \n \
+                                  )) \n \
+            , Comment('END factor')) /* Stack */ \n \
+ ); /* factor */ \n \
+/********************************************************************************************************************************/ \n \
+ Show(Sequence(Title('variable'),Terminal('/[A-Z][A-Za-z0-9_]*/'), Comment('END variable')) /* Sequence */ \n \
+ ); /* variable */ \n \
+/********************************************************************************************************************************/ \n \
+ Show(Sequence(Title('constant'),Terminal('/[+-]?[0-9]+/'), Comment('END constant')) /* Sequence */ \n \
+ ); /* constant */ \n";
+window.createtablesource= "/********************************************************************************************************************************/ \n \
+Show(Stack(Title('CREATE TABLE'), \n \
+  Sequence(Terminal('CREATE'),Choice(0,Skip(),Terminal('TEMP'),Terminal('TEMPORARY')),Terminal('TABLE'), \n \
+           Choice(0,Skip(),Sequence(Terminal('IF'),Terminal('NOT'),Terminal('EXISTS')) \n \
+  ) /* sequence */ \n \
+),Sequence(Optional(Sequence(NonTerminal('schema-name'),Terminal('.'))),NonTerminal('table-name')), /* sequence */ \n \
+Sequence( \n \
+ Choice(0, \n \
+  Sequence(Terminal('('),OneOrMore(NonTerminal('column-def'),Terminal(',')), \n \
+           ZeroOrMore(Terminal(','),NonTerminal('table-constraint')), \n \
+           Terminal(')'),Optional(Sequence(Terminal('WITHOUT'),Terminal('ROWID')))), \n \
+  Sequence(Terminal('AS'),NonImplemented('select-stm')) \n \
+ ) /* choice */ \n \
+), \n \
+Comment('END CREATE TABLE')) /* Stack */ \n \
+); /* Create Table */ \n \
+/********************************************************************************************************************************/ \n \
+Show( \n \
+Sequence(Title('schema-name'), \n \
+NonTerminal('name'),Comment('END schema-name') \n \
+)  \n \
+); /* schema name */ \n \
+/********************************************************************************************************************************/ \n \
+Show( \n \
+Sequence(Title('table-name'),NonTerminal('name'),Comment('END table-name') \n \
+) \n \
+); /* tables name */ \n \
+/********************************************************************************************************************************/ \n \
+Show( \n \
+Sequence(Title('column-def'),NonTerminal('column-name'),Optional(NonTerminal('type-name')),ZeroOrMore(NonTerminal('column-constraint')), \n \
+Comment('END column-def') \n \
+) \n \
+); /* column def */ \n \
+/********************************************************************************************************************************/ \n \
+Show( \n \
+Sequence(Title('column-name'),NonTerminal('name'),Comment('END column-name') \n \
+) \n \
+); /* column name */ \n \
+/********************************************************************************************************************************/ \n \
+Show( \n \
+Sequence(Title('name'), \n \
+Choice(0, \n \
+	Terminal('/(^[A-Za-z][A-Za-z0-9_]*)/'), \n \
+	Terminal('/(^\\\"[A-Za-z][A-Za-z0-9_\\s]*)\\\"/'), \n \
+        Terminal(\"/(^\\'[A-Za-z][A-Za-z0-9_\\s]*)\\'/\") \n \
+), \n \
+Comment('END name') \n \
+) \n \
+); /* name */ \n \
+/********************************************************************************************************************************/ \n \
+Show(Stack( \n \
+  Title('column-constraint'), \n \
+  Optional(Sequence(Terminal('CONSTRAINT'),NonTerminal('name'))), \n \
+  Sequence(Choice(0, \n \
+         Sequence(Terminal('PRIMARY'),Terminal('KEY'),Choice(0,Skip(),Terminal('ASC'),Terminal('DESC')),NonTerminal('conflict-clause'),Optional(Terminal('AUTOINCREMENT'))), \n \
+         Sequence(Optional(Terminal('NOT')),Terminal('NULL'),NonTerminal('conflict-clause')), \n \
+         Sequence(Terminal('UNIQUE'),NonTerminal('conflict-clause')), \n \
+         Sequence(Terminal('CHECK'),Terminal('('),NonImplemented('expr'),Terminal(')')), \n \
+         Sequence(Terminal('DEFAULT'),Choice(0,NonTerminal('signed-number'),NonTerminal('literal-value'),Sequence(Terminal('('),NonImplemented('expr'),Terminal(')')))), \n \
+         Sequence(Terminal('COLLATE'),Terminal('collation-name')), \n \
+         NonTerminal('foreign-key-clause') \n \
+        )), \n \
+  Comment('END column-constraint') \n \
+  ) \n \
+); /* column-constraint */ \n \
+/********************************************************************************************************************************/ \n \
+Show(Sequence(Title('conflict-clause'), \n \
+     Optional(Sequence(Terminal('ON'),Terminal('CONFLICT'), \n \
+                                                Choice(0, \n \
+                                                       Terminal('ROLLBACK'), \n \
+                                                       Terminal('ABORT'), \n \
+                                                       Terminal('FAIL'), \n \
+                                                       Terminal('IGNORE'), \n \
+                                                       Terminal('REPLACE')) \n \
+                                               ) \n \
+                                      ),Comment('END conflict-clause')) \n \
+    ); /* conflict-clause */ \n \
+/********************************************************************************************************************************/ \n \
+Show(Stack(Title('table-constraint'),Stack(Optional(Sequence(Terminal('CONSTRAINT'),NonTerminal('name'))), \n \
+                                     Choice(0,Sequence(Choice(0,Sequence(Terminal('PRIMARY'),Terminal('Key')),Terminal('UNIQUE')),Terminal('('), \n \
+                                                       OneOrMore(NonTerminal('indexed-column'),Terminal(',')),Terminal(')'),NonTerminal('conflict-clause')), \n \
+                                            Sequence(Terminal('CHECK'),Terminal('('),NonImplemented('expr'),Terminal(')')), \n \
+                                            Sequence(Terminal('FOREIGN'),Terminal('KEY'),Terminal('('), \n \
+                                                     OneOrMore(NonTerminal('column-name'),Terminal(',')),Terminal(')'), \n \
+                                                     NonTerminal('foreign-key-clause')) \n \
+                                           )                                           \n \
+     ), \n \
+     Comment('END table-constrainte')) \n \
+); /* table-constraint */ \n \
+/********************************************************************************************************************************/ \n \
+Show(Stack(Title('indexed-column'), \n \
+     Sequence(Choice(0,NonTerminal('column-name'),NonImplemented('expr')), \n \
+              Optional(Sequence(Terminal('COLLATE'),NonTerminal('collation-name'))), \n \
+              Choice(0,Skip(),Terminal('ASC'),Terminal('DESC'))), \n \
+     Comment('END indexed-column')) \n \
+    ); /* indexed-column */ \n \
+/********************************************************************************************************************************/ \n \
+Show(Stack(Title('type-name'), \n \
+           Sequence(NonTerminal('name'),Choice(0, \n \
+                                                Skip(), \n \
+                                                Sequence(Terminal('('),NonTerminal('signed-number'),Terminal(')')), \n \
+                                                Sequence(Terminal('('),NonTerminal('signed-number'),Terminal(','),NonTerminal('signed-number'),Terminal(')')) \n \
+                                               ) \n \
+                   ), \n \
+           Comment('END type-name')) \n \
+    ); /* type-name */  \n \
+/********************************************************************************************************************************/ \n \
+Show(Stack(Title('numeric-literal'), \n \
+           Sequence(Choice(0,Choice(0,Sequence(Choice(0,Sequence(Terminal('/[0-9]+/'),Optional(Sequence(Terminal('.'),Terminal('/[0-9]+/')))), \n \
+                                                      Sequence(Terminal('.'),Terminal('/[0-9]+/')) \n \
+                                                     ), \n \
+                                               Optional(Sequence(Terminal('E'), \n \
+                                                                 Choice(0,Skip(),Terminal('+'),Terminal('-')),Terminal('/[0-9]+/'))) \n \
+                                              ) \n \
+                                   ), \n \
+                           Sequence(Terminal('0x'),Terminal('/[A-Za-z0-9]+)/')) \n \
+                          ) \n \
+                   ), \n \
+           Comment('END numeric-literal')) \n \
+    ); /* numeric-literal */ \n \
+/********************************************************************************************************************************/ \n \
+Show(Sequence(Title('signed-number'),Optional(Choice(0,Terminal('+'),Terminal('-'))),NonTerminal('numeric-literal'),Comment('END signed-number')) \n \
+    ); /* signed-number */  \n \
+/********************************************************************************************************************************/ \n \
+Show(Stack(Title('foreign-key-clause'), \n \
+           Sequence(Terminal('REFERENCES'),NonTerminal('foreign-table'), \n \
+                    Optional(Sequence(Terminal('('),OneOrMore(NonTerminal('column-name'),Terminal(',')),Terminal(')')))), \n \
+           Stack(ZeroOrMore( \n \
+                          Choice(0, \n \
+                                 Sequence(Terminal('ON'), \n \
+                                          Choice(0,Terminal('DELETE'),Terminal('UPDATE')), \n \
+                                          Choice(0, \n \
+                                                 Sequence(Terminal('SET'),Choice(0,Terminal('NULL'),Terminal('DEFAULT'))), \n \
+                                                 Terminal('CASCADE'), \n \
+                                                 Terminal('RESTRICT'), \n \
+                                                 Sequence(Terminal('NO'),Terminal('ACTION')) \n \
+                                                ) \n \
+                                         ), \n \
+                                 Sequence(Terminal('MATCH'),NonTerminal('name')) \n \
+                                ) \n \
+                          ), \n \
+                          Optional(Sequence(Optional(Terminal('NOT')),Terminal('DEFERRABLE'), \n \
+                                           Choice(0,Skip(),Sequence(Terminal('INITIALLY'), \n \
+                                                                    Choice(0,Terminal('DEFFERED'),Terminal('IMMEDIATE')) \n \
+                                                                   ) \n \
+                                                 ) \n \
+                                           ) \n \
+                                  ) \n \
+                   ), \n \
+           Comment('END foreign-key-clause') \n \
+          ) \n \
+    ); /* foreign-key-clause */ \n \
+/********************************************************************************************************************************/ \n \
+Show(Sequence(Title('foreign-table'),NonTerminal('table-name'),Comment('END foreign-table')) \n \
+    ); /* foreign-table */ ";
+
 /* user application */
 root.context =	{
 		title:"notset",
@@ -123,6 +299,8 @@ footer {
 <h1>railroad-diagram</h1>
 </header>
 <nav>
+<button id="createtable" onclick="createtable();">Create Table</button>
+<button id="expression" onclick="expression();">expression</button>
 <button id="showhide" onclick="showhide();">show/hide</button>
 <select id="items" onchange="goToItem()"></select>
 <button id="switch" onclick="doswitch();">switch</button>
@@ -345,6 +523,14 @@ window.showstate="editor";
 var validate=document.getElementById("validate");
 validate.setAttribute("class","hidden");
 
+function createtable(){
+	window.editor.getDoc().setValue(window.createtablesource);
+}
+
+function expression(){
+	window.editor.getDoc().setValue(window.expressionsource);
+}
+
 function injectjs(content,error){
     var scriptref=document.createElement('script');
     scriptref.setAttribute("type","text/javascript");
@@ -517,7 +703,7 @@ function doc(type,node){
 }
 
 function tokenizer(str){
-const regex = /"(?:\w|\s)+"|'(?:\w|\s)+'|\w+|[,.()]/gm;
+const regex = /"(?:\w|\s)+"|'(?:\w|\s)+'|\w+|[,.()\+\-\*/;]/gm;
 var m;
 var results=[];
 
@@ -667,6 +853,7 @@ function dowalk(context){
 		 case 'NonTerminal':
 		  	var compiled = context.compiled;	
 		  	var ntname=context.walk["NonTerminal"][0];
+		  	console.log(ntname);
 		  	context.titles.push(ntname);
 		    if(context.nonTerminals[context.walk["NonTerminal"][0]]===undefined){
 		    	context.error={state:true,message:"not existing NonTerminal"+context.walk["NonTerminal"][0]};
@@ -847,7 +1034,7 @@ function dowalk(context){
 		    					break;		    					
 		    				}
 		    			} else{
-		    				compiled.push(context.compiled);
+		    				fillcompiled(context,compiled);	
 		    			}
 		    		} else if(i==1){		    			
 		    			// just the end	    			
