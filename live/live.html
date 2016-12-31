@@ -35,6 +35,7 @@ window.expressionsource="/******************************************************
 /********************************************************************************************************************************/ \n \
  Show(Sequence(Title('constant'),Terminal('/[+-]?[0-9]+/'), Comment('END constant')) /* Sequence */ \n \
  ); /* constant */ \n";
+window.expressionexample="(Z+315)*(22+A)";
 window.createtablesource= "/********************************************************************************************************************************/ \n \
 Show(Stack(Title('CREATE TABLE'), \n \
   Sequence(Terminal('CREATE'),Choice(0,Skip(),Terminal('TEMP'),Terminal('TEMPORARY')),Terminal('TABLE'), \n \
@@ -191,6 +192,20 @@ Show(Stack(Title('foreign-key-clause'), \n \
 Show(Sequence(Title('foreign-table'),NonTerminal('table-name'),Comment('END foreign-table')) \n \
     ); /* foreign-table */ ";
 
+window.createtableexample= "CREATE TABLE \"Customer\" ( \n \
+  \"IdCustomer\" text NULL PRIMARY KEY, \n \
+  \"CompanyName\" text NULL, \n \
+  \"ContactName\" text NULL, \n \
+  \"ContactTitle\" text NULL, \n \
+  \"Address\" text NULL, \n \
+  \"City\" text NULL, \n \
+  \"Region\" text NULL, \n \
+  \"PostalCode\" text NULL, \n \
+  \"Country\" text NULL, \n \
+  \"Phone\" text NULL, \n \
+  \"Fax\" text NULL \n \
+) \n";
+
 /* user application */
 root.context =	{
 		title:"notset",
@@ -311,178 +326,10 @@ footer {
 <input type='checkbox' id='home'/>home(+/-)<div>
 <div id="editor">
 <textarea id="graphin" cols='150' rows='25'>
-/********************************************************************************************************************************/
-Show(Stack(Title("CREATE TABLE"),
-  Sequence(Terminal('CREATE'),Choice(0,Skip(),Terminal('TEMP'),Terminal('TEMPORARY')),Terminal('TABLE'),
-           Choice(0,Skip(),Sequence(Terminal('IF'),Terminal('NOT'),Terminal('EXISTS'))
-  ) /* sequence */
-),Sequence(Optional(Sequence(NonTerminal('schema-name'),Terminal("."))),NonTerminal('table-name')), /* sequence */
-Sequence(
- Choice(0,
-  Sequence(Terminal("("),OneOrMore(NonTerminal("column-def"),Terminal(",")),
-           ZeroOrMore(Terminal(","),NonTerminal("table-constraint")),
-           Terminal(")"),Optional(Sequence(Terminal("WITHOUT"),Terminal("ROWID")))),
-  Sequence(Terminal("AS"),NonImplemented("select-stm"))
- ) /* choice */
-),
-Comment("END CREATE TABLE")) /* Stack */
-); /* Create Table */
-/********************************************************************************************************************************/
-Show(
-Sequence(Title("schema-name"),
-NonTerminal('name'),Comment("END schema-name")
-) 
-); /* schema name */
-/********************************************************************************************************************************/
-Show(
-Sequence(Title("table-name"),NonTerminal('name'),Comment('END table-name')
-)
-); /* tables name */
-/********************************************************************************************************************************/
-Show(
-Sequence(Title("column-def"),NonTerminal("column-name"),Optional(NonTerminal("type-name")),ZeroOrMore(NonTerminal("column-constraint")),
-Comment("END column-def")
-)
-); /* column def */
-/********************************************************************************************************************************/
-Show(
-Sequence(Title("column-name"),NonTerminal('name'),Comment('END column-name')
-)
-); /* column name */
-/********************************************************************************************************************************/
-Show(
-Sequence(Title("name"),
-Choice(0,
-	Terminal('/(^[A-Za-z][A-Za-z0-9_]*)/'),
-	Terminal('/(^\\"[A-Za-z][A-Za-z0-9_\\s]*)\\"/'),
-        Terminal("/(^\\'[A-Za-z][A-Za-z0-9_\\s]*)\\'/")
-),
-Comment("END name")
-)
-); /* name */
-/********************************************************************************************************************************/
-Show(Stack(
-  Title("column-constraint"),
-  Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name"))),
-  Sequence(Choice(0,
-         Sequence(Terminal("PRIMARY"),Terminal("KEY"),Choice(0,Skip(),Terminal("ASC"),Terminal("DESC")),NonTerminal("conflict-clause"),Optional(Terminal("AUTOINCREMENT"))),
-         Sequence(Optional(Terminal("NOT")),Terminal("NULL"),NonTerminal("conflict-clause")),
-         Sequence(Terminal("UNIQUE"),NonTerminal("conflict-clause")),
-         Sequence(Terminal("CHECK"),Terminal("("),NonImplemented("expr"),Terminal(")")),
-         Sequence(Terminal("DEFAULT"),Choice(0,NonTerminal("signed-number"),NonTerminal("literal-value"),Sequence(Terminal("("),NonImplemented("expr"),Terminal(")")))),
-         Sequence(Terminal("COLLATE"),Terminal("collation-name")),
-         NonTerminal("foreign-key-clause")
-        )),
-  Comment("END column-constraint")
-  )
-); /* column-constraint */
-/********************************************************************************************************************************/
-Show(Sequence(Title("conflict-clause"),
-     Optional(Sequence(Terminal("ON"),Terminal("CONFLICT"),
-                                                Choice(0,
-                                                       Terminal("ROLLBACK"),
-                                                       Terminal("ABORT"),
-                                                       Terminal("FAIL"),
-                                                       Terminal("IGNORE"),
-                                                       Terminal("REPLACE"))
-                                               )
-                                      ),Comment("END conflict-clause"))
-    ); /* conflict-clause */
-/********************************************************************************************************************************/
-Show(Stack(Title("table-constraint"),Stack(Optional(Sequence(Terminal("CONSTRAINT"),NonTerminal("name"))),
-                                     Choice(0,Sequence(Choice(0,Sequence(Terminal("PRIMARY"),Terminal("Key")),Terminal("UNIQUE")),Terminal("("),
-                                                       OneOrMore(NonTerminal("indexed-column"),Terminal(",")),Terminal(")"),NonTerminal("conflict-clause")),
-                                            Sequence(Terminal("CHECK"),Terminal("("),NonImplemented("expr"),Terminal(")")),
-                                            Sequence(Terminal("FOREIGN"),Terminal("KEY"),Terminal("("),
-                                                     OneOrMore(NonTerminal("column-name"),Terminal(",")),Terminal(")"),
-                                                     NonTerminal("foreign-key-clause"))
-                                           )                                          
-     ),
-     Comment("END table-constrainte"))
-); /* table-constraint */
-/********************************************************************************************************************************/
-Show(Stack(Title("indexed-column"),
-     Sequence(Choice(0,NonTerminal("column-name"),NonImplemented("expr")),
-              Optional(Sequence(Terminal("COLLATE"),NonTerminal("collation-name"))),
-              Choice(0,Skip(),Terminal("ASC"),Terminal("DESC"))),
-     Comment("END indexed-column"))
-    ); /* indexed-column */
-/********************************************************************************************************************************/
-Show(Stack(Title("type-name"),
-           Sequence(NonTerminal("name"),Choice(0,
-                                                       Skip(),
-                                                       Sequence(Terminal("("),NonTerminal("signed-number"),Terminal(")")),
-                                                       Sequence(Terminal("("),NonTerminal("signed-number"),Terminal(","),NonTerminal("signed-number"),Terminal(")"))
-                                                      )
-                   ),
-           Comment("END type-name"))
-    ); /* type-name */ 
-/********************************************************************************************************************************/
-Show(Stack(Title("numeric-literal"),
-           Sequence(Choice(0,Choice(0,Sequence(Choice(0,Sequence(Terminal("/[0-9]+/"),Optional(Sequence(Terminal("."),Terminal("/[0-9]+/")))),
-                                                      Sequence(Terminal("."),Terminal("/[0-9]+/"))
-                                                     ),
-                                               Optional(Sequence(Terminal("E"),
-                                                                 Choice(0,Skip(),Terminal("+"),Terminal("-")),Terminal("/[0-9]+/")))
-                                              )
-                                   ),
-                           Sequence(Terminal("0x"),Terminal("/[A-Za-z0-9]+)/"))
-                          )
-                   ),
-           Comment("END numeric-literal"))
-    ); /* numeric-literal */
-/********************************************************************************************************************************/
-Show(Sequence(Title("signed-number"),Optional(Choice(0,Terminal("+"),Terminal("-"))),NonTerminal("numeric-literal"),Comment("END signed-number"))
-    ); /* signed-number */ 
-/********************************************************************************************************************************/
-Show(Stack(Title("foreign-key-clause"),
-           Sequence(Terminal("REFERENCES"),NonTerminal("foreign-table"),
-                    Optional(Sequence(Terminal("("),OneOrMore(NonTerminal("column-name"),Terminal(",")),Terminal(")")))),
-           Stack(ZeroOrMore(
-                          Choice(0,
-                                 Sequence(Terminal("ON"),
-                                          Choice(0,Terminal("DELETE"),Terminal("UPDATE")),
-                                          Choice(0,
-                                                 Sequence(Terminal("SET"),Choice(0,Terminal("NULL"),Terminal("DEFAULT"))),
-                                                 Terminal("CASCADE"),
-                                                 Terminal("RESTRICT"),
-                                                 Sequence(Terminal("NO"),Terminal("ACTION"))
-                                                )
-                                         ),
-                                 Sequence(Terminal("MATCH"),NonTerminal("name"))
-                                )
-                          ),
-                          Optional(Sequence(Optional(Terminal("NOT")),Terminal("DEFERRABLE"),
-                                           Choice(0,Skip(),Sequence(Terminal("INITIALLY"),
-                                                                    Choice(0,Terminal("DEFFERED"),Terminal("IMMEDIATE"))
-                                                                   )
-                                                 )
-                                           )
-                                  )
-                   ),
-           Comment("END foreign-key-clause")
-          )
-    ); /* foreign-key-clause" */
-/********************************************************************************************************************************/
-Show(Sequence(Title("foreign-table"),NonTerminal("table-name"),Comment("END foreign-table"))
-    ); /* foreign-table */
 </textarea>
 </div >
 <div id="sql">
 <textarea id="sqleditor" cols="50" rows="25">
-CREATE TABLE "Customer" (
-  "IdCustomer" text NULL PRIMARY KEY,
-  "CompanyName" text NULL,
-  "ContactName" text NULL,
-  "ContactTitle" text NULL,
-  "Address" text NULL,
-  "City" text NULL,
-  "Region" text NULL,
-  "PostalCode" text NULL,
-  "Country" text NULL,
-  "Phone" text NULL,
-  "Fax" text NULL
-)
 </textarea>
 <div id="sqlcompiled">
 </div>
@@ -517,6 +364,9 @@ window.sql = CodeMirror.fromTextArea(document.getElementById("sqleditor"), {
         continueComments: "Enter",       
 });
 
+window.editor.getDoc().setValue(window.createtablesource);
+window.sql.getDoc().setValue(window.createtableexample);
+
 var cmsql = document.getElementById("sql");
 cmsql.setAttribute("class","hidden");
 window.showstate="editor";
@@ -525,10 +375,12 @@ validate.setAttribute("class","hidden");
 
 function createtable(){
 	window.editor.getDoc().setValue(window.createtablesource);
+	window.sql.getDoc().setValue(window.createtableexample);
 }
 
 function expression(){
 	window.editor.getDoc().setValue(window.expressionsource);
+	window.sql.getDoc().setValue(window.expressionexample);
 }
 
 function injectjs(content,error){
