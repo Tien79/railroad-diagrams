@@ -306,6 +306,8 @@ CREATE TABLE "Customer" (
   "Fax" text NULL
 )
 </textarea>
+<div id="sqlcompiled">
+</div>
 </div>
 </div>
 <div id="error">
@@ -546,6 +548,10 @@ function fillerrorstack(context){
 }
 
 function doswitch(){
+	var sqlcompiled=document.getElementById('sqlcompiled');
+	sqlcompiled.innerHTML="";
+	var error=document.getElementById('error');
+	error.innerHTML="";
 	var cmsql=document.getElementById("sql");
 	var cmrailroad=document.getElementById("editor");
 	var validate=document.getElementById("validate");
@@ -567,6 +573,10 @@ function doswitch(){
 }
 
 function dovalidate(){
+	var sqlcompiled=document.getElementById('sqlcompiled');
+	sqlcompiled.innerHTML="";
+	var error=document.getElementById('error');
+	error.innerHTML="";
 	var sql = window.sql.getValue();
 	var tokens = tokenizer(sql);
 	var i;
@@ -582,15 +592,42 @@ function dovalidate(){
 		walk = window.results.walk[i];
 		var walkindex = 0;
 		var pathindex = 0;
-		var context = {path:tokens,pathindex:pathindex,walk:walk,walkindex:walkindex};
+		var context = {path:tokens,pathindex:pathindex,walk:walk,walkindex:walkindex,titles:[item]};
 		context.nonTerminals={};
 		for(i=0; i<window.results.title.length;i++){
 			context.nonTerminals[window.results.title[i]]=window.results.walk[i];
 		}
 		dowalk(context);
-		return context;
+		var final={};
+		final[item]=context.compiled;
+		context.compiled=[];
+		context.compiled.push(final);
+		if(context.error===undefined){
+			// displayed 'compiled' structure		
+		    const formatter = new JSONFormatter(context.compiled);
+            var elt = formatter.render();
+            sqlcompiled.appendChild(elt);
+		} else{
+			// display error and errorstack
+			error.innerHTML=context.error.message;
+			const formatter = new JSONFormatter(context.errorstack);
+			var elt = formatter.render();
+			error.appendChild(elt);
+		}
 	}
 	return false;
+}
+
+function fillcompiled(context,compiled,nt){
+	if(nt===undefined){
+		if((Array.isArray(context.compiled) && (context.compiled.length>0))){
+			compiled.push(context.compiled);
+		}
+	} else if (!Array.isArray(context.compiled)){
+		compiled.push(context.compiled);
+	} else{
+		compiled.push(nt);
+	}
 }
 
 function dowalk(context){
@@ -599,6 +636,9 @@ function dowalk(context){
 	// context.errorstack=[];  // reset errorstack as it's relevant just for the current case (not global)
 	switch(walknodetype){
 		case 'Diagram':
+			if(context.titles===undefined){
+		    	context.titles=[];
+		    }
 			if(context.compiled===undefined){
 				context.compiled = [];
 			}
@@ -607,9 +647,6 @@ function dowalk(context){
 		    }
 		    if (context.errorstack===undefined){
 		    	context.errorstack = [];
-		    }
-		    if(context.results===undefined){
-		    	context.results=[];
 		    }
 		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    context.walkindex=0;
@@ -622,10 +659,6 @@ function dowalk(context){
 		    return;
 			break;
 		case 'Title':
-		    if(context.titles===undefined){
-		    	context.titles=[];
-		    }
-		    context.titles.push(context.walk['Title'][0]);
 		    context.walkindex++;
 		    break;
 		 case 'Comment':
@@ -634,6 +667,7 @@ function dowalk(context){
 		 case 'NonTerminal':
 		  	var compiled = context.compiled;	
 		  	var ntname=context.walk["NonTerminal"][0];
+		  	context.titles.push(ntname);
 		    if(context.nonTerminals[context.walk["NonTerminal"][0]]===undefined){
 		    	context.error={state:true,message:"not existing NonTerminal"+context.walk["NonTerminal"][0]};
 		    	break;
@@ -648,13 +682,10 @@ function dowalk(context){
 		    context.walkindex=restore.walkindex;
 		    context.walkindex++;
 		    if(context.error===undefined) {
-		    	context.results.push({type:'NonTerminal',walkvalue:context.walk.NonTerminal[0],pathvalue:context.path[context.pathindex]});
-		    	// console.log(walknodetype+" "+context.walk["NonTerminal"][0]);
-		    	if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
-		    		compiled.push(nt);
-		    	}		    		
+		    	fillcompiled(context,compiled,nt);	    		
 		    }
 		    context.compiled=compiled;
+		    context.titles.pop();
 		 	break;		    	 	
 		 case 'Terminal':
 		 	var compiled = context.compiled;	
@@ -669,29 +700,27 @@ function dowalk(context){
     					// m.forEach((match, groupIndex) => {
         					// console.log(`Found match, group ${groupIndex}: ${match}`);
     					// });
-    					// console.log(walknodetype+" "+context.path[context.pathindex]);	   
-    					context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});
-    					// context.compiled.push({"Terminal":context.path[context.pathindex]});
-    					 context.compiled.push(context.path[context.pathindex]);
+    					fillcompiled(context,compiled,context.path[context.pathindex]);
 					} else {
-						context.error={state:true,message:"Terminal "+context.path[context.pathindex]+" not matching Regexp: "+context.walk.Terminal[0]};
+						context.error={state:true,message:"Terminal "+context.path[context.pathindex]+
+						                                            " not matching Regexp: "+context.walk.Terminal[0]+
+						                                            " in: "+context.titles[context.titles.length-1]};
 					}
 		    	} else {
 		    		var feedback = context.walk.Terminal[0]==context.path[context.pathindex];
 		    		if(!feedback){
-		    			context.error={state:true,message:"Terminal "+context.path[context.pathindex]+" not matching: "+context.walk.Terminal[0]};
+		    			context.error={state:true,message:"Terminal "+context.path[context.pathindex]+
+		    			                                            " not matching: "+context.walk.Terminal[0]+
+						                                            " in: "+context.titles[context.titles.length-1]};
 		    		} else{
-		    			// console.log(walknodetype+" "+context.walk["Terminal"][0]);	   
-		    			context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0],pathvalue:context.path[context.pathindex]});		    	
-		    			// context.compiled.push({"Terminal":context.path[context.pathindex]});
-		    			context.compiled.push(context.path[context.pathindex]);
+		    			fillcompiled(context,compiled,context.path[context.pathindex]);
 		    		}
 		    	}
 		    } else {
-		    	context.results.push({type:'Terminal',walkvalue:context.walk.Terminal[0]});
 		    	context.error={state:true,message:"ended prematurely"};
 		    }
 		    context.pathindex++;
+		    context.compiled=compiled;
 		    break;
 		 case 'Stack':
 		 case 'Sequence':
@@ -703,14 +732,13 @@ function dowalk(context){
 		    	context.walkindex=0;
 		    	context.walk=context.walk[walknodetype][i];
 		    	dowalk(context);
-		    	if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
-		    		compiled.push(context.compiled);
-		    	}		    	
+		    	fillcompiled(context,compiled);	    	
 		        var restore = context.stack.pop();
 		    	context.walk=restore.walk;
 		    	context.walkindex=restore.walkindex;
 		    	context.walkindex++;
-		    	if(context.error!==undefined) break;
+		    	if(context.error!==undefined) 
+		    			break;
 		    }
 		    context.compiled=compiled;
 		    break;
@@ -718,7 +746,6 @@ function dowalk(context){
 		    var skip=false;		    
 		    var error=false;
 		    var esindex=context.errorstack.length;
-		    var resultsindex = context.results.length;
 		    var compiled = context.compiled;		 
 		    for(var i=1; i<context.walk[walknodetype].length;i++){
 		    	context.stack.push({walk:context.walk,walkindex:context.walkindex});
@@ -733,11 +760,6 @@ function dowalk(context){
 						fillerrorstack(context);
 						delete context.error;
 						error=true;
-						if(resultsindex==0){
-							context.results=[];
-						} else{
-							context.results=context.results.slice(0,resultsindex);
-						}
 					} else{ // success
 						// console.log(walknodetype+" "+i);
 		        		var restore = context.stack.pop();
@@ -745,9 +767,7 @@ function dowalk(context){
 		    			context.walkindex=restore.walkindex;
 		    			context.walkindex++;
 		    			error=false;
-		    			if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
-		    				compiled.push(context.compiled);
-		    			}		    	
+		    			fillcompiled(context,compiled);    	
 		    			break;							
 					}
 		    	} else{
@@ -767,11 +787,12 @@ function dowalk(context){
 		    	}				
 		    	return;
 		    }		    	
-		    context.error={state:true,message:"choice not satisfied near "+context.path[context.pathindex]};
+		    context.error={state:true,message:"choice not satisfied near "+
+		                                      context.path[context.pathindex]+
+		                                      " in: "+context.titles[context.titles.length-1]};
 		    break;
 		 case 'Optional':
 		    var skip=false;
-		    var resultsindex = context.results.length;
 		    var compiled = context.compiled;	
 		    context.stack.push({walk:context.walk,walkindex:context.walkindex});
 		    context.walkindex=0;
@@ -783,16 +804,9 @@ function dowalk(context){
 				context.pathindex=pathindex;
 				delete context.error;
 				skip=true;
-				if(resultsindex==0){
-					context.results=[];
-				} else{
-					context.results=context.results.slice(0,resultsindex);
-				}
 			} else{
 				// success
-		    	if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
-		    		compiled.push(context.compiled);
-		    	}		    	
+		    	fillcompiled(context,compiled);	    	
 			}	    	
 	    	var restore = context.stack.pop();
 		    context.walk=restore.walk;
@@ -826,9 +840,7 @@ function dowalk(context){
 		    				} else {
 		    					// just the end = success
 		    					// console.log(walknodetype+" "+i);
-		    					if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
-		    						compiled.push(context.compiled);
-		    					}		    	
+		    					fillcompiled(context,compiled);	    	
 								context.pathindex=pathindex;
 								delete context.error;
 		    					more=false;
@@ -847,9 +859,7 @@ function dowalk(context){
 		    				break;
 		    			} else{
 		    				// success: another one!
-		    				if((Array.isArray(context.compiled) && (context.compiled.length>0))||(!Array.isArray(context.compiled))){
-		    					compiled.push(context.compiled);
-		    				}		    	
+		    				fillcompiled(context,compiled);		    	
 		    			}
 		    		}
 		    	}
