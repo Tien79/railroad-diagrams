@@ -703,6 +703,7 @@ function doc(type,node){
 }
 
 function tokenizer(str){
+/* add characters if more needed*/
 const regex = /"(?:\w|\s)+"|'(?:\w|\s)+'|\w+|[,.()\+\-\*/;]/gm;
 var m;
 var results=[];
@@ -807,12 +808,40 @@ function dovalidate(){
 function fillcompiled(context,compiled,nt){
 	if(nt===undefined){
 		if((Array.isArray(context.compiled) && (context.compiled.length>0))){
-			compiled.push(context.compiled);
+			if(context.compiled.length==1){
+				compiled.push(context.compiled[0]);
+			} else{
+				compiled.push(context.compiled);
+			}
 		}
 	} else if (!Array.isArray(context.compiled)){
-		compiled.push(context.compiled);
+		var keys = Object.keys(context.compiled);
+		for(var i=0;i<keys.length;i++){
+			if(Array.isArray(context.compiled[keys[i]])){
+				if(context.compiled[keys[i]].length==1){
+					context.compiled[keys[i]]= context.compiled[keys[i]][0];
+				} else if(context.compiled[keys[i]].length==0){
+					delete(context.compiled[keys[i]]);
+				}
+			}
+		}
+		if(Array.isArray(context.compiled)||(Object.keys(context.compiled).length!=0)){
+			compiled.push(context.compiled);	
+		}			
 	} else{
-		compiled.push(nt);
+		var keys = Object.keys(nt);
+		for(var i=0;i<keys.length;i++){
+			if(Array.isArray(nt[keys[i]])){
+				if(nt[keys[i]].length==1){
+					nt[keys[i]]= nt[keys[i]][0];
+				} else if(nt[keys[i]].length==0){
+					delete(nt[keys[i]]);
+				}
+			}
+		}
+		if(Array.isArray(nt)||(Object.keys(nt).length!=0)){
+			compiled.push(nt);
+		}		
 	}
 }
 
@@ -853,7 +882,7 @@ function dowalk(context){
 		 case 'NonTerminal':
 		  	var compiled = context.compiled;	
 		  	var ntname=context.walk["NonTerminal"][0];
-		  	console.log(ntname);
+		  	// console.log(ntname);
 		  	context.titles.push(ntname);
 		    if(context.nonTerminals[context.walk["NonTerminal"][0]]===undefined){
 		    	context.error={state:true,message:"not existing NonTerminal"+context.walk["NonTerminal"][0]};
