@@ -403,7 +403,8 @@ svg.railroad-diagram path.diagram-text {
 svg.railroad-diagram g.diagram-text:hover path.diagram-text {
     fill: #eee;
 }
-input[type=checkbox]:checked + div {
+input[type=checkbox]:checked + div,
+input[type=checkbox]:checked + small + div {
   display: none;
 }
 .homeLink{
@@ -445,6 +446,7 @@ footer {
 <h1>railroad-diagram</h1>
 </header>
 <nav>
+<button id="dosetup" onclick="dosetup();">Setup</button>
 <button id="dorailroard" onclick="dorailroad();">RailRoad Grammar</button>
 <button id="createtable" onclick="createtable();">Create Table</button>
 <button id="expression" onclick="expression();">expression</button>
@@ -454,24 +456,39 @@ footer {
 <button id="validate" onclick="dovalidate();">validate</button>
 <button id="refresh" onclick="refresh();">refresh</button>
 </nav>
+<hr/>
+<!-- navigation -->
 <div>
-<input type='checkbox' id='home'/>home(+/-)<div>
+<input type='checkbox' id='home'/>home(+/-)<small><span id="lc"></span></small>
+<div>
 <div id="editor">
 <textarea id="graphin" cols='150' rows='25'>
 </textarea>
+<hr/>
+<!-- grammar editor input -->
 </div >
 <div id="sql">
 <textarea id="sqleditor" cols="50" rows="25">
 </textarea>
+<hr/>
+<!-- expression to validate editor -->
 <div id="sqlcompiled">
 </div>
 </div>
+<div id="setup">
+<textarea id="setuptextarea" cols='150' rows='25'>
+</textarea>
+<hr/>
+<!-- setup editor input -->
+</div >
 </div>
 <div id="error">
 </div>
+<hr/>
+<!-- errors output -->
 <div id="result">
 </div>
-<footer>Copyright &copy; Gilbert Brault 2016</footer>
+<footer>Copyright &copy; Gilbert Brault 2016,2017</footer>
 <script>
 
 window.editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
@@ -482,7 +499,7 @@ window.editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
         extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
-        continueComments: "Enter",       
+        continueComments: "Enter",	
 });
 
 window.sql = CodeMirror.fromTextArea(document.getElementById("sqleditor"), {
@@ -493,7 +510,18 @@ window.sql = CodeMirror.fromTextArea(document.getElementById("sqleditor"), {
         foldGutter: true,
         gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
         extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
-        continueComments: "Enter",       
+        continueComments: "Enter"       
+});
+
+window.setupeditor = CodeMirror.fromTextArea(document.getElementById("setuptextarea"), {
+		mode: "javascript",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter"       
 });
 
 window.editor.getDoc().setValue(window.createtablesource);
@@ -504,6 +532,65 @@ cmsql.setAttribute("class","hidden");
 window.showstate="editor";
 var validate=document.getElementById("validate");
 validate.setAttribute("class","hidden");
+var setup = document.getElementById("setup");
+setup.setAttribute("class","hidden");
+
+var setupblob={validating:"function"};
+
+window.editor.on("cursorActivity",function(instance){
+	updatecursor(instance);
+});
+window.sql.on("cursorActivity",function(instance){
+	updatecursor(instance);
+});
+window.setupeditor.on("cursorActivity",function(instance){
+	updatecursor(instance);
+});
+
+function updatecursor(instance){
+	var cursor = instance.getDoc().getCursor();
+	// console.log(JSON.stringify(cursor));
+	var lc = document.getElementById('lc');
+	// search token
+	var token=-1;
+	var linefound=false;
+	var charfound = false;
+	var ptoken;
+	if((instance===window.sql)&&((window.results!==undefined)&&(window.results.context!==undefined)&&(window.results.context.path!==undefined))){
+		for(var i=0;i<window.results.context.path.length;i++){
+			ptoken = window.results.context.path[i];
+			var lineschars = window.results.context.lineschars[ptoken.index];
+			if(lineschars.line==(cursor.line+1)){
+				linefound=true;
+			}
+			if(linefound){
+				if(lineschars.char>=(cursor.ch+1)){
+					charfound=true;
+					token=i;
+					break;
+				}
+			}
+		}
+	}
+	if(token==-1){
+		lc.innerHTML=" line("+(cursor.line+1)+")- char("+(cursor.ch+1)+")";
+	} else {
+		lc.innerHTML=" line("+(cursor.line+1)+")- char("+(cursor.ch+1)+") token:"+ptoken.value+"("+token+")";
+	}	
+}
+
+function dosetup(){
+	var setup = document.getElementById("setup");
+	var show = setup.getAttribute("class");
+
+    if(show=='hidden'){
+		setup.setAttribute("class","");
+		window.setupeditor.getDoc().setValue(JSON.stringify(setupblob));
+	} else {
+		setup.setAttribute("class","hidden");
+		setupblob=JSON.parse(window.setupeditor.getValue());
+	}
+}
 
 function createtable(){
 	window.editor.getDoc().setValue(window.createtablesource);
@@ -549,14 +636,27 @@ function _Show(){
 		this.context.title="notset";
 	} else if(this.state==="walking"){
 		this.walk.push (Diagram(arguments[0]));
+	} else if(this.state==="generating"){
+		var res = Diagram(arguments[0]);
+		var fname=normalize(this.context.fname); // we have to have a title in a Diagram! 
+		eval("var "+fname+"=function(){return "+res+";}")
+		this.context.language[fname]=eval(fname);
 	}
+}
+
+function normalize(str){
+	str=str.replace(/\s/g,'_');
+	str=str.replace(/\-/g,'_');
+	return "RR_"+str;
 }
 
 function refresh(){
 	var error=document.getElementById('error');
 	var result=document.getElementById('result');
 	var select=document.getElementById('items');
+	root.context.language={};
 	window.results={title:[],graph:[],walk:[],context:root.context,state:"notset",error:error};
+	window.results.context.normalize=normalize;
 	window.Show=_Show.bind(window.results);
 	result.innerHTML="";
 	error.innerHTML="";
@@ -590,7 +690,19 @@ function refresh(){
 	// prepare json
 	results.state='walking';
     root.Railroad.SetExports(root.Railroad.walking,root.Railroad.fnames);
-    	try{
+    try{
+		scriptref = injectjs(diags);
+	} catch(e){
+		error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+	}
+	scriptref.outerHTML="";
+
+	// prepare generating
+	results.state='generating';
+	root.Railroad.SetExports(root.Railroad.generating,root.Railroad.fnames);
+	try{
 		scriptref = injectjs(diags);
 	} catch(e){
 		error.innerHTML="<pre>"+
@@ -707,11 +819,11 @@ while ((m = regex.exec(str)) !== null) {
     
     // The result can be accessed through the `m`-variable.
     m.forEach((match, groupIndex) => {
-        // console.log(`Found match, group ${groupIndex}: ${match}`);
+        // console.log(`Found match, group ${groupIndex}: ${match}`);		
         if(!match.startsWith('/*')){
-        		tokens.push(match);
+        		tokens.push({value:match,index:results.length});
         }
-        results.push(match);
+		results.push(match);
     });
 }
 /* list lines and start char */
@@ -797,36 +909,60 @@ function dovalidate(){
 	var walk;
 	// now check if the path i.e. the tokens list is compatible with the selected graph
 	// find the entry graph
-    var select = document.getElementById("items");
+	var select = document.getElementById("items");
 	var item = select.value;
 	for(i=0; i<window.results.title.length;i++){
 		if(item===window.results.title[i]) break;
 	}
 	if(i<window.results.title.length){
-		walk = window.results.walk[i];
-		var walkindex = 0;
-		var pathindex = 0;
-		var context = {path:tokens,pathindex:pathindex,walk:walk,walkindex:walkindex,titles:[item],lineschars:tokenizerout.lineschars};
-		context.nonTerminals={};
-		for(i=0; i<window.results.title.length;i++){
-			context.nonTerminals[window.results.title[i]]=window.results.walk[i];
-		}
-		dowalk(context);
-		var final={};
-		final[item]=context.compiled;
-		context.compiled=[];
-		context.compiled.push(final);
-		if(context.error===undefined){
-			// displayed 'compiled' structure		
-		    const formatter = new JSONFormatter(context.compiled);
-            var elt = formatter.render();
-            sqlcompiled.appendChild(elt);
-		} else{
-			// display error and errorstack
-			error.innerHTML=context.error.message;
-			const formatter = new JSONFormatter(context.errorstack);
-			var elt = formatter.render();
-			error.appendChild(elt);
+		if(setupblob.validating=='tree'){
+			walk = window.results.walk[i];
+			var walkindex = 0;
+			var pathindex = 0;
+			var context = {path:tokens,pathindex:pathindex,walk:walk,walkindex:walkindex,titles:[item],lineschars:tokenizerout.lineschars};
+			context.nonTerminals={};
+			for(i=0; i<window.results.title.length;i++){
+				context.nonTerminals[window.results.title[i]]=window.results.walk[i];
+			}
+			dowalk(context);
+			var final={};
+			final[item]=context.compiled;
+			context.compiled=[];
+			context.compiled.push(final);
+			if(context.error===undefined){
+				// displayed 'compiled' structure		
+				const formatter = new JSONFormatter(context.compiled);
+				var elt = formatter.render();
+				sqlcompiled.appendChild(elt);
+			} else{
+				// display error and errorstack
+				error.innerHTML=context.error.message;
+				const formatter = new JSONFormatter(context.errorstack);
+				var elt = formatter.render();
+				error.appendChild(elt);
+			}		
+		} else if(setupblob.validating=='function'){
+			root.Railroad.SetExports(root.Railroad.validating,root.Railroad.fnames);
+			var funame = normalize(item);
+			var fun = window.results.context.language[funame];
+			if((fun!==undefined)&&(typeof fun ==='function')){
+				window.results.context.path=tokens;
+				window.results.context.pathindex=0;
+				window.results.context.lineschars=tokenizerout.lineschars;
+				window.results.context.compiled=[];
+				window.results.context.compiledindex=0;
+				window.results.context.stack=[item];
+				var result=root.Railroad.execute(fun);
+				if(result.error===undefined){
+					// displayed 'compiled' structure		
+					const formatter = new JSONFormatter(window.results.context.compiled);
+					var elt = formatter.render();
+					sqlcompiled.appendChild(elt);
+				} else{
+					// display error and errorstack
+					error.innerHTML=result.error;
+				}		
+			}
 		}
 	}
 	return false;
@@ -938,25 +1074,25 @@ function dowalk(context){
                   	const regex = new RegExp(context.walk.Terminal[0].substring(1,l-1));
 					var m;
 
-					if ((m = regex.exec(context.path[context.pathindex])) !== null) {
+					if ((m = regex.exec(context.path[context.pathindex].value)) !== null) {
     					// The result can be accessed through the `m`-variable.
     					// m.forEach((match, groupIndex) => {
         					// console.log(`Found match, group ${groupIndex}: ${match}`);
     					// });
     					fillcompiled(context,compiled,context.path[context.pathindex]);
 					} else {
-						context.error={state:true,message:"Terminal "+context.path[context.pathindex]+"("+context.pathindex+")-lines:"+
-		                                      						context.lineschars[context.pathindex].line+
-		                                      						" chars:"+context.lineschars[context.pathindex].char+"-"+		    			
+						context.error={state:true,message:"Terminal "+context.path[context.pathindex].value+"("+context.pathindex+")-lines:"+
+		                                      						context.lineschars[context.path[context.pathindex].index].line+
+		                                      						" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-"+		    			
 		    			                                            " not matching: "+context.walk.Terminal[0]+
 						                                            " in: "+context.titles[context.titles.length-1]};
 					}
 		    	} else {
 		    		var feedback = context.walk.Terminal[0]==context.path[context.pathindex];
 		    		if(!feedback){
-		    			context.error={state:true,message:"Terminal "+context.path[context.pathindex]+"("+context.pathindex+")-lines:"+
-		                                      						context.lineschars[context.pathindex].line+
-		                                      						" chars:"+context.lineschars[context.pathindex].char+"-"+		    			
+		    			context.error={state:true,message:"Terminal "+context.path[context.pathindex].value+"("+context.pathindex+")-lines:"+
+		                                      						context.lineschars[context.path[context.pathindex].index].line+
+		                                      						" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-"+		    			
 		    			                                            " not matching: "+context.walk.Terminal[0]+
 						                                            " in: "+context.titles[context.titles.length-1]};
 		    		} else{
@@ -1039,9 +1175,9 @@ function dowalk(context){
 		    	return;
 		    }		    	
 		    context.error={state:true,message:"choice not satisfied near "+
-		                                      context.path[context.pathindex]+"("+context.pathindex+")-lines:"+
-		                                      context.lineschars[context.pathindex].line+
-		                                      " chars:"+context.lineschars[context.pathindex].char+"-"+
+		                                      context.path[context.pathindex].value+"("+context.pathindex+")-lines:"+
+		                                      context.lineschars[context.path[context.pathindex].index].line+
+		                                      " chars:"+context.lineschars[context.path[context.pathindex].index].char+"-"+
 		                                      " in: "+context.titles[context.titles.length-1]};
 		    break;
 		 case 'Optional':

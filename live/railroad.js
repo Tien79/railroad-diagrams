@@ -1004,4 +1004,331 @@ root.Railroad = function(root, options, context) {
 
     var walking = [pTitle,pDiagram, pComplexDiagram, pSequence, pStack, pOptionalSequence, pChoice, pMultipleChoice, pOptional, pOneOrMore, pZeroOrMore, pTerminal, pNonTerminal, pComment, pSkip, pNonImplemented];
     root.Railroad.walking = walking;
+
+    // generating functions
+    function va_args(args){
+    	var res="";
+    	for(var i=0;i<args.length;i++){
+			res +=args[i];
+			if(i<args.length-1){
+				res+=",";
+			}
+    	} 
+    	return res;   	
+    }
+	function quote(str){
+		str=str.replace(/\\"/g,'"');
+		str=str.replace(/"/g,'\\"');
+		str='"'+str+'"';
+		return str;
+	}
+    function gTitle(){
+		context.fname=arguments[0];
+		return "Title.bind(this,"+quote(arguments[0])+")";
+	};
+    function gDiagram(){return "Diagram.bind(this,"+va_args(arguments)+")";};
+    function gComplexDiagram(){return "ComplexDiagram.bind(this,"+va_args(arguments)+")";};
+    function gSequence(){return "Sequence.bind(this,"+va_args(arguments)+")";};
+    function gStack(){return "Stack.bind(this,"+va_args(arguments)+")";};
+    function gOptionalSequence(){return "OptionalSequence.bind(this,"+ va_args(arguments)+")";};
+    function gChoice(){return "Choice.bind(this,"+va_args(arguments)+")";};
+    function gMultipleChoice(){return "MultipleChoice.bind(this,"+va_args(arguments)+")";};
+    function gOptional(){return "Optional.bind(this,"+va_args(arguments)+")";};
+    function gOneOrMore(){return "OneOrMore.bind(this,"+va_args(arguments)+")";};
+    function gZeroOrMore(){return "ZeroOrMore.bind(this,"+va_args(arguments)+")";};
+    function gTerminal(){return "Terminal.bind(this,"+quote(arguments[0])+")";};
+    function gNonTerminal(){return "NonTerminal.bind(this,"+quote(arguments[0])+")";};
+    function gComment(){return "Comment.bind(this,"+quote(arguments[0])+")";};
+    function gSkip(){return "Skip";};
+    function gNonImplemented() {return "NonImplemented.bind(this,"+quote(arguments[0])+")";};
+
+    var generating = [gTitle,gDiagram, gComplexDiagram, gSequence, gStack, gOptionalSequence, gChoice, gMultipleChoice, gOptional, gOneOrMore, gZeroOrMore, gTerminal, gNonTerminal, gComment, gSkip, gNonImplemented];
+    root.Railroad.generating = generating;
+	
+	// validating functions
+	function execute(fun){
+		var tmp=fun;
+		do{
+			if(typeof tmp ==='function'){
+				tmp=tmp();
+			} else {
+				return tmp;
+			}
+		} while(true);
+    };
+	
+	root.Railroad.execute = execute;
+
+	function vTitle(){
+		return {type:'Title'};			
+	};
+	
+    function vDiagram(){
+		var _arguments=arguments;
+		return vSSD('Diagram',arguments);
+	};
+	
+    function vComplexDiagram(){
+		var error="ComplexDiagram("+context.path[context.pathindex].value+") ";
+		if(arguments.length>0)
+			error += "("+arguments[0]+")";
+			error+= "-lines:"+context.lineschars[context.pathindex].line+" chars:"+context.lineschars[context.pathindex].char+"-";
+		return {type:'ComplexDiagram',error};				
+	};
+	
+    function vSSD(type,_arguments){
+		/*  All must return no error */
+		var res = {type:type};
+		var tres;
+		var pathindex=context.pathindex;
+		var compiledindex=context.compiledindex;
+		for(var i=0; i<_arguments.length; i++){		
+			tres=execute(_arguments[i]);
+			if(tres.error!==undefined){
+				res.error=tres.error;
+				context.pathindex=pathindex;
+				if(compiledindex>0)
+					context.compiled=context.compiled.slice(0,compiledindex);
+				else
+					context.compiled=[];
+				context.compiledindex=compiledindex;
+				break;
+			} 
+		}
+		return res;
+	};
+	
+	function vSequence(){
+		var _arguments=arguments;
+		return vSSD('Sequence',arguments);
+	}
+	
+    function vStack(){
+		var _arguments=arguments;
+		return vSSD('Stack',_arguments);
+	};
+	
+    function vOptionalSequence(){
+		var error="OptionalSequence("+context.path[context.pathindex].value+") ";
+		if(arguments.length>0)
+			error += "("+arguments[0]+")";
+			error+= "-lines:"+context.lineschars[context.pathindex].line+" chars:"+context.lineschars[context.pathindex].char+"-";
+		return {type:'OptionalSequence',error};			
+	};
+	
+    function vChoice(){
+		/* One at least must return no error (or skip)*/
+		var tres;
+		var skip=false;
+		var pathindex=context.pathindex;
+		var compiledindex=context.compiledindex;
+		for(var i=1; i<arguments.length; i++){ // don't care about arguments[0]
+			tres = execute(arguments[i]);
+			if(tres.error===undefined){
+				if(tres.type=='skip'){
+					skip=true;
+				} else {
+					return tres;
+				}			
+			}
+			context.pathindex=pathindex;
+			if(compiledindex>0)
+				context.compiled=context.compiled.slice(0,compiledindex);
+			else
+				context.compiled=[];
+			context.compiledindex=compiledindex;
+		}
+		if(skip){
+			context.pathindex=pathindex;
+			if(compiledindex>0)
+				context.compiled=context.compiled.slice(0,compiledindex);
+			else
+				context.compiled=[];
+			context.compiledindex=compiledindex;
+			return {type:'choice'};
+		} else {
+			context.pathindex=pathindex;
+			if(compiledindex>0)
+				context.compiled=context.compiled.slice(0,compiledindex);
+			else
+				context.compiled=[];
+			context.compiledindex=compiledindex;
+			var error="choice with("+context.path[context.pathindex].value+") not possible";
+			error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
+			return {type:'choice',error};		
+		}		
+	};
+	
+    function vMultipleChoice(){
+		var error="MultipleChoice("+context.path[context.pathindex].value+") ";
+		if(arguments.length>0)
+			error += "("+arguments[0]+")";
+			error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
+		return {type:'MultipleChoice',error};		
+	};
+	
+    function vOptional(){
+		var res = {type:'Optional'};
+		var tres;
+		var pathindex=context.pathindex;
+		var compiledindex=context.compiledindex;
+		if(context.pathindex<context.path.length){
+			tres=execute(arguments[0]);
+			if(tres.error!==undefined){
+				// res.error=tres.error;
+				context.pathindex=pathindex;
+				if(compiledindex>0)
+					context.compiled=context.compiled.slice(0,compiledindex);
+				else
+					context.compiled=[];
+				context.compiledindex=compiledindex;
+			} else {
+				res.type=tres.type;
+			}
+		}
+		return res;		
+	};
+	
+    function vOneOrMore(){
+		var _arguments=arguments;
+		return vOrMore(false,_arguments);
+	};
+	
+    function vZeroOrMore(){
+		var _arguments=arguments;
+		return vOrMore(true,_arguments);
+	};
+	
+	function vOrMore(zero,_arguments){
+		var tres;
+		var more=true;
+		var error = false;
+		var pathindex=context.pathindex;
+		var compiledindex=context.compiledindex;
+		var first=true;
+		var i=0;
+		do{
+			if(context.pathindex>=context.path.length){
+				error=false;
+				more=false;
+			} else {
+				tres = execute(_arguments[i]);
+				i++;
+				if(i>=_arguments.length) i=0;
+				if(tres.error!==undefined){
+					if((first)&&(!zero)){
+						error=true;
+						more=false;
+					} else {
+						error=false;
+						more=false;					
+					}
+					context.pathindex=pathindex;
+					if(compiledindex>0)
+						context.compiled=context.compiled.slice(0,compiledindex);
+					else
+						context.compiled=[];
+					context.compiledindex=compiledindex;
+				} else{
+					first=false;
+					pathindex=context.pathindex;
+					compiledindex=context.compiledindex;
+				}
+			}
+		} while(more);
+		if(!error){
+			return {type:'oneORmore'};
+		} else{
+			return {type:'oneORmore',error:tres.error};
+		}		
+	}
+	
+	function vTerminal(){
+		var error = false;
+		if(arguments.length==1){
+			if(arguments[0].startsWith("/")){
+				var l = arguments[0].length;
+				const regex = new RegExp(arguments[0].substring(1,l-1));
+				var m;
+				if ((m = regex.exec(context.path[context.pathindex].value)) === null) {
+					error=true;
+				}
+			} else {
+				if(arguments[0]!==context.path[context.pathindex].value){
+					error=true;
+				}			
+			}
+		} else {
+			error=true;
+		}
+		if(error){
+			var error="In "+context.stack[context.stack.length-1]+" Terminal("+context.path[context.pathindex].value+") not fitting ";
+			if(arguments.length>0)
+				error += "("+arguments[0]+")";
+			error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
+			return {type:'terminal',error};
+		} else {
+			if (arguments[0]==context.path[context.pathindex].value){
+				context.compiled.push({	PathItem:context.path[context.pathindex].value,										
+										line:context.lineschars[context.path[context.pathindex].index].line,
+										char:context.lineschars[context.path[context.pathindex].index].char,
+										level:getpath(context.stack)									
+									  });
+			} else{
+				context.compiled.push({	Terminal:arguments[0],
+										PathItem:context.path[context.pathindex].value,										
+										line:context.lineschars[context.path[context.pathindex].index].line,
+										char:context.lineschars[context.path[context.pathindex].index].char,
+										level:getpath(context.stack)									
+									  });
+				
+			}
+			context.compiledindex++;
+			context.pathindex++;
+			return {type:'Terminal'};
+		}
+	};
+	
+	function getpath(stack){
+		var stmp="";
+		for(var i=0; i<stack.length;i++){
+			if(i>0) stmp +=":";
+			stmp +=stack[i];
+		}
+		return stmp;
+	}
+	
+    function vNonTerminal(){
+		if(context.language[context.normalize(arguments[0])]!==undefined){
+			context.stack.push(arguments[0]);
+			var res= execute(context.language[context.normalize(arguments[0])]);
+			context.stack.pop();
+			return res;
+		} else {
+			var error="NonTerminal("+context.path[context.pathindex].value+") not fitting ";
+			if(arguments.length>0)
+				error += "("+arguments[0]+")";
+			error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
+			return {type:'NonTerminal',error};			
+		}
+	};
+	
+    function vComment(){
+		return {type:'Comment'};	
+	};
+	
+    function vSkip(){
+		return {type:'Skip'};	
+	};
+	
+    function vNonImplemented() {
+		var error="NonImplemented("+context.path[context.pathindex].value+") ";
+		if(arguments.length>0)
+			error += "("+arguments[0]+")";
+			error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
+		return {type:'NonImplemented',error};	
+	};
+
+    var validating = [vTitle,vDiagram, vComplexDiagram, vSequence, vStack, vOptionalSequence, vChoice, vMultipleChoice, vOptional, vOneOrMore, vZeroOrMore, vTerminal, vNonTerminal, vComment, vSkip, vNonImplemented];
+    root.Railroad.validating = validating;
 }
