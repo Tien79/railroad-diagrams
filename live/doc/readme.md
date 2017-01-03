@@ -16,3 +16,4 @@
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/ZeroOrMore.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Terminal.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/NonTerminal.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Skip.svg)
