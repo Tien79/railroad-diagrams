@@ -1,0 +1,88 @@
+<svg class="railroad-diagram" width="800" height="362" viewBox="0 0 800 362" xmlns="http://www.w3.org/2000/svg">
+   <style>
+   /* <![CDATA[ */
+   .hidden{
+   display: none;
+   }
+   a.svg {
+   position: relative;
+   display: inline-block;
+   }
+   svg.railroad-diagram {
+   background-color: hsl(30,20%,95%);
+   }
+   svg.railroad-diagram path {
+   stroke-width: 3;
+   stroke: black;
+   fill: rgba(0,0,0,0);
+   }
+   svg.railroad-diagram text {
+   font: bold 14px monospace;
+   text-anchor: middle;
+   }
+   svg.railroad-diagram text.diagram-text {
+   font-size: 12px;
+   }
+   svg.railroad-diagram text.diagram-arrow {
+   font-size: 16px;
+   }
+   svg.railroad-diagram text.label {
+   text-anchor: start;
+   }
+   svg.railroad-diagram text.comment {
+   font: italic 12px monospace;
+   }
+   svg.railroad-diagram g.non-terminal text {
+   /*font-style: italic;*/
+   }
+   svg.railroad-diagram rect {
+   stroke-width: 3;
+   stroke: black;
+   fill: hsl(120,100%,90%);
+   }
+   svg.railroad-diagram path.diagram-text {
+   stroke-width: 3;
+   stroke: black;
+   fill: white;
+   cursor: help;
+   }
+   svg.railroad-diagram g.diagram-text:hover path.diagram-text {
+   fill: #eee;
+   }
+   input[type=checkbox]:checked + div,
+   input[type=checkbox]:checked + small + div {
+   display: none;
+   }
+   .homeLink{
+   background-color: #E4F5F8;
+   border:1px solid #C0DEED; 
+   text-decoration:none; 
+   }
+   header,
+   section,
+   aside,
+   nav,
+   footer {
+   /* margin: 0 1.5% 24px 1.5%; */
+   }
+   section {
+   float: left;
+   width: 63%;
+   }
+   aside {
+   float: right;
+   width: 30%;
+   }
+   header{
+   color:white;
+   background-color:lightgrey;	
+   }
+   footer {
+   clear: both;
+   margin-bottom: 0;
+   color:white;
+   background-color:grey;
+   }
+   /* ]]> */
+   </style>
+<g transform="translate(.5 .5)"><path d="M 20 21 v 20 m 10 -20 v 20 m -10 -10 h 20.5"></path><path d="M40 31h10"></path><g><path d="M50 31h0"></path><path d="M360 31h0"></path><g><path d="M50 31h0"></path><path d="M95 31h0"></path><text x="72.5" y="36" class="comment">Child</text></g><path d="M95 31h10"></path><g><path d="M105 31h0"></path><path d="M277 31h0"></path><path d="M105 31h20"></path><g class="non-terminal"><path d="M125 31h24"></path><path d="M233 31h24"></path><rect x="149" y="20" width="84" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Sequence')"><text x="191" y="35">Sequence</text></a></g><path d="M257 31h20"></path><path d="M105 31a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 61h36"></path><path d="M221 61h36"></path><rect x="161" y="50" width="60" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Stack')"><text x="191" y="65">Stack</text></a></g><path d="M257 61a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 91h32"></path><path d="M225 91h32"></path><rect x="157" y="80" width="68" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Choice')"><text x="191" y="95">Choice</text></a></g><path d="M257 91a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v70a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 121h24"></path><path d="M233 121h24"></path><rect x="149" y="110" width="84" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Optional')"><text x="191" y="125">Optional</text></a></g><path d="M257 121a10 10 0 0 0 10 -10v-70a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v100a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 151h20"></path><path d="M237 151h20"></path><rect x="145" y="140" width="92" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','OneOrMore')"><text x="191" y="155">OneOrMore</text></a></g><path d="M257 151a10 10 0 0 0 10 -10v-100a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v130a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 181h16"></path><path d="M241 181h16"></path><rect x="141" y="170" width="100" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','ZeroOrMore')"><text x="191" y="185">ZeroOrMore</text></a></g><path d="M257 181a10 10 0 0 0 10 -10v-130a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v160a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 211h24"></path><path d="M233 211h24"></path><rect x="149" y="200" width="84" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Terminal')"><text x="191" y="215">Terminal</text></a></g><path d="M257 211a10 10 0 0 0 10 -10v-160a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v190a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 241h12"></path><path d="M245 241h12"></path><rect x="137" y="230" width="108" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','NonTerminal')"><text x="191" y="245">NonTerminal</text></a></g><path d="M257 241a10 10 0 0 0 10 -10v-190a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v220a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 271h28"></path><path d="M229 271h28"></path><rect x="153" y="260" width="76" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Comment')"><text x="191" y="275">Comment</text></a></g><path d="M257 271a10 10 0 0 0 10 -10v-220a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v250a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 301h40"></path><path d="M217 301h40"></path><rect x="165" y="290" width="52" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Skip')"><text x="191" y="305">Skip</text></a></g><path d="M257 301a10 10 0 0 0 10 -10v-250a10 10 0 0 1 10 -10"></path><path d="M105 31a10 10 0 0 1 10 10v280a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M125 331h0"></path><path d="M257 331h0"></path><rect x="125" y="320" width="132" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','NonImplemented')"><text x="191" y="335">NonImplemented</text></a></g><path d="M257 331a10 10 0 0 0 10 -10v-280a10 10 0 0 1 10 -10"></path></g><path d="M277 31h10"></path><g><path d="M287 31h0"></path><path d="M360 31h0"></path><text x="323.5" y="36" class="comment">END Child</text></g></g><path d="M360 31h10"></path><path d="M 370 31 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
