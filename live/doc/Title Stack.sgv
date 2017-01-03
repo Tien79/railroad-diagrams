@@ -1,0 +1,88 @@
+<svg class="railroad-diagram" width="800" height="150" viewBox="0 0 800 150" xmlns="http://www.w3.org/2000/svg">
+   <style>
+   /* <![CDATA[ */
+   .hidden{
+   display: none;
+   }
+   a.svg {
+   position: relative;
+   display: inline-block;
+   }
+   svg.railroad-diagram {
+   background-color: hsl(30,20%,95%);
+   }
+   svg.railroad-diagram path {
+   stroke-width: 3;
+   stroke: black;
+   fill: rgba(0,0,0,0);
+   }
+   svg.railroad-diagram text {
+   font: bold 14px monospace;
+   text-anchor: middle;
+   }
+   svg.railroad-diagram text.diagram-text {
+   font-size: 12px;
+   }
+   svg.railroad-diagram text.diagram-arrow {
+   font-size: 16px;
+   }
+   svg.railroad-diagram text.label {
+   text-anchor: start;
+   }
+   svg.railroad-diagram text.comment {
+   font: italic 12px monospace;
+   }
+   svg.railroad-diagram g.non-terminal text {
+   /*font-style: italic;*/
+   }
+   svg.railroad-diagram rect {
+   stroke-width: 3;
+   stroke: black;
+   fill: hsl(120,100%,90%);
+   }
+   svg.railroad-diagram path.diagram-text {
+   stroke-width: 3;
+   stroke: black;
+   fill: white;
+   cursor: help;
+   }
+   svg.railroad-diagram g.diagram-text:hover path.diagram-text {
+   fill: #eee;
+   }
+   input[type=checkbox]:checked + div,
+   input[type=checkbox]:checked + small + div {
+   display: none;
+   }
+   .homeLink{
+   background-color: #E4F5F8;
+   border:1px solid #C0DEED; 
+   text-decoration:none; 
+   }
+   header,
+   section,
+   aside,
+   nav,
+   footer {
+   /* margin: 0 1.5% 24px 1.5%; */
+   }
+   section {
+   float: left;
+   width: 63%;
+   }
+   aside {
+   float: right;
+   width: 30%;
+   }
+   header{
+   color:white;
+   background-color:lightgrey;	
+   }
+   footer {
+   clear: both;
+   margin-bottom: 0;
+   color:white;
+   background-color:grey;
+   }
+   /* ]]> */
+   </style>
+<g transform="translate(.5 .5)"><path d="M 20 21 v 20 m 10 -20 v 20 m -10 -10 h 20.5"></path><path d="M40 31h10"></path><g><path d="M50 31h0"></path><path d="M500 119h0"></path><g><path d="M50 31h0"></path><path d="M137 31h0"></path><text x="93.5" y="36" class="comment">Title Stack</text></g><path d="M137 31h10"></path><path d="M147 31h10"></path><g><path d="M157 31h0"></path><path d="M157 31h10"></path><g><path d="M167 31h0"></path><path d="M355 31h0"></path><g class="terminal"><path d="M167 31h0"></path><path d="M227 31h0"></path><rect x="167" y="20" width="60" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','Stack')"><text x="197" y="35">Stack</text></a></g><path d="M227 31h10"></path><path d="M237 31h10"></path><g class="terminal"><path d="M247 31h0"></path><path d="M275 31h0"></path><rect x="247" y="20" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','(')"><text x="261" y="35">(</text></a></g><path d="M275 31h10"></path><path d="M285 31h10"></path><g class="non-terminal"><path d="M295 31h0"></path><path d="M355 31h0"></path><rect x="295" y="20" width="60" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Title')"><text x="325" y="35">Title</text></a></g></g><path d="M355 31a10 10 0 0 1 10 10v0"></path><path d="M365 41a10 10 0 0 1 -10 10h-188"></path><path d="M167 51a10 10 0 0 0 -10 10v8"></path><path d="M157 69a10 10 0 0 0 10 10"></path><g><path d="M167 79h16"></path><path d="M339 79h16"></path><path d="M183 79a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><g><path d="M203 59h116"></path></g><path d="M319 59a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><path d="M183 79h20"></path><g><path d="M203 79h0"></path><path d="M319 79h0"></path><g class="terminal"><path d="M203 79h0"></path><path d="M231 79h0"></path><rect x="203" y="68" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal',',')"><text x="217" y="83">,</text></a></g><path d="M231 79h10"></path><path d="M241 79h10"></path><g class="non-terminal"><path d="M251 79h0"></path><path d="M319 79h0"></path><rect x="251" y="68" width="68" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','Childs')"><text x="285" y="83">Childs</text></a></g></g><path d="M319 79h20"></path></g><path d="M355 79a10 10 0 0 1 10 10v0"></path><path d="M365 89a10 10 0 0 1 -10 10h-188"></path><path d="M167 99a10 10 0 0 0 -10 10v0"></path><path d="M157 109a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M167 119h80"></path><path d="M275 119h80"></path><rect x="247" y="108" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal',')')"><text x="261" y="123">)</text></a></g><path d="M355 119h10"></path><path d="M365 119h0"></path></g><path d="M365 119h10"></path><path d="M375 119h10"></path><g><path d="M385 119h0"></path><path d="M500 119h0"></path><text x="442.5" y="124" class="comment">END Title Stack</text></g></g><path d="M500 119h10"></path><path d="M 510 119 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
