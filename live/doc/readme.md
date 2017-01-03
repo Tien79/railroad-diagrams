@@ -11,3 +11,4 @@
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Stack.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Choice.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/ordinal.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Optional.svg)
