@@ -1,4 +1,5 @@
-<style>
+<svg class="railroad-diagram" width="740" height="62" viewBox="0 0 740 62" xmlns="http://www.w3.org/2000/svg">>
+   <style>
    .hidden{
    display: none;
    }
@@ -81,8 +82,9 @@
    color:white;
    background-color:grey;
    }
-</style>
-<svg class="railroad-diagram" width="740" height="62" viewBox="0 0 740 62">
+   /* ]]> */
+   </style>
+   /* <![CDATA[ */
    <g transform="translate(.5 .5)">
       <path d="M 20 21 v 20 m 10 -20 v 20 m -10 -10 h 20.5"></path>
       <path d="M40 31h10"></path>
