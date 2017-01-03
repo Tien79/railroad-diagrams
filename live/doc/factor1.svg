@@ -1,0 +1,88 @@
+<svg class="railroad-diagram" width="800" height="201" viewBox="0 0 800 201" xmlns="http://www.w3.org/2000/svg">
+   <style>
+   /* <![CDATA[ */
+   .hidden{
+   display: none;
+   }
+   a.svg {
+   position: relative;
+   display: inline-block;
+   }
+   svg.railroad-diagram {
+   background-color: hsl(30,20%,95%);
+   }
+   svg.railroad-diagram path {
+   stroke-width: 3;
+   stroke: black;
+   fill: rgba(0,0,0,0);
+   }
+   svg.railroad-diagram text {
+   font: bold 14px monospace;
+   text-anchor: middle;
+   }
+   svg.railroad-diagram text.diagram-text {
+   font-size: 12px;
+   }
+   svg.railroad-diagram text.diagram-arrow {
+   font-size: 16px;
+   }
+   svg.railroad-diagram text.label {
+   text-anchor: start;
+   }
+   svg.railroad-diagram text.comment {
+   font: italic 12px monospace;
+   }
+   svg.railroad-diagram g.non-terminal text {
+   /*font-style: italic;*/
+   }
+   svg.railroad-diagram rect {
+   stroke-width: 3;
+   stroke: black;
+   fill: hsl(120,100%,90%);
+   }
+   svg.railroad-diagram path.diagram-text {
+   stroke-width: 3;
+   stroke: black;
+   fill: white;
+   cursor: help;
+   }
+   svg.railroad-diagram g.diagram-text:hover path.diagram-text {
+   fill: #eee;
+   }
+   input[type=checkbox]:checked + div,
+   input[type=checkbox]:checked + small + div {
+   display: none;
+   }
+   .homeLink{
+   background-color: #E4F5F8;
+   border:1px solid #C0DEED; 
+   text-decoration:none; 
+   }
+   header,
+   section,
+   aside,
+   nav,
+   footer {
+   /* margin: 0 1.5% 24px 1.5%; */
+   }
+   section {
+   float: left;
+   width: 63%;
+   }
+   aside {
+   float: right;
+   width: 30%;
+   }
+   header{
+   color:white;
+   background-color:lightgrey;	
+   }
+   footer {
+   clear: both;
+   margin-bottom: 0;
+   color:white;
+   background-color:grey;
+   }
+   /* ]]> */
+   </style>
+<g transform="translate(.5 .5)"><path d="M 20 21 v 20 m 10 -20 v 20 m -10 -10 h 20.5"></path><path d="M40 31h10"></path><g><path d="M50 31h0"></path><path d="M50 31h10"></path><g><path d="M60 31h92"></path><path d="M204 31h92"></path><text x="178" y="36" class="comment">factor</text></g><path d="M296 31a10 10 0 0 1 10 10v0"></path><path d="M306 41a10 10 0 0 1 -10 10h-236"></path><path d="M60 51a10 10 0 0 0 -10 10v0"></path><path d="M50 61a10 10 0 0 0 10 10"></path><g><path d="M60 71h0"></path><path d="M296 71h0"></path><g><path d="M60 71h0"></path><path d="M296 71h0"></path><path d="M60 71h20"></path><g class="non-terminal"><path d="M80 71h56"></path><path d="M220 71h56"></path><rect x="136" y="60" width="84" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','constant')"><text x="178" y="75">constant</text></a></g><path d="M276 71h20"></path><path d="M60 71a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M80 101h56"></path><path d="M220 101h56"></path><rect x="136" y="90" width="84" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','variable')"><text x="178" y="105">variable</text></a></g><path d="M276 101a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path><path d="M60 71a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10"></path><g><path d="M80 131h0"></path><path d="M276 131h0"></path><g class="terminal"><path d="M80 131h0"></path><path d="M108 131h0"></path><rect x="80" y="120" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','(')"><text x="94" y="135">(</text></a></g><path d="M108 131h10"></path><path d="M118 131h10"></path><g class="non-terminal"><path d="M128 131h0"></path><path d="M228 131h0"></path><rect x="128" y="120" width="100" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','expression')"><text x="178" y="135">expression</text></a></g><path d="M228 131h10"></path><path d="M238 131h10"></path><g class="terminal"><path d="M248 131h0"></path><path d="M276 131h0"></path><rect x="248" y="120" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal',')')"><text x="262" y="135">)</text></a></g></g><path d="M276 131a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10"></path></g></g><path d="M296 71a10 10 0 0 1 10 10v59"></path><path d="M306 140a10 10 0 0 1 -10 10h-236"></path><path d="M60 150a10 10 0 0 0 -10 10v0"></path><path d="M50 160a10 10 0 0 0 10 10"></path><g><path d="M60 170h78"></path><path d="M218 170h78"></path><text x="178" y="175" class="comment">END factor</text></g><path d="M296 170h10"></path><path d="M306 170h0"></path></g><path d="M306 170h10"></path><path d="M 316 170 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
