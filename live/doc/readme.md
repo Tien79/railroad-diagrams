@@ -2,4 +2,5 @@
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Show.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Choice.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/string.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/ordinal.svg)
 
