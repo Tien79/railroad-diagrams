@@ -2,6 +2,7 @@
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Show.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Title.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Title Stack.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Title Sequence.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Comment.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Choice.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/string.svg)
