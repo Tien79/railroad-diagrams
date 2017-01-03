@@ -6,6 +6,7 @@
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Comment.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Childs.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Child.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Sequence.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/Choice.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/string.svg)
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/ordinal.svg)
