@@ -1,21 +1,5 @@
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Show.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/string.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Stack.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Sequence.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Comment.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Childs.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Child.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Sequence.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Stack.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Choice.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/TwoOrMoreChilds.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/ordinal.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Optional.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/OneOrMore.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/ZeroOrMore.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Terminal.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/NonTerminal.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Skip.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/NonImplemented.svg)
+# Introduction
+
+I always have been fascinated by formal languages... I mean computer languages! I just found a new way of "representing" those languages and want to share that.
+
+# Multiple representation
