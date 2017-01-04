@@ -5,6 +5,8 @@
 - validate expression
 - tag tokens with grammar items
 
+# Where to start
+
 - You can test it [there](https://rawgit.com/gbrault/railroad-diagrams/gh-pages/live/live.html)
 - And read the doc here
 
