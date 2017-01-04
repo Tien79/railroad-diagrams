@@ -1,7 +1,7 @@
 # Purpose
 
 - Define a grammar
-- Display the rail-road diagrams of a grammar
+- Display the railroad diagrams of a grammar
 - validate expressions written for this grammar
 - tag associated tokens with corresponding grammar chunks
 
