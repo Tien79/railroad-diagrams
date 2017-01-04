@@ -7,8 +7,10 @@
 
 # Where to start
 
-- You can test it [there](https://rawgit.com/gbrault/railroad-diagrams/gh-pages/live/live.html)
-- And read the doc here
+You can
+
+- Test it [there](https://rawgit.com/gbrault/railroad-diagrams/gh-pages/live/live.html)
+- Browse documentation [here](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/readme.md)
 
 # History
 
