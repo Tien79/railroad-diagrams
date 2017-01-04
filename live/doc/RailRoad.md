@@ -196,4 +196,4 @@
       ); 
  /* Child */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Child.svg
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Child.svg)
