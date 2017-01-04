@@ -3,8 +3,8 @@
   Show(Sequence(Title('RailRoad'),OneOrMore(NonTerminal('Show'),Terminal(';')),Comment('END Railroad'))); 
  /* Railroad */
 ```
-```javascript
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)
+```javascript
 /**************************************************************************************************************/ 
   Show( 
   Sequence(Title('Show'),
