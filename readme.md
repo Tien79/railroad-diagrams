@@ -1,7 +1,8 @@
 # Purpose
 
-- Define a grammar
+- Define a grammar using a "functional representation"
 - Display the railroad diagrams of a grammar
+- Display an "alabnf" textual representation of this grammar
 - validate expressions written for this grammar
 - tag associated tokens with corresponding grammar chunks
 
