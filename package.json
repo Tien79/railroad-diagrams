@@ -5,7 +5,7 @@
   "main": "railroad-diagrams.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tabatkins/railroad-diagrams.git"
+    "url": "https://github.com/gbrault/railroad-diagrams.git"
   },
   "keywords": [
     "railroad",
@@ -14,10 +14,10 @@
     "grammar",
     "svg"
   ],
-  "author": "Tab Atkins Jr.",
+  "author": "Gilbert Brault",
   "license": "CC0-1.0",
   "bugs": {
-    "url": "https://github.com/tabatkins/railroad-diagrams/issues"
+    "url": "https://github.com/gbrault/railroad-diagrams/issues"
   },
-  "homepage": "https://github.com/tabatkins/railroad-diagrams"
+  "homepage": "https://github.com/gbrault/railroad-diagrams"
 }
