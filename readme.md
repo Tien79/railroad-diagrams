@@ -7,7 +7,7 @@
 
 # Where to start
 
-- You can test it [there](https://rawgit.com/gbrault/railroad-diagrams/gh-pages/live/live.html)
+- You can test it [there](https://rawgit.com/gbrault/railroad-diagrams/gh-pages/live/live.html){:target="_blank"}
 - And read the doc here
 
 # History
