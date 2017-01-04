@@ -2,8 +2,8 @@
 
 - Define a grammar
 - Display the rail-road diagrams of a grammar
-- validate expression
-- tag tokens with grammar items
+- validate expressions written for this grammar
+- tag associated tokens with corresponding grammar chunks
 
 # Where to start
 
