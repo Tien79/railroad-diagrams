@@ -22,8 +22,8 @@ Show(Sequence(Title('variable'),Terminal('/[A-Z][A-Za-z0-9_]*/'), Comment('END v
 Show(Sequence(Title('constant'),Terminal('/[+-]?[0-9]+/'), Comment('END constant')) /* Sequence */ 
   ); /* constant */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/expression.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/term.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/factor.svg)
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/variable.svg) 
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/constant.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/expression.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/term.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/factor.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/variable.svg) 
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/constant.svg)
