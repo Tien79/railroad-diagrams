@@ -6,6 +6,6 @@ I always have been fascinated by formal languages... I mean computer languages! 
 
 Representing grammars is a rich field of work since 6 or so decades and many existing form have been released so far. You can go and see articles dealing with this matter googleing or wikipediaing... Here is a list of article to learn more about that
 
-*[Context Free Grammar](https://en.wikipedia.org/wiki/Context-free_grammar)
+-[Context Free Grammar](https://en.wikipedia.org/wiki/Context-free_grammar)
 
 ## 
