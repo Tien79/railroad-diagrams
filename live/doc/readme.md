@@ -78,4 +78,7 @@ The following table, providing one entry by core function, explains the syntax f
 | Title Stack           | Title Stack: same as Sequence, but rendering top to bottom: one Child per line                         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Stack.svg)                 |
 |                       | ``` Title Stack:"(`Title Stack` , (('Stack' , '(' ,  Title ) , \n(',' ,  Childs )? , \n')') , `END Title Stack`)" ```                     |
+| Childs                | Childs OneOrMore Child separated by commas                                                             |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Childs.svg)                      |
+|                       | ``` Childs:"(`Childs` ,  Child (',' Child )* , `END Childs`)" ```                                      |
 
