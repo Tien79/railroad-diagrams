@@ -61,9 +61,7 @@ The following table, providing one entry by core function, explains the syntax f
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
 | RailRoad              | RailRoad: This is the topmost function                                                                 |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/RailRoad.svg)                     |
-|                       | ``` RailRoad:"(`RailRoad` ,  Show (';' Show )* , `END Railroad`)" ```                                  |
-|                       | ```javascript /********************************************************************************************************************************/ 
-  Show(Sequence(Title('RailRoad'),OneOrMore(NonTerminal('Show'),Terminal(';')),Comment('END Railroad')));   /* Railroad */  ``` |                      
+|                       | ``` RailRoad:"(`RailRoad` ,  Show (';' Show )* , `END Railroad`)" ```                                  |       
 | Show                  | Show: Processing a Diagram                                                                             |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Show.svg)                         |
 |                       | ``` Show:"(`Show` , ('Show' , '(' , (( Title  , (',' ,  Childs )? , ',' ,  Comment ) |  Title Stack  |  Title Sequence ) , ')') , `END Show`)" ```   |
