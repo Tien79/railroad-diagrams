@@ -2,7 +2,7 @@
 
 I always have been fascinated by formal languages... I mean computer languages! I just discovered a new way of "representing" those languages and want to share that. 
 
-By representing I mean learn and test if language expression match with grammar rules.
+By representing I mean learn and test if language expressions I can produce are matching the grammar rules.
 
 # Multiple representations
 
