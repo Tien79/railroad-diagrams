@@ -79,6 +79,40 @@ column-name:"(`column-name` ,  name  , `END column-name`)"
 
 ```javascript
 /**************************************************************************************************************/ 
+ Show( 
+ Sequence(Title('name'), 
+ Choice(0, 
+ 	Terminal('/(^[A-Za-z][A-Za-z0-9_]*)/'), 
+ 	Terminal('/(^\"[A-Za-z][A-Za-z0-9_\s]*)\"/'), 
+         Terminal("/(^\'[A-Za-z][A-Za-z0-9_\s]*)\'/") 
+ ), 
+ Comment('END name') 
+ ) 
+ ); /* name */
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/name.svg)
+```
+name:"(`name` , ('/(^[A-Za-z][A-Za-z0-9_]*)/' | '/(^"[A-Za-z][A-Za-z0-9_s]*)"/' | '/(^\'[A-Za-z][A-Za-z0-9_s]*)\'/') , `END name`)"
+```
+
+```javascript
+/**************************************************************************************************************/ 
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+```
+
+```
+
+```javascript
+/**************************************************************************************************************/ 
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+```
+
+```
+
+```javascript
+/**************************************************************************************************************/ 
 ```
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
 ```
