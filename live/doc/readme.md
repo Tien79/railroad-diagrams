@@ -149,9 +149,9 @@ The following table, providing one entry by core function, explains the syntax f
 | Sequence              | [bnfSequence](#bnfsequence)| Returns Childs separated by commas between parenthesis                       | 
 | Stack                 | [bnfStack](#bnfstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
 | Choice                | [bnfChoice](#bnfchoice) | Returns Childs separated by vertical line and linefeed between parenthesis      | 
-| Optional              | [bnfOptional](#bnfoptional) | Return Child with appended ?                                                | 
-| OneOrMore             | [bnfOneOrMore](#bnfoneormore) | Return Child1 ( Child2 Child1 )\*   or  Child+                            | 
-| ZeroOrMore            | [bnfZeroOrMore](#bnfzeroormore) | Return Child1 ( Child2 Child1 )\* or  Child\*                           | 
+| Optional              | [bnfOptional](#bnfoptional) | Returns Child with appended ?                                               | 
+| OneOrMore             | [bnfOneOrMore](#bnfoneormore) | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
+| ZeroOrMore            | [bnfZeroOrMore](#bnfzeroormore) | Returns Child1 ( Child2 Child1 )\* or  Child\*                          | 
 
 ## bnfTitle
 ```javascript
