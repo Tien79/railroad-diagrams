@@ -64,7 +64,7 @@ My discovery was just to move one step forward: changing the basis definition to
 I also have written the RailRoad grammar in SFRB ([here](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/RailRoad.md)), which is explained in the next paragraph and also two other grammars
 
 - expressions grammar as a tutorial [here](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/expression.md)
-- sqlite CREATE TABLE as this was one of my orginial needs for this work
+- sqlite CREATE TABLE as this was one of my orginial needs for this work [her](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/CREATE%20TABLE.md)
 
 # The Core Functional Basis composition
 
