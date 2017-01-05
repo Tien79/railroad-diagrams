@@ -202,7 +202,7 @@ function bnfChoice(){
 	}
 	result+=")";				/* closing round bracket */
 	if(skip){
-		result+="?";
+		result+="?";			/* if skip makes it optional */
 	}
 	return result;
 };
