@@ -142,13 +142,13 @@ The following table, providing one entry by core function, explains the syntax f
 
 # Generating EBNF
 
-| Function              | Code                                                                                            | 
-|                       |  ```javascript
+## Title
+```javascript
 function bnfTitle(){
 		context.fname=arguments[0];
 		return "`"+arguments[0]+"`";
 	};
- ``` |
+ ```
 
 
 
