@@ -269,14 +269,17 @@ Show(Stack(Title('foreign-key-clause'),
 foreign-key-clause:"(`foreign-key-clause` , \n
 ('REFERENCES' ,  foreign-table  , ('(' ,  column-name (',' column-name )* , ')')?) , \n
 (((('ON' , ('DELETE' | 'UPDATE') , (('SET' , ('NULL' | 'DEFAULT')) | 'CASCADE' | 'RESTRICT' | ('NO' , 'ACTION')))
- | ('MATCH' ,  name )))* , \n('NOT'? , 'DEFERRABLE' , (('INITIALLY' , ('DEFFERED' | 'IMMEDIATE')))?)?) , \n
+ | ('MATCH' ,  name )))* , \n
+ ('NOT'? , 'DEFERRABLE' , (('INITIALLY' , ('DEFFERED' | 'IMMEDIATE')))?)?) , \n
  `END foreign-key-clause`)"
 ```
 
 ```javascript
-/**************************************************************************************************************/ 
+/**************************************************************************************************************/
+Show(Sequence(Title('foreign-table'),NonTerminal('table-name'),Comment('END foreign-table')) 
+     ); /* foreign-table */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/foreign-table.svg)
 ```
-
+foreign-table:"(`foreign-table` ,  table-name  , `END foreign-table`)"
 ```
