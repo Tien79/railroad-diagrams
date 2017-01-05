@@ -146,20 +146,31 @@ The following table, providing one entry by core function, explains the syntax f
 | --------------------- |------- | -------------------------------------------------------------------------------------------------| 
 | Title                 | [-](#title)   | Returns the title string between ticks quote                                              | 
 | Diagram               | [-](#diagram)   | Returns the result string                                                               | 
-
+| Sequence              | [-](#sequence)  | Returns Childs separated by commas between parenthesis                                  | 
 
 ## Title
 ```javascript
 function bnfTitle(){
-		context.fname=arguments[0];       /* saves the Diagram Title */
-		return "`"+arguments[0]+"`";      /* returns the title between ticks quote */
+		context.fname=arguments[0];  	/* saves the Diagram Title */
+		return "`"+arguments[0]+"`";	/* returns the title between ticks quote */
 };
 ```
  
 ##Diagram
 ```javascript
 function bnfDiagram(){
-		return arguments[0];              /* just return the whole result */
+		return arguments[0];		/* just return the whole result */
 };
 ```
 
+##Sequence
+```javascript
+function bnfSequence(){
+	var result="(";				/* opening round bracket */	
+	for(var i=0;i<arguments.length;i++){
+		if(i>0) result+=" , ";		/* comma separated list */
+		result+=arguments[i];
+	}
+	return result+")";			/* closing round bracket */
+};
+```
