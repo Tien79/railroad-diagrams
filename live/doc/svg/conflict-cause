@@ -1,0 +1,88 @@
+<svg class="railroad-diagram" width="800" height="191" viewBox="0 0 800 191" xmlns="http://www.w3.org/2000/svg">
+   <style>
+   /* <![CDATA[ */
+   .hidden{
+   display: none;
+   }
+   a.svg {
+   position: relative;
+   display: inline-block;
+   }
+   svg.railroad-diagram {
+   background-color: hsl(30,20%,95%);
+   }
+   svg.railroad-diagram path {
+   stroke-width: 3;
+   stroke: black;
+   fill: rgba(0,0,0,0);
+   }
+   svg.railroad-diagram text {
+   font: bold 14px monospace;
+   text-anchor: middle;
+   }
+   svg.railroad-diagram text.diagram-text {
+   font-size: 12px;
+   }
+   svg.railroad-diagram text.diagram-arrow {
+   font-size: 16px;
+   }
+   svg.railroad-diagram text.label {
+   text-anchor: start;
+   }
+   svg.railroad-diagram text.comment {
+   font: italic 12px monospace;
+   }
+   svg.railroad-diagram g.non-terminal text {
+   /*font-style: italic;*/
+   }
+   svg.railroad-diagram rect {
+   stroke-width: 3;
+   stroke: black;
+   fill: hsl(120,100%,90%);
+   }
+   svg.railroad-diagram path.diagram-text {
+   stroke-width: 3;
+   stroke: black;
+   fill: white;
+   cursor: help;
+   }
+   svg.railroad-diagram g.diagram-text:hover path.diagram-text {
+   fill: #eee;
+   }
+   input[type=checkbox]:checked + div,
+   input[type=checkbox]:checked + small + div {
+   display: none;
+   }
+   .homeLink{
+   background-color: #E4F5F8;
+   border:1px solid #C0DEED; 
+   text-decoration:none; 
+   }
+   header,
+   section,
+   aside,
+   nav,
+   footer {
+   /* margin: 0 1.5% 24px 1.5%; */
+   }
+   section {
+   float: left;
+   width: 63%;
+   }
+   aside {
+   float: right;
+   width: 30%;
+   }
+   header{
+   color:white;
+   background-color:lightgrey;	
+   }
+   footer {
+   clear: both;
+   margin-bottom: 0;
+   color:white;
+   background-color:grey;
+   }
+   /* ]]> */
+   </style>
+<g transform="translate(.5 .5)"><path d="M 20 30 v 20 m 10 -20 v 20 m -10 -10 h 20.5"></path><path d="M40 40h10"></path><g><path d="M50 40h0"></path><path d="M642 40h0"></path><g><path d="M50 40h0"></path><path d="M165 40h0"></path><text x="107.5" y="45" class="comment">conflict-clause</text></g><path d="M165 40h10"></path><g><path d="M175 40h0"></path><path d="M489 40h0"></path><path d="M175 40a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><g><path d="M195 20h274"></path></g><path d="M469 20a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><path d="M175 40h20"></path><g><path d="M195 40h0"></path><path d="M469 40h0"></path><g class="terminal"><path d="M195 40h0"></path><path d="M231 40h0"></path><rect x="195" y="29" width="36" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','ON')"><text x="213" y="44">ON</text></a></g><path d="M231 40h10"></path><path d="M241 40h10"></path><g class="terminal"><path d="M251 40h0"></path><path d="M335 40h0"></path><rect x="251" y="29" width="84" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','CONFLICT')"><text x="293" y="44">CONFLICT</text></a></g><path d="M335 40h10"></path><g><path d="M345 40h0"></path><path d="M469 40h0"></path><path d="M345 40h20"></path><g class="terminal"><path d="M365 40h0"></path><path d="M449 40h0"></path><rect x="365" y="29" width="84" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','ROLLBACK')"><text x="407" y="44">ROLLBACK</text></a></g><path d="M449 40h20"></path><path d="M345 40a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M365 70h12"></path><path d="M437 70h12"></path><rect x="377" y="59" width="60" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','ABORT')"><text x="407" y="74">ABORT</text></a></g><path d="M449 70a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path><path d="M345 40a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M365 100h16"></path><path d="M433 100h16"></path><rect x="381" y="89" width="52" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','FAIL')"><text x="407" y="104">FAIL</text></a></g><path d="M449 100a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10"></path><path d="M345 40a10 10 0 0 1 10 10v70a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M365 130h8"></path><path d="M441 130h8"></path><rect x="373" y="119" width="68" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','IGNORE')"><text x="407" y="134">IGNORE</text></a></g><path d="M449 130a10 10 0 0 0 10 -10v-70a10 10 0 0 1 10 -10"></path><path d="M345 40a10 10 0 0 1 10 10v100a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M365 160h4"></path><path d="M445 160h4"></path><rect x="369" y="149" width="76" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','REPLACE')"><text x="407" y="164">REPLACE</text></a></g><path d="M449 160a10 10 0 0 0 10 -10v-100a10 10 0 0 1 10 -10"></path></g></g><path d="M469 40h20"></path></g><path d="M489 40h10"></path><g><path d="M499 40h0"></path><path d="M642 40h0"></path><text x="570.5" y="45" class="comment">END conflict-clause</text></g></g><path d="M642 40h10"></path><path d="M 652 40 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
