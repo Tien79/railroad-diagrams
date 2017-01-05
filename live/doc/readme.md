@@ -54,10 +54,10 @@ The following table, providing one entry by core function, explains the syntax f
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
-| RailRoad              | RailRoad: This is the topmost function                                                                           |
+| RailRoad              | RailRoad: This is the topmost function                                                                 |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)                    |
 |                       | ``` RailRoad:"(`RailRoad` ,  Show (';' Show )* , `END Railroad`)" ```                                  |
-| Show                  | Show: Processing a Diagram                                                                         |
+| Show                  | Show: Processing a Diagram                                                                             |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Show.svg)                        |
 |                       | ``` Show:"(`Show` , ('Show' , '(' , (( Title  , (',' ,  Childs )? , ',' ,  Comment ) |  Title Stack  |  Title Sequence ) , ')') , `END Show`)" ```   |
 | string                | string: Check against a string regexp pattern (similar to javascript strings)                                  |
@@ -72,13 +72,13 @@ The following table, providing one entry by core function, explains the syntax f
 | Comment               | Comment: Add comment anywhere in a Diagram and required as a last Child                                |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Comment.svg)                     |
 |                       | ``` Comment:"(`Comment` , ('Comment' , '(' ,  string  , ')') , `END Comment`)" ```                     |
-| Title Sequence        | Title Sequence: a sequence of Childs, rendered Left to Right, first Child being Title                  |
+| _Title Sequence_      | Title Sequence: a sequence of Childs, rendered Left to Right, first Child being Title                  |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Sequence.svg)              |
 |                       | ``` Title Sequence:"(`Title Sequence` , (('Sequence' , '(' ,  Title ) , \n(',' ,  Childs )? , \n')') , `END Title Sequence` ``` |
-| Title Stack           | Title Stack: same as Sequence, but rendering top to bottom: one Child per line                         |
+| _Title Stack_         | Title Stack: same as Sequence, but rendering top to bottom: one Child per line                         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Stack.svg)                 |
 |                       | ``` Title Stack:"(`Title Stack` , (('Stack' , '(' ,  Title ) , \n(',' ,  Childs )? , \n')') , `END Title Stack`)" ```                     |
-| TwoOrMoreChilds       | TwoOrMoreChilds: a Child and ZeroOrMore Child separated by commas                                      |
+| _TwoOrMoreChilds_     | TwoOrMoreChilds: a Child and ZeroOrMore Child separated by commas                                      |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/TwoOrMoreChilds.svg)             |
 |                       | ``` TwoOrMoreChilds:"(`TwoOrMoreChilds` ,  Child  , ',' ,  Child (',' Child )* , `END TwoOrMoreChilds`)" ``` |
 | Sequence              | Sequence: a sequence of Childs separated by commas, rendered Left to Right                             |
