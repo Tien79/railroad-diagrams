@@ -1387,7 +1387,7 @@ root.Railroad = function(root, options, context) {
 		return "("+arguments[0]+")?";
 	};
     function bnfOneOrMore(){
-		return "("+arguments[0]+arguments[1]+")*"+arguments[0];
+		return arguments[0]+"("+arguments[1]+arguments[0]+")*";
 	};
     function bnfZeroOrMore(){
 		return "("+arguments[0]+arguments[1]+")*";
@@ -1396,7 +1396,7 @@ root.Railroad = function(root, options, context) {
 		return quote(arguments[0]);
 	};
     function bnfNonTerminal(){
-		return "<"+arguments[0]+">";
+		return " "+arguments[0]+" ";
 	};
     function bnfComment(){
 		return "; "+arguments[0]+" ;";
