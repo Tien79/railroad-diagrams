@@ -46,7 +46,7 @@ My discovery was just to move one step forward: changing the basis definition to
 
 - Generate the EBNF format of the SRFB
 - Generate a tree representation of the grammar (guess it's an AST somehow)
-- Generate a function basis to parse the grammar laguage and the associated core function basis to actually validate any corresponding statements
+- Generate a function basis to parse the grammar language and the associated core function basis to actually validate any corresponding statements
 
 # The Core Functional Basis composition
 
