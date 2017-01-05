@@ -180,19 +180,46 @@ indexed-column:"(`indexed-column` , \n
 ```
 
 ```javascript
-/**************************************************************************************************************/ 
+/**************************************************************************************************************/
+Show(Stack(Title('type-name'), 
+            Sequence(NonTerminal('name'),Choice(0, 
+                                                 Skip(), 
+                                                 Sequence(Terminal('('),NonTerminal('signed-number'),Terminal(')')), 
+                                                 Sequence(Terminal('('),NonTerminal('signed-number'),Terminal(','),NonTerminal('signed-number'),Terminal(')')) 
+                                                ) 
+                    ), 
+            Comment('END type-name')) 
+     ); /* type-name */  
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/type-name.svg)
 ```
-
+type-name:"(`type-name` , \n
+( name  , (('(' ,  signed-number  , ')') | ('(' ,  signed-number  , ',' ,  signed-number  , ')')
+)?) , \n
+`END type-name`)"
 ```
 
 ```javascript
-/**************************************************************************************************************/ 
+/**************************************************************************************************************/
+ Show(Stack(Title('numeric-literal'), 
+            Sequence(Choice(0,Choice(0,Sequence(Choice(0,Sequence(Terminal('/[0-9]+/'),Optional(Sequence(Terminal('.'),Terminal('/[0-9]+/')))), 
+                                                       Sequence(Terminal('.'),Terminal('/[0-9]+/')) 
+                                                      ), 
+                                                Optional(Sequence(Terminal('E'), 
+                                                                  Choice(0,Skip(),Terminal('+'),Terminal('-')),Terminal('/[0-9]+/'))) 
+                                               ) 
+                                    ), 
+                            Sequence(Terminal('0x'),Terminal('/[A-Za-z0-9]+)/')) 
+                           ) 
+                    ), 
+            Comment('END numeric-literal')) 
+     ); /* numeric-literal */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/numeric-literal.svg)
 ```
-
+numeric-literal:"(`numeric-literal` , \n
+(((((('/[0-9]+/' , ('.' , '/[0-9]+/')?) | ('.' , '/[0-9]+/')) , ('E' , ('+' | '-')? , '/[0-9]+/')?)) | ('0x' , '/[A-Za-z0-9]+)/'))) , \n
+ `END numeric-literal`)"
 ```
 
 ```javascript
