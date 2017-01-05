@@ -3,6 +3,7 @@
 - [Introduction](#introduction)
 - [Multiple representations](#multiple-representations)
 - [The Core Functional Basis composition](#the-core-functional-basis-composition)
+- [Generating EBNF](#generating-ebnf)
 
 # Introduction
 
