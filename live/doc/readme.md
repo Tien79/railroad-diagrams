@@ -32,7 +32,7 @@ Here is a simple example of the three equivalent representation of a grammar 'ch
 ![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/expression.svg)
 - EBNF
 ```
-expression:"(`expression` ,  term ('+' term )* , `END expression`)"
+expression:"( expression ,  term ('+' term )* , END expression )"
 ```
 - SRFB
 ```javascript
@@ -59,7 +59,7 @@ My discovery was just to move one step forward: changing the basis definition to
 
 I also have written the RailRoad grammar in SFRB, which is explained in the next paragraph and also two other grammars
 
-- expressions grammar as a tutorial
+- expressions grammar as a tutorial [here](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/expression.md)
 - sqlite CREATE TABLE as this was one of my orginial needs for this work
 
 # The Core Functional Basis composition
