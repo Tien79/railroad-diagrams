@@ -25,4 +25,16 @@ CREATE TABLE: "(`CREATE TABLE` , \n
               ((('(' ,  column-def (',' column-def )* , (',' table-constraint )* , ')' , ('WITHOUT' , 'ROWID')?)
               | ('AS' , select-stm))) , \n
               `END CREATE TABLE`)"
-``` 
+```
+```javascript
+/**************************************************************************************************************/ 
+Show( 
+ Sequence(Title('schema-name'), 
+ NonTerminal('name'),Comment('END schema-name') 
+ )  
+ ); /* schema name */ 
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/schema-name.svg)
+```
+schema-name:"(`schema-name` ,  name  , `END schema-name`)"
+```
