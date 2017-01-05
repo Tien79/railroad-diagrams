@@ -55,7 +55,7 @@ My discovery was just to move one step forward: changing the basis definition to
 
 # The Core Functional Basis composition
 
-The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar of to generate SFRB expressions.
+The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar of to generate SFRB expressions. Any grammar represented according to the following rules defined in this table are likely to be processed by the live tool accessible [here](https://gbrault.github.io/railroad-diagrams/live/doc/live.html).
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
