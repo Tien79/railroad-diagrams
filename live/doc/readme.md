@@ -68,7 +68,7 @@ I also have written the RailRoad grammar in SFRB ([here](https://github.com/gbra
 
 # The Core Functional Basis composition
 
-The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar of to generate SFRB expressions. Any grammar represented according to the following rules defined in this table are likely to be processed by the live tool accessible [here](https://gbrault.github.io/railroad-diagrams/live/live.html).
+The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar to generate SFRB expressions. Any grammar represented according to the following rules defined in this table are likely to be processed by the live tool accessible [here](https://gbrault.github.io/railroad-diagrams/live/live.html).
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
