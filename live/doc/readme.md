@@ -104,4 +104,19 @@ The following table, providing one entry by core function, explains the syntax f
 | ZeroOrMore            | ZeroOrMore: an optional sequence of a given Child, separated by a second Child                         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/OneOrMore.svg)                    |
 |                       | ``` ZeroOrMore:"(`ZeroOrMore` , 'ZeroOrMore' , '(' ,  Child  , ',' ,  Child  , ')' , `END ZeroOrMore`)" ``` |
+| Terminal              | Terminal: one string literal or Regex matching                                                         |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Terminal.svg)                     |
+|                       | ``` Terminal:"(`Terminal` , ('Terminal' , '(' ,  string  , ')') , `END Terminal`)" ```                 |
+| NonTerminal           | NonTerminal: one string literal                                                      |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/NonTerminal.svg)                  |
+|                       | ``` NonTerminal:"(`NonTerminal` , ('NonTerminal' , '(' ,  string  , ')') , `END NonTerminal`)" ```     |
+| NonImplemented        | NonImplemented: one string literal to tell this branch of the grammar is still to complete             |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/NonImplemented.svg)               |
+|                     | ``` NonImplemented:"(`NonImplemented` , ('NonImplemented' , '(' ,  string  , ')') , `END NonImplemented`)" ``` |
+| Skip                  | Skip: to tell this choice branch is optional                                                           |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Skip.svg)                         |
+|                       | ``` Skip:"(`Skip` , ('Skip' , '(' , ')') , `END Skip`)" ```                                            |
+| Child                 | Child: list of core functions except Title and Show                                                    |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Child.svg)                         |
+|                       | ``` Child:"(`Child` , ( Sequence  |  Stack  |  Choice  |  Optional  |  OneOrMore  |  ZeroOrMore  |  Terminal  |  NonTerminal  |  Comment  |  Skip  |  NonImplemented ) , `END Child`)" ```                                            |
 
