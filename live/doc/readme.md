@@ -25,7 +25,7 @@ In fact, I have discovered that, looking to tabakins code which was generating '
 Here is a simple example of the three equivalent representation of a grammar 'chunck' which meaning is: an expression is a sequence of term(s) separated by '+' sign.
 
 - Syntax Diagram
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/expression.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/expression.svg)
 - EBNF
 ```
 expression:"(`expression` ,  term ('+' term )* , `END expression`)"
@@ -55,7 +55,7 @@ My discovery was just to move one step forward: changing the basis definition to
 
 # The Core Functional Basis composition
 
-The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar of to generate SFRB expressions. Any grammar represented according to the following rules defined in this table are likely to be processed by the live tool accessible [here](https://gbrault.github.io/railroad-diagrams/live/doc/live.html).
+The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar of to generate SFRB expressions. Any grammar represented according to the following rules defined in this table are likely to be processed by the live tool accessible [here](https://gbrault.github.io/railroad-diagrams/live/live.html).
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
