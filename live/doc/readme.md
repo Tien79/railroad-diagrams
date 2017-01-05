@@ -87,7 +87,7 @@ The following table, providing one entry by core function, explains the syntax f
 | Stack                 | Stack: OneOrMore Child separated by commas, rendered Top to bottom                                     |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Stack.svg)                       |
 |                       | ``` Stack:"(`Stack` , 'Stack' , '(' ,  Childs  , ')' , `END Stack`)" ```                               |
-| Choice                | Choice: Selecting one Child among a list or Skip                                                       |
+| Choice                | Choice: Selecting one Child among a list or Skip . The ordinale designate which child in the list is the 'normal' selection         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Choice.svg)                      |
 |                       | ``` Choice:"(`Choice` , 'Choice' , '(' ,  ordinal  , ',' ,  TwoOrMoreChilds  , ')' , `END Choice`)" ```  |
 
