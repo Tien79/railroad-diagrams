@@ -1022,6 +1022,14 @@ root.Railroad = function(root, options, context) {
 		str='"'+str+'"';
 		return str;
 	}
+	
+	function singlequote(str){
+		str=str.replace(/\\'/g,"'");
+		str=str.replace(/'/g,"\\'");
+		str="'"+str+"'";
+		return str;
+	}
+	
     function gTitle(){
 		context.fname=arguments[0];
 		return "Title.bind(this,"+quote(arguments[0])+")";
@@ -1370,7 +1378,7 @@ root.Railroad = function(root, options, context) {
 			if(arguments[i]=="<Skip>"){
 				skip=true;
 			} else {
-				if(!(result=="(")) result+="|";
+				if(!(result=="(")) result+=" | ";
 				result+=arguments[i];
 			}
 		}
@@ -1384,7 +1392,7 @@ root.Railroad = function(root, options, context) {
 		return "<<MultipleChoice not implemented>>";
 	};
     function bnfOptional(){
-		return "("+arguments[0]+")?";
+		return arguments[0]+"?";
 	};
     function bnfOneOrMore(){
 		return arguments[0]+"("+arguments[1]+arguments[0]+")*";
@@ -1393,7 +1401,7 @@ root.Railroad = function(root, options, context) {
 		return "("+arguments[0]+arguments[1]+")*";
 	};
     function bnfTerminal(){
-		return quote(arguments[0]);
+		return singlequote(arguments[0]);
 	};
     function bnfNonTerminal(){
 		return " "+arguments[0]+" ";

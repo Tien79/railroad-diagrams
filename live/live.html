@@ -39,7 +39,7 @@ window.expressionexample="(Z+315)*(22+A)";
 window.createtablesource= "/********************************************************************************************************************************/ \n \
 Show(Stack(Title('CREATE TABLE'), \n \
   Sequence(Terminal('CREATE'),Choice(0,Skip(),Terminal('TEMP'),Terminal('TEMPORARY')),Terminal('TABLE'), \n \
-           Choice(0,Skip(),Sequence(Terminal('IF'),Terminal('NOT'),Terminal('EXISTS')) \n \
+           Optional(Sequence(Terminal('IF'),Terminal('NOT'),Terminal('EXISTS')) \n \
   ) /* sequence */ \n \
 ),Sequence(Optional(Sequence(NonTerminal('schema-name'),Terminal('.'))),NonTerminal('table-name')), /* sequence */ \n \
 Sequence( \n \
@@ -470,11 +470,12 @@ footer {
 <div id="sql">
 <textarea id="sqleditor" cols="50" rows="25">
 </textarea>
-<hr/>
 <!-- expression to validate editor -->
+<hr/>
+</div>
 <div id="sqlcompiled">
 </div>
-</div>
+<!-- compiled result -->
 <div id="setup">
 <textarea id="setuptextarea" cols='150' rows='25'>
 </textarea>
@@ -482,18 +483,20 @@ footer {
 <!-- setup editor input -->
 </div >
 </div>
+<div>
 <div id="error">
 </div>
-<hr/>
 <!-- errors output -->
 <div id="result">
 </div>
-<!-- a la bnf -->
-<section>
+<!-- results -->
+</div>
+<section style="width:100%;">
 <hr/>
 <div id="alabnf">
 </div>
 </section>
+<!-- a la bnf -->
 <footer>Copyright &copy; Gilbert Brault 2016,2017</footer>
 <script>
 
