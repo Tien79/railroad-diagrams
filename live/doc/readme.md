@@ -55,5 +55,5 @@ My discovery was just to move one step forward: changing the basis definition to
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)                    |
 |                       | ``` RailRoad:"(`RailRoad` ,  Show (';' Show )* , `END Railroad`)" ```                                  |
 | Show                  | This is the topmost function: oneOrMore "Show" Constructs                                              |
-|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)                    |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Show.svg)                        |
 |                       | ``` Show:"(`Show` , ('Show' , '(' , (( Title  , (',' ,  Childs )? , ',' ,  Comment ) |  Title Stack  |  Title Sequence ) , ')') , `END Show`)" ```                                  |
