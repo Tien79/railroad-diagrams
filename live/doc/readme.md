@@ -51,6 +51,6 @@ My discovery was just to move one step forward: changing the basis definition to
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
-| RailRoad              | This is the topmost function: oneOrMore "Show" Constructs                                               |
+| RailRoad              | This is the topmost function: oneOrMore "Show" Constructs                                              |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)                    |
-|
+|                       | ``` RailRoad:"(`RailRoad` ,  Show (';' Show )* , `END Railroad`)" ```
