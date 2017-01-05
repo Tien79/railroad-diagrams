@@ -54,31 +54,31 @@ The following table, providing one entry by core function, explains the syntax f
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
-| RailRoad              | This is the topmost function                                                                           |
+| RailRoad              | RailRoad: This is the topmost function                                                                           |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)                    |
 |                       | ``` RailRoad:"(`RailRoad` ,  Show (';' Show )* , `END Railroad`)" ```                                  |
-| Show                  | "Show" is processing a Diagram                                                                         |
+| Show                  | Show: Processing a Diagram                                                                         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Show.svg)                        |
 |                       | ``` Show:"(`Show` , ('Show' , '(' , (( Title  , (',' ,  Childs )? , ',' ,  Comment ) |  Title Stack  |  Title Sequence ) , ')') , `END Show`)" ```   |
-| string                | check against a string regexp pattern (similar to javascript strings)                                  |
+| string                | string: Check against a string regexp pattern (similar to javascript strings)                                  |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/string.svg)                      |
 |                       | ``` string:"(`string` , ('/\'(?:[^\']|.)*\'/' | '/"(?:[^"]|.)*"/' | '/[^\'"]+/') , `END string`)" ```  |
-| ordinal               | check against an ordinal number i.e. Natural number                                                    |
+| ordinal               | Ordinal: check against an ordinal number i.e. Natural number                                           |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/ordinal.svg)                     |
 |                       | ``` ordinal:"(`ordinal` , ('0' | ('/[1-9]/' , '/[0-9]*/')) , `END ordinal`)" ```                       |
-| Title                 | naming the Diagram  (only one Title per Show)                                                          |
+| Title                 | Title: naming the Diagram  (only one Title per Show)                                                   |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title.svg)                       |
 |                       | ``` Title:"(`Title` , ('Title' , '(' ,  string  , ')') , `END Title`)" ```                             |
-| Comment               | Comment, anywhere in a Diagram  and required last item                                                 |
+| Comment               | Comment: Add comment anywhere in a Diagram and required as a last Child                                |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Comment.svg)                     |
 |                       | ``` Comment:"(`Comment` , ('Comment' , '(' ,  string  , ')') , `END Comment`)" ```                     |
-| Title Sequence        | Title Sequence: a sequence of Childs, first Child being Title                                          |
+| Title Sequence        | Title Sequence: a sequence of Childs, rendered Left to Right, first Child being Title                  |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Sequence.svg)              |
 |                       | ``` Title Sequence:"(`Title Sequence` , (('Sequence' , '(' ,  Title ) , \n(',' ,  Childs )? , \n')') , `END Title Sequence` ``` |
 | Title Stack           | Title Stack: same as Sequence, but rendering top to bottom: one Child per line                         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Stack.svg)                 |
 |                       | ``` Title Stack:"(`Title Stack` , (('Stack' , '(' ,  Title ) , \n(',' ,  Childs )? , \n')') , `END Title Stack`)" ```                     |
-| Childs                | Childs OneOrMore Child separated by commas                                                             |
+| Childs                | Childs: OneOrMore Child separated by commas                                                            |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Childs.svg)                      |
 |                       | ``` Childs:"(`Childs` ,  Child (',' Child )* , `END Childs`)" ```                                      |
 
