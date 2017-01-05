@@ -13,7 +13,7 @@ Representing grammars is a rich field of work since 8 or 7 or so decades (this a
 
 To benefit further reading of this article, understanding of basic formal grammar concepts are necessary: EBNF and Syntax Diagram.
 
-The guy whom made the syntax diagram popular is **Niklaus Wirth** [see Pascal User manual](https://books.google.fr/books?isbn=0387976493).
+The guy whom made the syntax diagram popular is **Niklaus Wirth** [see Pascal User manual](https://books.google.fr/books?isbn=0387976493) in the late 70's.
 
 ![alt-tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Pascal1.png)
 ![alt-tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/pascal2.png)
