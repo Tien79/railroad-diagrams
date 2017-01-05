@@ -142,11 +142,12 @@ The following table, providing one entry by core function, explains the syntax f
 
 # Generating EBNF from SRFB
 
-| Function              | Implementation          | Description                                                                     | 
+| Core Function         | Implementation          | Description                                                                     | 
 | --------------------- |------------------------ | --------------------------------------------------------------------------------| 
 | Title                 | [bnfTitle](#bnftitle)   | Returns the title string between ticks quote                                    | 
 | Diagram               | [bnfDiagram](#bnfdiagram) | Returns the result string                                                     | 
-| Sequence              | [bnfSequence](#bnfsequence)| Returns Childs separated by commas between parenthesis                      | 
+| Sequence              | [bnfSequence](#bnfsequence)| Returns Childs separated by commas between parenthesis                       | 
+| Stack                 | [bnfStack](#bnfstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
 
 ## bnfTitle
 ```javascript
@@ -155,14 +156,12 @@ function bnfTitle(){
 		return "`"+arguments[0]+"`";	/* returns the title between ticks quote */
 };
 ```
- 
 ## bnfDiagram
 ```javascript
 function bnfDiagram(){
 		return arguments[0];		/* just return the whole result */
 };
 ```
-
 ## bnfSequence
 ```javascript
 function bnfSequence(){
@@ -170,6 +169,17 @@ function bnfSequence(){
 	for(var i=0;i<arguments.length;i++){
 		if(i>0) result+=" , ";		/* comma separated list */
 		result+=arguments[i];
+	}
+	return result+")";			/* closing round bracket */
+};
+```
+## bnfStack
+```javascript
+function bnfStack(){
+	var result="(";				/* opening round bracket */
+	for(var i=0;i<arguments.length;i++){
+		if(i>0) result+=" , \\n";	/* comma separated list with linefeed */
+		result+=arguments[i];			
 	}
 	return result+")";			/* closing round bracket */
 };
