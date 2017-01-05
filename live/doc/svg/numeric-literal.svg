@@ -1,0 +1,88 @@
+<svg class="railroad-diagram" width="800" height="229" viewBox="0 0 800 229" xmlns="http://www.w3.org/2000/svg">
+   <style>
+   /* <![CDATA[ */
+   .hidden{
+   display: none;
+   }
+   a.svg {
+   position: relative;
+   display: inline-block;
+   }
+   svg.railroad-diagram {
+   background-color: hsl(30,20%,95%);
+   }
+   svg.railroad-diagram path {
+   stroke-width: 3;
+   stroke: black;
+   fill: rgba(0,0,0,0);
+   }
+   svg.railroad-diagram text {
+   font: bold 14px monospace;
+   text-anchor: middle;
+   }
+   svg.railroad-diagram text.diagram-text {
+   font-size: 12px;
+   }
+   svg.railroad-diagram text.diagram-arrow {
+   font-size: 16px;
+   }
+   svg.railroad-diagram text.label {
+   text-anchor: start;
+   }
+   svg.railroad-diagram text.comment {
+   font: italic 12px monospace;
+   }
+   svg.railroad-diagram g.non-terminal text {
+   /*font-style: italic;*/
+   }
+   svg.railroad-diagram rect {
+   stroke-width: 3;
+   stroke: black;
+   fill: hsl(120,100%,90%);
+   }
+   svg.railroad-diagram path.diagram-text {
+   stroke-width: 3;
+   stroke: black;
+   fill: white;
+   cursor: help;
+   }
+   svg.railroad-diagram g.diagram-text:hover path.diagram-text {
+   fill: #eee;
+   }
+   input[type=checkbox]:checked + div,
+   input[type=checkbox]:checked + small + div {
+   display: none;
+   }
+   .homeLink{
+   background-color: #E4F5F8;
+   border:1px solid #C0DEED; 
+   text-decoration:none; 
+   }
+   header,
+   section,
+   aside,
+   nav,
+   footer {
+   /* margin: 0 1.5% 24px 1.5%; */
+   }
+   section {
+   float: left;
+   width: 63%;
+   }
+   aside {
+   float: right;
+   width: 30%;
+   }
+   header{
+   color:white;
+   background-color:lightgrey;	
+   }
+   footer {
+   clear: both;
+   margin-bottom: 0;
+   color:white;
+   background-color:grey;
+   }
+   /* ]]> */
+   </style>
+<g transform="translate(.5 .5)"><path d="M 20 21 v 20 m 10 -20 v 20 m -10 -10 h 20.5"></path><path d="M40 31h10"></path><g><path d="M50 31h0"></path><path d="M50 31h10"></path><g><path d="M60 31h255.5"></path><path d="M430.5 31h255.5"></path><text x="373" y="36" class="comment">numeric-literal</text></g><path d="M686 31a10 10 0 0 1 10 10v0"></path><path d="M696 41a10 10 0 0 1 -10 10h-626"></path><path d="M60 51a10 10 0 0 0 -10 10v8"></path><path d="M50 69a10 10 0 0 0 10 10"></path><g><path d="M60 79h0"></path><path d="M686 79h0"></path><g><path d="M60 79h0"></path><path d="M686 79h0"></path><path d="M60 79h20"></path><g><path d="M80 79h0"></path><path d="M666 79h0"></path><path d="M80 79h20"></path><g><path d="M100 79h0"></path><path d="M646 79h0"></path><g><path d="M100 79h0"></path><path d="M406 79h0"></path><path d="M100 79h20"></path><g><path d="M120 79h0"></path><path d="M386 79h0"></path><g class="terminal"><path d="M120 79h0"></path><path d="M204 79h0"></path><rect x="120" y="68" width="84" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','/[0-9]+/')"><text x="162" y="83">/[0-9]+/</text></a></g><path d="M204 79h10"></path><g><path d="M214 79h0"></path><path d="M386 79h0"></path><path d="M214 79a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><g><path d="M234 59h132"></path></g><path d="M366 59a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><path d="M214 79h20"></path><g><path d="M234 79h0"></path><path d="M366 79h0"></path><g class="terminal"><path d="M234 79h0"></path><path d="M262 79h0"></path><rect x="234" y="68" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','.')"><text x="248" y="83">.</text></a></g><path d="M262 79h10"></path><path d="M272 79h10"></path><g class="terminal"><path d="M282 79h0"></path><path d="M366 79h0"></path><rect x="282" y="68" width="84" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','/[0-9]+/')"><text x="324" y="83">/[0-9]+/</text></a></g></g><path d="M366 79h20"></path></g></g><path d="M386 79h20"></path><path d="M100 79a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path><g><path d="M120 109h67"></path><path d="M319 109h67"></path><g class="terminal"><path d="M187 109h0"></path><path d="M215 109h0"></path><rect x="187" y="98" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','.')"><text x="201" y="113">.</text></a></g><path d="M215 109h10"></path><path d="M225 109h10"></path><g class="terminal"><path d="M235 109h0"></path><path d="M319 109h0"></path><rect x="235" y="98" width="84" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','/[0-9]+/')"><text x="277" y="113">/[0-9]+/</text></a></g></g><path d="M386 109a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path></g><g><path d="M406 79h0"></path><path d="M646 79h0"></path><path d="M406 79a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><g><path d="M426 59h200"></path></g><path d="M626 59a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><path d="M406 79h20"></path><g><path d="M426 79h0"></path><path d="M626 79h0"></path><g class="terminal"><path d="M426 79h0"></path><path d="M454 79h0"></path><rect x="426" y="68" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','E')"><text x="440" y="83">E</text></a></g><path d="M454 79h10"></path><g><path d="M464 79h0"></path><path d="M532 79h0"></path><path d="M464 79h20"></path><g><path d="M484 79h28"></path></g><path d="M512 79h20"></path><path d="M464 79a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M484 99h0"></path><path d="M512 99h0"></path><rect x="484" y="88" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','+')"><text x="498" y="103">+</text></a></g><path d="M512 99a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><path d="M464 79a10 10 0 0 1 10 10v30a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M484 129h0"></path><path d="M512 129h0"></path><rect x="484" y="118" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','-')"><text x="498" y="133">-</text></a></g><path d="M512 129a10 10 0 0 0 10 -10v-30a10 10 0 0 1 10 -10"></path></g><path d="M532 79h10"></path><g class="terminal"><path d="M542 79h0"></path><path d="M626 79h0"></path><rect x="542" y="68" width="84" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','/[0-9]+/')"><text x="584" y="83">/[0-9]+/</text></a></g></g><path d="M626 79h20"></path></g></g><path d="M646 79h20"></path></g><path d="M666 79h20"></path><path d="M60 79a10 10 0 0 1 10 10v60a10 10 0 0 0 10 10"></path><g><path d="M80 159h195"></path><path d="M471 159h195"></path><g class="terminal"><path d="M275 159h0"></path><path d="M311 159h0"></path><rect x="275" y="148" width="36" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','0x')"><text x="293" y="163">0x</text></a></g><path d="M311 159h10"></path><path d="M321 159h10"></path><g class="terminal"><path d="M331 159h0"></path><path d="M471 159h0"></path><rect x="331" y="148" width="140" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','/[A-Za-z0-9]+)/')"><text x="401" y="163">/[A-Za-z0-9]+)/</text></a></g></g><path d="M666 159a10 10 0 0 0 10 -10v-60a10 10 0 0 1 10 -10"></path></g></g><path d="M686 79a10 10 0 0 1 10 10v79"></path><path d="M696 168a10 10 0 0 1 -10 10h-626"></path><path d="M60 178a10 10 0 0 0 -10 10v0"></path><path d="M50 188a10 10 0 0 0 10 10"></path><g><path d="M60 198h241.5"></path><path d="M444.5 198h241.5"></path><text x="373" y="203" class="comment">END numeric-literal</text></g><path d="M686 198h10"></path><path d="M696 198h0"></path></g><path d="M696 198h10"></path><path d="M 706 198 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
