@@ -52,5 +52,5 @@ My discovery was just to move one step forward: changing the basis definition to
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
 | RailRoad              | This is the topmost function: oneOrMore "Show" Contructs                                               |
-|                       | ![railRoad](![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)         |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)                    |
 |
