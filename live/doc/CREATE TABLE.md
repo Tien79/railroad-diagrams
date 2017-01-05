@@ -26,6 +26,7 @@ CREATE TABLE: "(`CREATE TABLE` , \n
               | ('AS' , select-stm))) , \n
               `END CREATE TABLE`)"
 ```
+
 ```javascript
 /**************************************************************************************************************/ 
 Show( 
@@ -38,6 +39,7 @@ Show(
 ```
 schema-name:"(`schema-name` ,  name  , `END schema-name`)"
 ```
+
 ```javascript
 /**************************************************************************************************************/ 
 Show( 
@@ -48,4 +50,37 @@ Show(
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/table-name.svg)
 ```
 table-name:"(`table-name` ,  name  , `END table-name`)"
+```
+
+```javascript
+/**************************************************************************************************************/ 
+ Show( 
+ Sequence(Title('column-def'),NonTerminal('column-name'),Optional(NonTerminal('type-name')),ZeroOrMore(NonTerminal('column-constraint')), 
+ Comment('END column-def') 
+ ) 
+ ); /* column def */ 
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/column-def.svg)
+```
+column-def:"(`column-def` ,  column-name  ,  type-name ? , ( column-constraint )* , `END column-def`)"
+```
+
+```javascript
+/**************************************************************************************************************/
+Show( 
+ Sequence(Title('column-name'),NonTerminal('name'),Comment('END column-name') 
+ ) 
+ ); /* column name */ 
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/column-name.svg)
+```
+column-name:"(`column-name` ,  name  , `END column-name`)"
+```
+
+```javascript
+/**************************************************************************************************************/ 
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+```
+
 ```
