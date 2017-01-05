@@ -146,7 +146,7 @@ The following table, providing one entry by core function, explains the syntax f
 | --------------------- |------------------------ | --------------------------------------------------------------------------------| 
 | Title                 | [bnfTitle](#bnftitle)   | Returns the title string between ticks quote                                    | 
 | Diagram               | [bnfDiagram](#bnfdiagram) | Returns the result string                                                     | 
-| Sequence              | [bnfSequence](#bnfsequence)| Returns Childs separated by commas between paren thesis                      | 
+| Sequence              | [bnfSequence](#bnfsequence)| Returns Childs separated by commas between parenthesis                      | 
 
 ## bnfTitle
 ```javascript
