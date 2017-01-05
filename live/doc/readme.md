@@ -144,11 +144,11 @@ The following table, providing one entry by core function, explains the syntax f
 
 | Function              | Link   | Description                                                                                      | 
 | --------------------- |------- | -------------------------------------------------------------------------------------------------| 
-| Title                 | [-](#title)   | Returns the title string between ticks quote                                              | 
-| Diagram               | [-](#diagram)   | Returns the result string                                                               | 
-| Sequence              | [-](#sequence)  | Returns Childs separated by commas between parenthesis                                  | 
+| Title                 | [-](#bnftitle)   | Returns the title string between ticks quote                                              | 
+| Diagram               | [-](#bnfdiagram) | Returns the result string                                                               | 
+| Sequence              | [-](#bnfsequence)| Returns Childs separated by commas between parenthesis                                  | 
 
-## Title
+## bnfTitle
 ```javascript
 function bnfTitle(){
 		context.fname=arguments[0];  	/* saves the Diagram Title */
@@ -156,14 +156,14 @@ function bnfTitle(){
 };
 ```
  
-##Diagram
+## bnfDiagram
 ```javascript
 function bnfDiagram(){
 		return arguments[0];		/* just return the whole result */
 };
 ```
 
-##Sequence
+## bnfSequence
 ```javascript
 function bnfSequence(){
 	var result="(";				/* opening round bracket */	
