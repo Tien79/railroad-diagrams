@@ -240,3 +240,28 @@ function bnfZeroOrMore(){
 		return result;
 };
 ```
+## bnfTerminal
+```javascript
+function bnfTerminal(){
+	return singlequote(arguments[0]);
+};
+```
+## bnfNonTerminal
+```javascript	
+function bnfNonTerminal(){
+	return " "+arguments[0]+" ";
+};
+```
+## bnfComment
+```javascript	
+function bnfComment(){
+	return "`"+arguments[0]+"`";
+};
+```
+## bnfSkip
+```javascript	
+function bnfSkip(){
+	return "<Skip>";
+};
+```	
+
