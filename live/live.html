@@ -488,6 +488,12 @@ footer {
 <!-- errors output -->
 <div id="result">
 </div>
+<!-- a la bnf -->
+<section>
+<hr/>
+<div id="alabnf">
+</div>
+</section>
 <footer>Copyright &copy; Gilbert Brault 2016,2017</footer>
 <script>
 
@@ -641,6 +647,11 @@ function _Show(){
 		var fname=normalize(this.context.fname); // we have to have a title in a Diagram! 
 		eval("var "+fname+"=function(){return "+res+";}")
 		this.context.language[fname]=eval(fname);
+	} else if(this.state==="bnf"){
+		var res = Diagram(arguments[0]);
+		var tmp = {};
+		tmp[this.context.fname]=res;
+		this.context.bnf.push(tmp);
 	}
 }
 
@@ -654,13 +665,16 @@ function refresh(){
 	var error=document.getElementById('error');
 	var result=document.getElementById('result');
 	var select=document.getElementById('items');
+	var alabnf = document.getElementById('alabnf');
 	root.context.language={};
+	root.context.bnf=[];
 	window.results={title:[],graph:[],walk:[],context:root.context,state:"notset",error:error};
 	window.results.context.normalize=normalize;
 	window.Show=_Show.bind(window.results);
 	result.innerHTML="";
 	error.innerHTML="";
 	select.innerHTML="";
+	alabnf.innerHTML="";
 	var diags = window.editor.getValue();
 	var scriptref;
 
@@ -710,6 +724,25 @@ function refresh(){
 						"</pre>";
 	}
 	scriptref.outerHTML="";
+	
+	// prepare a la bnf
+	results.state='bnf';
+	root.Railroad.SetExports(root.Railroad.bnf,root.Railroad.fnames);
+	try{
+		scriptref = injectjs(diags);
+	} catch(e){
+		error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+	}
+	scriptref.outerHTML="";
+	
+	// render a la bnf
+	{		
+		const formatter = new JSONFormatter(results.context.bnf);
+		var elt = formatter.render();
+		alabnf.appendChild(elt);
+	}
 
     // render results
     for(var i=0; i<results.graph.length;i++){
@@ -742,7 +775,8 @@ function refresh(){
 
     		// graphing
 			var graphout = document.createElement('aside');           
-            graphout.appendChild(results.graph[i].toSVG());           
+            graphout.appendChild(results.graph[i].toSVG());
+			// graphout.appendChild(document.createTextNode(results.graph[i].toString()));
             div.appendChild(graphout);    	
 			// json tree
 		    const formatter = new JSONFormatter(results.walk[i]);

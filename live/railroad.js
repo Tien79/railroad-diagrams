@@ -1331,4 +1331,83 @@ root.Railroad = function(root, options, context) {
 
     var validating = [vTitle,vDiagram, vComplexDiagram, vSequence, vStack, vOptionalSequence, vChoice, vMultipleChoice, vOptional, vOneOrMore, vZeroOrMore, vTerminal, vNonTerminal, vComment, vSkip, vNonImplemented];
     root.Railroad.validating = validating;
+	
+	// a la bnf functions
+
+    function bnfTitle(){
+		context.fname=arguments[0];
+		return ";"+arguments[0]+";";
+	};
+    function bnfDiagram(){
+		return arguments[0];
+	};
+    function bnfComplexDiagram(){
+		return arguments[0];
+	};
+    function bnfSequence(){
+		var result="(";
+		for(var i=0;i<arguments.length;i++){
+			if(i>0) result+=" ";
+			result+=arguments[i];
+		}
+		return result+")";
+	};
+    function bnfStack(){
+		var result="(";
+		for(var i=0;i<arguments.length;i++){
+			if(i>0) result+=" ";
+			result+=arguments[i];			
+		}
+		return result+")";
+	};
+    function bnfOptionalSequence(){
+		return ";<OptionalSequence not implemented>;";
+	};
+    function bnfChoice(){
+		var result="(";
+		var skip=false;
+		for(var i=1;i<arguments.length;i++){
+			if(arguments[i]=="<Skip>"){
+				skip=true;
+			} else {
+				if(!(result=="(")) result+="|";
+				result+=arguments[i];
+			}
+		}
+		result+=")";
+		if(skip){
+			result+="?";
+		}
+		return result;
+	};
+    function bnfMultipleChoice(){
+		return "<<MultipleChoice not implemented>>";
+	};
+    function bnfOptional(){
+		return "("+arguments[0]+")?";
+	};
+    function bnfOneOrMore(){
+		return "("+arguments[0]+arguments[1]+")*"+arguments[0];
+	};
+    function bnfZeroOrMore(){
+		return "("+arguments[0]+arguments[1]+")*";
+	};
+    function bnfTerminal(){
+		return quote(arguments[0]);
+	};
+    function bnfNonTerminal(){
+		return "<"+arguments[0]+">";
+	};
+    function bnfComment(){
+		return "; "+arguments[0]+" ;";
+	};
+    function bnfSkip(){
+		return "<Skip>";
+	};
+    function bnfNonImplemented(){
+		return arguments[0];
+	};
+
+    var bnf = [bnfTitle,bnfDiagram, bnfComplexDiagram, bnfSequence, bnfStack, bnfOptionalSequence, bnfChoice, bnfMultipleChoice, bnfOptional, bnfOneOrMore, bnfZeroOrMore, bnfTerminal, bnfNonTerminal, bnfComment, bnfSkip, bnfNonImplemented];
+    root.Railroad.bnf = bnf;
 }
