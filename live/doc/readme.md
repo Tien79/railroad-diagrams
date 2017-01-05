@@ -116,7 +116,7 @@ The following table, providing one entry by core function, explains the syntax f
 | Skip                  | Skip: to tell this choice branch is optional                                                           |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Skip.svg)                         |
 |                       | ``` Skip:"(`Skip` , ('Skip' , '(' , ')') , `END Skip`)" ```                                            |
-| Child                 | Child: list of core functions except Title and Show                                                    |
-|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Child.svg)                         |
-|                       | ``` Child:"(`Child` , ( Sequence  |  Stack  |  Choice  |  Optional  |  OneOrMore  |  ZeroOrMore  |  Terminal  |  NonTerminal  |  Comment  |  Skip  |  NonImplemented ) , `END Child`)" ```                                            |
+| Child                 | Child: list of core functions except Title and Show which can be included as a child                   |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Child.svg)                        |
+|                       | ``` Child:"(`Child` , ( Sequence  |  Stack  |  Choice  |  Optional  |  OneOrMore  |  ZeroOrMore  |  Terminal  |  NonTerminal  |  Comment  |  Skip  |  NonImplemented ) , `END Child`)" ``` |
 
