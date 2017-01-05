@@ -14,7 +14,7 @@ Representing grammars is a rich field of work since 8 or 7 or so decades (this a
 To benefit further reading of this article, understanding of basic formal grammar concepts are necessary: EBNF and Syntax Diagram.
 
 The guy whom made the syntax diagram popular is **Niklaus Wirth** [see Pascal User manual](https://books.google.fr/books?isbn=0387976493).
-![alt-tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/pascal1.png)
+![alt-tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Pascal1.png)
 
 My 'discovery' is just to add one more representation, which I call a '**S**yntax **R**epresentation by a **F**unction **B**asis' (SRFB) of grammars. I will show that this representation is equivallent of EBNF and Syntax Diagram.
 
