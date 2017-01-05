@@ -72,10 +72,10 @@ The following table, providing one entry by core function, explains the syntax f
 | Comment               | Comment, anywhere in a Diagram  and required last item                                                 |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Comment.svg)                     |
 |                       | ``` Comment:"(`Comment` , ('Comment' , '(' ,  string  , ')') , `END Comment`)" ```                     |
-| Title Sequence        | Title Sequence: a sequence of Childs, first Child being Title                                                |
-|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Sequence.svg)                    |
+| Title Sequence        | Title Sequence: a sequence of Childs, first Child being Title                                          |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Sequence.svg)              |
 |                       | ``` Title Sequence:"(`Title Sequence` , (('Sequence' , '(' ,  Title ) , \n(',' ,  Childs )? , \n')') , `END Title Sequence` ``` |
-| Title Stack           | Title Stack: same as Sequence, but rendering top to bottom: one Child per line                               |
-|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Stack.svg)                       |
+| Title Stack           | Title Stack: same as Sequence, but rendering top to bottom: one Child per line                         |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Stack.svg)                 |
 |                       | ``` Title Stack:"(`Title Stack` , (('Stack' , '(' ,  Title ) , \n(',' ,  Childs )? , \n')') , `END Title Stack`)" ```                     |
 
