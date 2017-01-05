@@ -148,6 +148,7 @@ The following table, providing one entry by core function, explains the syntax f
 | Diagram               | [bnfDiagram](#bnfdiagram) | Returns the result string                                                     | 
 | Sequence              | [bnfSequence](#bnfsequence)| Returns Childs separated by commas between parenthesis                       | 
 | Stack                 | [bnfStack](#bnfstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
+| Choice                | [bnfChoice](#bnchoice)   | Returns Childs separated by vertical line and linefeed between parenthesis     | 
 
 ## bnfTitle
 ```javascript
@@ -184,3 +185,25 @@ function bnfStack(){
 	return result+")";			/* closing round bracket */
 };
 ```
+## bnfChoice
+```javascript
+function bnfChoice(){
+	var result="(";				/* opening round bracket */
+	var skip=false;
+	for(var i=1;i<arguments.length;i++){
+	if(arguments[i]=="<Skip>"){		/* checking if choice is optional */
+		skip=true;
+	} else {
+		if(!(result=="(")) result+=" | ";  /* vertical line separated list */
+			var temp=arguments[i];
+			if (temp.length>50) temp+="\n";	/* with linefeed if line too big */
+			result+=temp;
+		}
+	}
+	result+=")";				/* closing round bracket */
+	if(skip){
+		result+="?";
+	}
+	return result;
+};
+```	
