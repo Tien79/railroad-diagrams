@@ -1,6 +1,8 @@
 # Introduction
 
-I always have been fascinated by formal languages... I mean computer languages! I just discovered a new way of "representing" those languages and want to share that. By representing I mean learn and test if language expression match with grammar rules.
+I always have been fascinated by formal languages... I mean computer languages! I just discovered a new way of "representing" those languages and want to share that. 
+
+By representing I mean learn and test if language expression match with grammar rules.
 
 # Multiple representations
 
