@@ -19,6 +19,9 @@
 ``` 
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/CREATE TABLE.svg)
 ``` 
-CREATE TABLE:"(`CREATE TABLE` , \n('CREATE' , ('TEMP' | 'TEMPORARY')? , 'TABLE' , ('IF' , 'NOT' , 'EXISTS')?) , \n(( schema-name  , '.')? ,  table-name ) , \n((('(' ,  column-def (',' column-def )* , (',' table-constraint )* , ')' , ('WITHOUT' , 'ROWID')?)
+CREATE TABLE:"(`CREATE TABLE` , \n
+('CREATE' , ('TEMP' | 'TEMPORARY')? , 'TABLE' , ('IF' , 'NOT' , 'EXISTS')?) , \n
+(( schema-name  , '.')? ,  table-name ) , \n
+((('(' ,  column-def (',' column-def )* , (',' table-constraint )* , ')' , ('WITHOUT' , 'ROWID')?)
  | ('AS' , select-stm))) , \n`END CREATE TABLE`)"
 ``` 
