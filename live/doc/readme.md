@@ -1,8 +1,8 @@
 # Outline
 
-- [Introduction](#Introduction)
-- [Multiple representations](#Multiple representations)
-- [The Core Functional Basis composition](#The Core Functional Basis composition)
+- [Introduction](#introduction)
+- [Multiple representations](#multiple-representations)
+- [The Core Functional Basis composition](#the-core-functional-basis-composition)
 
 # Introduction
 
