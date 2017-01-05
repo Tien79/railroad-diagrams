@@ -35,4 +35,14 @@ expression:"(`expression` ,  term ('+' term )* , `END expression`)"
   ); /* expression */ 
 ```
 
+Off course, the latest representation SRFB is kind of heavy... Compared to the first two! But most of the benefits of SRFB is that a javascript compiler understands the syntax, and depending upon the definition of the Function Basis, one can produce different transformation of the grammar.
+
+What tabatkins is actually doing is using a basis definition which allows to move from SRFB to Syntax Diagram representation: he has defined a set of function which allows to draw graphs fro the SRFB input! Cleaver!
+
+My discovery was just to move one step forward: changing the basis definition to get different jobs done. I have implemented Function Basis to
+
+- Generate the EBNF format of the SRFB
+- Generate a tree representation of the grammar (guess it's an AST somehow)
+- Generate a function basis to parse the grammar laguage and the associated core function basis to actually validate any corresponding statements
+
 ## 
