@@ -142,6 +142,11 @@ The following table, providing one entry by core function, explains the syntax f
 
 # Generating EBNF
 
+| Function              | Link   | Description                                                                                      | 
+| --------------------- |------- | -------------------------------------------------------------------------------------------------| 
+| Title                 | [-](#title)   | Description                                                                                      | 
+
+
 ## Title
 ```javascript
 function bnfTitle(){
