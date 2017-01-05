@@ -1,5 +1,5 @@
 ```javascript
-/*****************************************************************************************************************/ 
+/**************************************************************************************************************/ 
  Show(Stack(Title('CREATE TABLE'), 
    Sequence(Terminal('CREATE'),Choice(0,Skip(),Terminal('TEMP'),Terminal('TEMPORARY')),Terminal('TABLE'), 
             Optional(Sequence(Terminal('IF'),Terminal('NOT'),Terminal('EXISTS')) 
