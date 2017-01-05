@@ -38,3 +38,14 @@ Show(
 ```
 schema-name:"(`schema-name` ,  name  , `END schema-name`)"
 ```
+```javascript
+/**************************************************************************************************************/ 
+Show( 
+ Sequence(Title('table-name'),NonTerminal('name'),Comment('END table-name') 
+ ) 
+ ); /* table name */ 
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/table-name.svg)
+```
+table-name:"(`table-name` ,  name  , `END table-name`)"
+```
