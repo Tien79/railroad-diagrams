@@ -164,11 +164,19 @@ table-constraint:"(`table-constraint` , \n
 ```
 
 ```javascript
-/**************************************************************************************************************/ 
+/**************************************************************************************************************/
+ Show(Stack(Title('indexed-column'), 
+      Sequence(Choice(0,NonTerminal('column-name'),NonImplemented('expr')), 
+               Optional(Sequence(Terminal('COLLATE'),NonTerminal('collation-name'))), 
+               Choice(0,Skip(),Terminal('ASC'),Terminal('DESC'))), 
+      Comment('END indexed-column')) 
+     ); /* indexed-column */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/indexed-column.svg)
 ```
-
+indexed-column:"(`indexed-column` , \n
+(( column-name  | expr) , ('COLLATE' ,  collation-name )? , ('ASC' | 'DESC')?) , \n
+`END indexed-column`)"
 ```
 
 ```javascript
