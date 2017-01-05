@@ -50,7 +50,7 @@ My discovery was just to move one step forward: changing the basis definition to
 
 # The Core Functional Basis composition
 
-The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar
+The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar of to generate SFRB expressions.
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
@@ -93,4 +93,7 @@ The following table, providing one entry by core function, explains the syntax f
 | Optional              | Optional: Select a Child or Skip                                                                       |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Optional.svg)                    |
 |                       | ``` Optional:"(`Optional` , 'Optional' , '(' ,  Child  , ')' , `END Optional`)" ```                    |
+| OneOrMore             | OneOrMore: A Child followed by an optional sequence of The same kind of Child, separated by a second Child  |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/OneOrMore.svg)                    |
+|                       | ``` OneOrMore:"(`OneOrMore` , 'OneOrMore' , '(' ,  Child  , ',' ,  Child  , ')' , `END OneOrMore`)" ```                    |
 
