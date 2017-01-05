@@ -1,0 +1,88 @@
+<svg class="railroad-diagram" width="800" height="362" viewBox="0 0 800 362" xmlns="http://www.w3.org/2000/svg">
+   <style>
+   /* <![CDATA[ */
+   .hidden{
+   display: none;
+   }
+   a.svg {
+   position: relative;
+   display: inline-block;
+   }
+   svg.railroad-diagram {
+   background-color: hsl(30,20%,95%);
+   }
+   svg.railroad-diagram path {
+   stroke-width: 3;
+   stroke: black;
+   fill: rgba(0,0,0,0);
+   }
+   svg.railroad-diagram text {
+   font: bold 14px monospace;
+   text-anchor: middle;
+   }
+   svg.railroad-diagram text.diagram-text {
+   font-size: 12px;
+   }
+   svg.railroad-diagram text.diagram-arrow {
+   font-size: 16px;
+   }
+   svg.railroad-diagram text.label {
+   text-anchor: start;
+   }
+   svg.railroad-diagram text.comment {
+   font: italic 12px monospace;
+   }
+   svg.railroad-diagram g.non-terminal text {
+   /*font-style: italic;*/
+   }
+   svg.railroad-diagram rect {
+   stroke-width: 3;
+   stroke: black;
+   fill: hsl(120,100%,90%);
+   }
+   svg.railroad-diagram path.diagram-text {
+   stroke-width: 3;
+   stroke: black;
+   fill: white;
+   cursor: help;
+   }
+   svg.railroad-diagram g.diagram-text:hover path.diagram-text {
+   fill: #eee;
+   }
+   input[type=checkbox]:checked + div,
+   input[type=checkbox]:checked + small + div {
+   display: none;
+   }
+   .homeLink{
+   background-color: #E4F5F8;
+   border:1px solid #C0DEED; 
+   text-decoration:none; 
+   }
+   header,
+   section,
+   aside,
+   nav,
+   footer {
+   /* margin: 0 1.5% 24px 1.5%; */
+   }
+   section {
+   float: left;
+   width: 63%;
+   }
+   aside {
+   float: right;
+   width: 30%;
+   }
+   header{
+   color:white;
+   background-color:lightgrey;	
+   }
+   footer {
+   clear: both;
+   margin-bottom: 0;
+   color:white;
+   background-color:grey;
+   }
+   /* ]]> */
+   </style>
+<g transform="translate(.5 .5)"><path d="M 20 21 v 20 m 10 -20 v 20 m -10 -10 h 20.5"></path><path d="M40 31h10"></path><g><path d="M50 31h0"></path><path d="M50 31h10"></path><g><path d="M60 31h238.5"></path><path d="M427.5 31h238.5"></path><text x="363" y="36" class="comment">column-constraint</text></g><path d="M666 31a10 10 0 0 1 10 10v0"></path><path d="M676 41a10 10 0 0 1 -10 10h-606"></path><path d="M60 51a10 10 0 0 0 -10 10v8"></path><path d="M50 69a10 10 0 0 0 10 10"></path><g><path d="M60 79h197"></path><path d="M469 79h197"></path><path d="M257 79a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><g><path d="M277 59h172"></path></g><path d="M449 59a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><path d="M257 79h20"></path><g><path d="M277 79h0"></path><path d="M449 79h0"></path><g class="terminal"><path d="M277 79h0"></path><path d="M377 79h0"></path><rect x="277" y="68" width="100" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','CONSTRAINT')"><text x="327" y="83">CONSTRAINT</text></a></g><path d="M377 79h10"></path><path d="M387 79h10"></path><g class="non-terminal"><path d="M397 79h0"></path><path d="M449 79h0"></path><rect x="397" y="68" width="52" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','name')"><text x="423" y="83">name</text></a></g></g><path d="M449 79h20"></path></g><path d="M666 79a10 10 0 0 1 10 10v0"></path><path d="M676 89a10 10 0 0 1 -10 10h-606"></path><path d="M60 99a10 10 0 0 0 -10 10v8"></path><path d="M50 117a10 10 0 0 0 10 10"></path><g><path d="M60 127h0"></path><path d="M666 127h0"></path><g><path d="M60 127h0"></path><path d="M666 127h0"></path><path d="M60 127h20"></path><g><path d="M80 127h0"></path><path d="M646 127h0"></path><g class="terminal"><path d="M80 127h0"></path><path d="M156 127h0"></path><rect x="80" y="116" width="76" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','PRIMARY')"><text x="118" y="131">PRIMARY</text></a></g><path d="M156 127h10"></path><path d="M166 127h10"></path><g class="terminal"><path d="M176 127h0"></path><path d="M220 127h0"></path><rect x="176" y="116" width="44" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','KEY')"><text x="198" y="131">KEY</text></a></g><path d="M220 127h10"></path><g><path d="M230 127h0"></path><path d="M322 127h0"></path><path d="M230 127h20"></path><g><path d="M250 127h52"></path></g><path d="M302 127h20"></path><path d="M230 127a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M250 147h4"></path><path d="M298 147h4"></path><rect x="254" y="136" width="44" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','ASC')"><text x="276" y="151">ASC</text></a></g><path d="M302 147a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><path d="M230 127a10 10 0 0 1 10 10v30a10 10 0 0 0 10 10"></path><g class="terminal"><path d="M250 177h0"></path><path d="M302 177h0"></path><rect x="250" y="166" width="52" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','DESC')"><text x="276" y="181">DESC</text></a></g><path d="M302 177a10 10 0 0 0 10 -10v-30a10 10 0 0 1 10 -10"></path></g><path d="M322 127h10"></path><g class="non-terminal"><path d="M332 127h0"></path><path d="M472 127h0"></path><rect x="332" y="116" width="140" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','conflict-clause')"><text x="402" y="131">conflict-clause</text></a></g><path d="M472 127h10"></path><g><path d="M482 127h0"></path><path d="M646 127h0"></path><path d="M482 127a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><g><path d="M502 107h124"></path></g><path d="M626 107a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><path d="M482 127h20"></path><g class="terminal"><path d="M502 127h0"></path><path d="M626 127h0"></path><rect x="502" y="116" width="124" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','AUTOINCREMENT')"><text x="564" y="131">AUTOINCREMENT</text></a></g><path d="M626 127h20"></path></g></g><path d="M646 127h20"></path><path d="M60 127a10 10 0 0 1 10 10v69a10 10 0 0 0 10 10"></path><g><path d="M80 216h130"></path><path d="M516 216h130"></path><g><path d="M210 216h0"></path><path d="M294 216h0"></path><path d="M210 216a10 10 0 0 0 10 -10v0a10 10 0 0 1 10 -10"></path><g><path d="M230 196h44"></path></g><path d="M274 196a10 10 0 0 1 10 10v0a10 10 0 0 0 10 10"></path><path d="M210 216h20"></path><g class="terminal"><path d="M230 216h0"></path><path d="M274 216h0"></path><rect x="230" y="205" width="44" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','NOT')"><text x="252" y="220">NOT</text></a></g><path d="M274 216h20"></path></g><path d="M294 216h10"></path><g class="terminal"><path d="M304 216h0"></path><path d="M356 216h0"></path><rect x="304" y="205" width="52" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','NULL')"><text x="330" y="220">NULL</text></a></g><path d="M356 216h10"></path><path d="M366 216h10"></path><g class="non-terminal"><path d="M376 216h0"></path><path d="M516 216h0"></path><rect x="376" y="205" width="140" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','conflict-clause')"><text x="446" y="220">conflict-clause</text></a></g></g><path d="M646 216a10 10 0 0 0 10 -10v-69a10 10 0 0 1 10 -10"></path><path d="M60 127a10 10 0 0 1 10 10v99a10 10 0 0 0 10 10"></path><g><path d="M80 246h169"></path><path d="M477 246h169"></path><g class="terminal"><path d="M249 246h0"></path><path d="M317 246h0"></path><rect x="249" y="235" width="68" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','UNIQUE')"><text x="283" y="250">UNIQUE</text></a></g><path d="M317 246h10"></path><path d="M327 246h10"></path><g class="non-terminal"><path d="M337 246h0"></path><path d="M477 246h0"></path><rect x="337" y="235" width="140" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','conflict-clause')"><text x="407" y="250">conflict-clause</text></a></g></g><path d="M646 246a10 10 0 0 0 10 -10v-99a10 10 0 0 1 10 -10"></path><path d="M60 127a10 10 0 0 1 10 10v129a10 10 0 0 0 10 10"></path><g><path d="M80 276h161"></path><path d="M485 276h161"></path><g class="terminal"><path d="M241 276h0"></path><path d="M301 276h0"></path><rect x="241" y="265" width="60" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','CHECK')"><text x="271" y="280">CHECK</text></a></g><path d="M301 276h10"></path><path d="M311 276h10"></path><g class="terminal"><path d="M321 276h0"></path><path d="M349 276h0"></path><rect x="321" y="265" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','(')"><text x="335" y="280">(</text></a></g><path d="M349 276h10"></path><path d="M359 276h10"></path><g class="non-terminal"><path d="M369 276h0"></path><path d="M437 276h0"></path><rect x="369" y="265" width="68" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonImplemented','expr')"><text x="403" y="280">&lt;expr&gt;</text></a></g><path d="M437 276h10"></path><path d="M447 276h10"></path><g class="terminal"><path d="M457 276h0"></path><path d="M485 276h0"></path><rect x="457" y="265" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal',')')"><text x="471" y="280">)</text></a></g></g><path d="M646 276a10 10 0 0 0 10 -10v-129a10 10 0 0 1 10 -10"></path><path d="M60 127a10 10 0 0 1 10 10v159a10 10 0 0 0 10 10"></path><g><path d="M80 306h138"></path><path d="M508 306h138"></path><g class="terminal"><path d="M218 306h0"></path><path d="M294 306h0"></path><rect x="218" y="295" width="76" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','DEFAULT')"><text x="256" y="310">DEFAULT</text></a></g><path d="M294 306h10"></path><g><path d="M304 306h0"></path><path d="M508 306h0"></path><path d="M304 306h20"></path><g class="non-terminal"><path d="M324 306h20"></path><path d="M468 306h20"></path><rect x="344" y="295" width="124" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','signed-number')"><text x="406" y="310">signed-number</text></a></g><path d="M488 306h20"></path><path d="M304 306a10 10 0 0 1 10 10v10a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M324 336h20"></path><path d="M468 336h20"></path><rect x="344" y="325" width="124" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','literal-value')"><text x="406" y="340">literal-value</text></a></g><path d="M488 336a10 10 0 0 0 10 -10v-10a10 10 0 0 1 10 -10"></path><path d="M304 306a10 10 0 0 1 10 10v40a10 10 0 0 0 10 10"></path><g><path d="M324 366h0"></path><path d="M488 366h0"></path><g class="terminal"><path d="M324 366h0"></path><path d="M352 366h0"></path><rect x="324" y="355" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','(')"><text x="338" y="370">(</text></a></g><path d="M352 366h10"></path><path d="M362 366h10"></path><g class="non-terminal"><path d="M372 366h0"></path><path d="M440 366h0"></path><rect x="372" y="355" width="68" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonImplemented','expr')"><text x="406" y="370">&lt;expr&gt;</text></a></g><path d="M440 366h10"></path><path d="M450 366h10"></path><g class="terminal"><path d="M460 366h0"></path><path d="M488 366h0"></path><rect x="460" y="355" width="28" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal',')')"><text x="474" y="370">)</text></a></g></g><path d="M488 366a10 10 0 0 0 10 -10v-40a10 10 0 0 1 10 -10"></path></g></g><path d="M646 306a10 10 0 0 0 10 -10v-159a10 10 0 0 1 10 -10"></path><path d="M60 127a10 10 0 0 1 10 10v249a10 10 0 0 0 10 10"></path><g><path d="M80 396h169"></path><path d="M477 396h169"></path><g class="terminal"><path d="M249 396h0"></path><path d="M325 396h0"></path><rect x="249" y="385" width="76" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','COLLATE')"><text x="287" y="400">COLLATE</text></a></g><path d="M325 396h10"></path><path d="M335 396h10"></path><g class="terminal"><path d="M345 396h0"></path><path d="M477 396h0"></path><rect x="345" y="385" width="132" height="22" rx="10" ry="10"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('Terminal','collation-name')"><text x="411" y="400">collation-name</text></a></g></g><path d="M646 396a10 10 0 0 0 10 -10v-249a10 10 0 0 1 10 -10"></path><path d="M60 127a10 10 0 0 1 10 10v279a10 10 0 0 0 10 10"></path><g class="non-terminal"><path d="M80 426h201"></path><path d="M445 426h201"></path><rect x="281" y="415" width="164" height="22"></rect><a xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="javascript:doc('NonTerminal','foreign-key-clause')"><text x="363" y="430">foreign-key-clause</text></a></g><path d="M646 426a10 10 0 0 0 10 -10v-279a10 10 0 0 1 10 -10"></path></g></g><path d="M666 127a10 10 0 0 1 10 10v298"></path><path d="M676 435a10 10 0 0 1 -10 10h-606"></path><path d="M60 445a10 10 0 0 0 -10 10v0"></path><path d="M50 455a10 10 0 0 0 10 10"></path><g><path d="M60 465h224.5"></path><path d="M441.5 465h224.5"></path><text x="363" y="470" class="comment">END column-constraint</text></g><path d="M666 465h10"></path><path d="M676 465h0"></path></g><path d="M676 465h10"></path><path d="M 686 465 h 20 m -10 -10 v 20 m 10 -20 v 20"></path></g></svg>
