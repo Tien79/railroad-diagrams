@@ -11,7 +11,7 @@ Representing grammars is a rich field of work since 6 or so decades and many exi
 - [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form)
 - [Syntax Diagram](https://en.wikipedia.org/wiki/Syntax_diagram)
 
-To benefit further reading, understanding of basic formal grammar concepts are necessary.
+To benefit further reading of this article, understanding of basic formal grammar concepts are necessary.
 My 'discovery' is just to add one more representation, which I call a 'Syntax representation by a Function Basis' (SRFB) of grammars. I will show that this representation is equivallent of EBNF and Syntax Diagram.
 
 In fact, I have discovered that, looking to tabakins code which was generating 'syntax diagrams' from a description of it by such a kind of basis.
