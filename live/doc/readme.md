@@ -150,8 +150,8 @@ The following table, providing one entry by core function, explains the syntax f
 | Stack                 | [bnfStack](#bnfstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
 | Choice                | [bnfChoice](#bnfchoice) | Returns Childs separated by vertical line and linefeed between parenthesis      | 
 | Optional              | [bnfOptional](#bnfoptional) | Return Child with appended ?                                                | 
-| OneOrMore             | [bnfOneOrMore](#bnfoneormore) | Return Child1 (Child2,Child1)\*                                           | 
-
+| OneOrMore             | [bnfOneOrMore](#bnfoneormore) | Return Child1 ( Child2 Child1 )\*   or  Child+                            | 
+| ZeroOrMore            | [bnfZeroOrMore](#bnfzeroormore) | Return Child1 ( Child2 Child1 )\* or  Child\*                           | 
 
 ## bnfTitle
 ```javascript
@@ -224,6 +224,18 @@ function bnfOneOrMore(){
 			result=arguments[0]+"("+arguments[1]+arguments[0]+")*"; /* if two Childs, use the * iteration */
 		} else {
 			result="("+arguments[0]+")+";			/* if only one Child, use the + iteration */
+		}
+		return result;
+};
+```
+## bnfZeroOrMore
+```javascript
+function bnfZeroOrMore(){
+		var result;
+		if(arguments.length>1){ 						/* if two Childs, use the * iteration */
+			result=arguments[0]+"?"+"("+arguments[1]+arguments[0]+")*"; 	/* makes first Child optional */
+		} else {
+			result="("+arguments[0]+")*";		/* if only one Child, use the * iteration */
 		}
 		return result;
 };
