@@ -65,4 +65,10 @@ The following table, providing one entry by core function, explains the syntax f
 | ordinal               | check against an ordinal number i.e. Natural number                                                    |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/ordinal.svg)                     |
 |                       | ``` ordinal:"(`ordinal` , ('0' | ('/[1-9]/' , '/[0-9]*/')) , `END ordinal`)" ```                       |
+| Title                 | naming the Diagram  (only one Title per Show)                                                          |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title.svg)                       |
+|                       | ``` Title:"(`Title` , ('Title' , '(' ,  string  , ')') , `END Title`)" ```                             |
+| Comment               | Comment, anywhere in a Diagram  and required last item                                                 |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Comment.svg)                     |
+|                       | ``` Comment:"(`Comment` , ('Comment' , '(' ,  string  , ')') , `END Comment`)" ```                     |
 
