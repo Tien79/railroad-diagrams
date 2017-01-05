@@ -45,7 +45,7 @@ Of course, the latest representation SRFB is kind of heavy... Compared to the fi
 
 But most of the benefits of SRFB is that a javascript compiler understands the syntax, and depending upon the definition of the Function Basis, one can produce different transformation of the grammar. So, from a practical standpoint it's not that stupid!
 
-What tabatkins is actually doing is using a basis definition which allows to move from SRFB to Syntax Diagram representation: he has defined a set of function which allows to draw graphs from an SRFB input! Cleaver!
+What tabatkins is actually doing is using a basis definition which allows to 'translate' an SRFB representation to a Syntax Diagram representation in svg: to do so, he has defined a set of functions (the basis) which allows to draw graphs from an SRFB input! Cleaver!
 
 My discovery was just to move one step forward: changing the basis definition to get different jobs done. I have implemented Function Basis to
 
