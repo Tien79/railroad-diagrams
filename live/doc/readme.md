@@ -49,6 +49,8 @@ My discovery was just to move one step forward: changing the basis definition to
 
 ## The Core Functional Basis composition
 
+The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar
+
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
 | RailRoad              | This is the topmost function                                                                           |
