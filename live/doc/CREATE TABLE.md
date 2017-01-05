@@ -218,16 +218,59 @@ type-name:"(`type-name` , \n
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/numeric-literal.svg)
 ```
 numeric-literal:"(`numeric-literal` , \n
-(((((('/[0-9]+/' , ('.' , '/[0-9]+/')?) | ('.' , '/[0-9]+/')) , ('E' , ('+' | '-')? , '/[0-9]+/')?)) | ('0x' , '/[A-Za-z0-9]+)/'))) , \n
+(((((('/[0-9]+/' , ('.' , '/[0-9]+/')?) | ('.' , '/[0-9]+/')) , ('E' , ('+' | '-')? , '/[0-9]+/')?)) | 
+('0x' , '/[A-Za-z0-9]+)/'))) , \n
  `END numeric-literal`)"
 ```
 
 ```javascript
-/**************************************************************************************************************/ 
+/**************************************************************************************************************/
+Show(Sequence(Title('signed-number'),Optional(Choice(0,Terminal('+'),Terminal('-'))),NonTerminal('numeric-literal'),Comment('END signed-number')) 
+     ); /* signed-number */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/signed-number.svg)
+```
+signed-number:"(`signed-number` , ('+' | '-')? ,  numeric-literal  , `END signed-number`)"
 ```
 
+```javascript
+/**************************************************************************************************************/
+Show(Stack(Title('foreign-key-clause'), 
+            Sequence(Terminal('REFERENCES'),NonTerminal('foreign-table'), 
+                     Optional(Sequence(Terminal('('),OneOrMore(NonTerminal('column-name'),Terminal(',')),Terminal(')')))), 
+            Stack(ZeroOrMore( 
+                           Choice(0, 
+                                  Sequence(Terminal('ON'), 
+                                           Choice(0,Terminal('DELETE'),Terminal('UPDATE')), 
+                                           Choice(0, 
+                                                  Sequence(Terminal('SET'),Choice(0,Terminal('NULL'),Terminal('DEFAULT'))), 
+                                                  Terminal('CASCADE'), 
+                                                  Terminal('RESTRICT'), 
+                                                  Sequence(Terminal('NO'),Terminal('ACTION')) 
+                                                 ) 
+                                          ), 
+                                  Sequence(Terminal('MATCH'),NonTerminal('name')) 
+                                 ) 
+                           ), 
+                           Optional(Sequence(Optional(Terminal('NOT')),Terminal('DEFERRABLE'), 
+                                            Choice(0,Skip(),Sequence(Terminal('INITIALLY'), 
+                                                                     Choice(0,Terminal('DEFFERED'),Terminal('IMMEDIATE')) 
+                                                                    ) 
+                                                  ) 
+                                            ) 
+                                   ) 
+                    ), 
+            Comment('END foreign-key-clause') 
+           ) 
+     ); /* foreign-key-clause */ 
+```
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/foreign-key-clause.svg)
+```
+foreign-key-clause:"(`foreign-key-clause` , \n
+('REFERENCES' ,  foreign-table  , ('(' ,  column-name (',' column-name )* , ')')?) , \n
+(((('ON' , ('DELETE' | 'UPDATE') , (('SET' , ('NULL' | 'DEFAULT')) | 'CASCADE' | 'RESTRICT' | ('NO' , 'ACTION')))
+ | ('MATCH' ,  name )))* , \n('NOT'? , 'DEFERRABLE' , (('INITIALLY' , ('DEFFERED' | 'IMMEDIATE')))?)?) , \n
+ `END foreign-key-clause`)"
 ```
 
 ```javascript
