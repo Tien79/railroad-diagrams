@@ -78,7 +78,16 @@ The following table, providing one entry by core function, explains the syntax f
 | Title Stack           | Title Stack: same as Sequence, but rendering top to bottom: one Child per line                         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Stack.svg)                 |
 |                       | ``` Title Stack:"(`Title Stack` , (('Stack' , '(' ,  Title ) , \n(',' ,  Childs )? , \n')') , `END Title Stack`)" ```                     |
-| Childs                | Childs: OneOrMore Child separated by commas                                                            |
-|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Childs.svg)                      |
-|                       | ``` Childs:"(`Childs` ,  Child (',' Child )* , `END Childs`)" ```                                      |
+| TwoOrMoreChilds       | TwoOrMoreChilds: a Child and ZeroOrMore Child separated by commas                                      |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/TwoOrMoreChilds.svg)             |
+|                       | ``` TwoOrMoreChilds:"(`TwoOrMoreChilds` ,  Child  , ',' ,  Child (',' Child )* , `END TwoOrMoreChilds`)" ``` |
+| Sequence              | Sequence: a sequence of Childs separated by commas, rendered Left to Right                             |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Sequence.svg)                    |
+|                       | ``` Sequence:"(`Sequence` , 'Sequence' , '(' ,  Childs  , ')' , `END Sequence`)" ```                   |
+| Stack                 | Stack: OneOrMore Child separated by commas, rendered Top to bottom                                     |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Stack.svg)                       |
+|                       | ``` Stack:"(`Stack` , 'Stack' , '(' ,  Childs  , ')' , `END Stack`)" ```                               |
+| Choice                | Choice: Selecting one Child among a list or Skip                                                       |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Choice.svg)                      |
+|                       | ``` Choice:"(`Choice` , 'Choice' , '(' ,  ordinal  , ',' ,  TwoOrMoreChilds  , ')' , `END Choice`)" ```  |
 
