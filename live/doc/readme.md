@@ -47,7 +47,7 @@ My discovery was just to move one step forward: changing the basis definition to
 - Generate a tree representation of the grammar (guess it's an AST somehow)
 - Generate a function basis to parse the grammar laguage and the associated core function basis to actually validate any corresponding statements
 
-## The Core Functional Basis definition
+## The Core Functional Basis composition
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
