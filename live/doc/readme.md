@@ -18,7 +18,7 @@ The guy whom made the syntax diagram popular is **Niklaus Wirth** [see Pascal Us
 ![alt-tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Pascal1.png)
 ![alt-tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/pascal2.png)
 
-My 'discovery' is just to add one more representation, which I call a '**S**yntax **R**epresentation by a **F**unction **B**asis' (SRFB) of grammars. I will show that this representation is equivalent to EBNF and Syntax Diagram.
+My 'discovery' is just to add one more representation, which I call a '**S**yntax **R**epresentation by a **F**unction **B**asis' (SRFB) of grammars. I will show (not proof) that this representation is equivalent to EBNF and Syntax Diagram.
 
 In fact, I have made this 'discovery', looking to tabakins code which was generating 'syntax diagrams' from a description of it by such a kind of basis. I am not sure this 'discovery' is genuine, but so far, I didn't found anything googleing... This might change!
 
