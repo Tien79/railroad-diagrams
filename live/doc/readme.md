@@ -22,7 +22,7 @@ One of the guys whom made the syntax diagram popular is **Niklaus Wirth** [see P
 
 My 'discovery' is just to add one more representation, which I call a '**S**yntax **R**epresentation by a **F**unction **B**asis' (SRFB) of grammars. I will show (not proof) that this representation is equivalent to EBNF and Syntax Diagram.
 
-In fact, I have made this 'discovery', looking to tabakins code which was generating 'syntax diagrams' from a description of it by such a kind of basis. I am not sure this 'discovery' is genuine, but so far, I didn't found anything googleing... This might change!
+In fact, I have made this 'discovery', looking to tabakins code which was generating 'syntax diagrams' from an SRFB description. I am not sure this 'discovery' is genuine, but so far, I didn't found anything googleing... This might change!
 
 Here is a simple example of the three equivalent representation of a grammar 'chunck' which meaning is in 'current' language: 
 
