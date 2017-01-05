@@ -51,9 +51,13 @@ My discovery was just to move one step forward: changing the basis definition to
 
 | Function              | Description                                                                                            | 
 | --------------------- |--------------------------------------------------------------------------------------------------------| 
-| RailRoad              | This is the topmost function: oneOrMore "Show" Constructs                                              |
+| RailRoad              | This is the topmost function                                                                           |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)                    |
 |                       | ``` RailRoad:"(`RailRoad` ,  Show (';' Show )* , `END Railroad`)" ```                                  |
-| Show                  | This is the topmost function: oneOrMore "Show" Constructs                                              |
+| Show                  | "Show" is processing a Diagram                                                                         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Show.svg)                        |
 |                       | ``` Show:"(`Show` , ('Show' , '(' , (( Title  , (',' ,  Childs )? , ',' ,  Comment ) |  Title Stack  |  Title Sequence ) , ')') , `END Show`)" ```                                  |
+| string                | check against a string regexp pattern (similar to javascript strings)                                  |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/string.svg)                    |
+|                       | ``` string:"(`string` , ('/\'(?:[^\']|.)*\'/' | '/"(?:[^"]|.)*"/' | '/[^\'"]+/') , `END string`)" ```                                  |
+
