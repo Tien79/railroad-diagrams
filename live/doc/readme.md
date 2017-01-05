@@ -36,7 +36,7 @@ expression:"(`expression` ,  term ('+' term )* , `END expression`)"
   ); /* expression */ 
 ```
 
-Off course, the latest representation SRFB is kind of heavy... Compared to the first two! 
+Of course, the latest representation SRFB is kind of heavy... Compared to the first two! 
 
 But most of the benefits of SRFB is that a javascript compiler understands the syntax, and depending upon the definition of the Function Basis, one can produce different transformation of the grammar. So, from a practical standpoint it's not that stupid!
 
