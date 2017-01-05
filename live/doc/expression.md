@@ -9,7 +9,7 @@ Show(Sequence(  Title('expression'),
 ``` 
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/expression.svg)
 ``` 
-expression:"(;expression; (<term>"+")*<term> ; END expression ;)"
+expression:"(;expression;  term ('+' term )* ; END expression ;)"
 ``` 
 ```javascript
 /**************************************************************************************************************/ 
@@ -22,7 +22,7 @@ Show(Sequence(  Title('term'),
 ``` 
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/term.svg)
 ``` 
-term:"(;term; (<factor>"*")*<factor> ; END term ;)"
+term:"(;term;  factor ('*' factor )* ; END term ;)"
 ``` 
 ```javascript  
 /**************************************************************************************************************/ 
@@ -36,7 +36,7 @@ Show(Stack(Title('factor'),Sequence(Choice(0,
 ```  
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/factor.svg)
 ``` 
-factor:"(;factor; ((<constant>|<variable>|("(" <expression> ")"))) ; END factor ;)"
+factor:"(;factor; (( constant  |  variable  | ('('  expression  ')'))) ; END factor ;)"
 ``` 
 ```javascript
 /**************************************************************************************************************/ 
@@ -47,7 +47,7 @@ Show(Sequence(  Title('variable'),
 ```  
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/variable.svg) 
 ``` 
-variable:"(;variable; "/[A-Z][A-Za-z0-9_]*/" ; END variable ;)"
+variable:"(;variable; '/[A-Z][A-Za-z0-9_]*/' ; END variable ;)"
 ``` 
 ```javascript  
 /**************************************************************************************************************/ 
@@ -59,5 +59,5 @@ Show(Sequence(  Title('constant'),
 ```
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/constant.svg)
 ```
-constant:"(;constant; "/[+-]?[0-9]+/" ; END constant ;)"
+constant:"(;constant; '/[+-]?[0-9]+/' ; END constant ;)"
 ```
