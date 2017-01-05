@@ -17,7 +17,7 @@ My 'discovery' is just to add one more representation, which I call a '**S**ynta
 
 In fact, I have discovered that, looking to tabakins code which was generating 'syntax diagrams' from a description of it by such a kind of basis.
 
-Here is a simple example of the three equivalent representation of a grammar 'chunck'
+Here is a simple example of the three equivalent representation of a grammar 'chunck' which meaning is: an expression is a sequence of term(s) separated by '+' sign.
 
 - Syntax Diagram
 ![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/expression.svg)
