@@ -9,7 +9,7 @@ Representing grammars is a rich field of work since 6 or so decades and many exi
 - [Syntax](http://cs.lmu.edu/~ray/notes/syntax/)
 - [Context Free Grammar](https://en.wikipedia.org/wiki/Context-free_grammar)
 - [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form)
--[Syntax Diagram](https://en.wikipedia.org/wiki/Syntax_diagram)
+- [Syntax Diagram](https://en.wikipedia.org/wiki/Syntax_diagram)
 
 
 
