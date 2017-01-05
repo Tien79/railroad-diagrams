@@ -23,5 +23,6 @@ CREATE TABLE:"(`CREATE TABLE` , \n
 ('CREATE' , ('TEMP' | 'TEMPORARY')? , 'TABLE' , ('IF' , 'NOT' , 'EXISTS')?) , \n
 (( schema-name  , '.')? ,  table-name ) , \n
 ((('(' ,  column-def (',' column-def )* , (',' table-constraint )* , ')' , ('WITHOUT' , 'ROWID')?)
- | ('AS' , select-stm))) , \n`END CREATE TABLE`)"
+ | ('AS' , select-stm))) , \n
+ `END CREATE TABLE`)"
 ``` 
