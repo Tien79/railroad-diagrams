@@ -4,7 +4,7 @@ I always have been fascinated by formal languages... I mean computer languages! 
 
 # Multiple representations
 
-Representing grammars is a rich field of work since 8 or 7 or so decades (this article was written in 2017) and many existing forms have been released so far. You can go and see articles dealing with this matter googleing or wikipediaing... Here is a list of article to learn more about that
+Representing grammars is a rich field of work since 8 or 7 decades or so (this article was written in 2017) and many existing forms have been released so far. You can go and see articles dealing with this matter googleing or wikipediaing... Here is a list of article to learn more about that
 
 - [Syntax](http://cs.lmu.edu/~ray/notes/syntax/)
 - [Context Free Grammar](https://en.wikipedia.org/wiki/Context-free_grammar)
