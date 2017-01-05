@@ -148,7 +148,7 @@ The following table, providing one entry by core function, explains the syntax f
 | Diagram               | [bnfDiagram](#bnfdiagram) | Returns the result string                                                     | 
 | Sequence              | [bnfSequence](#bnfsequence)| Returns Childs separated by commas between parenthesis                       | 
 | Stack                 | [bnfStack](#bnfstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
-| Choice                | [bnfChoice](#bnchoice)   | Returns Childs separated by vertical line and linefeed between parenthesis     | 
+| Choice                | [bnfChoice](#bnfchoice) | Returns Childs separated by vertical line and linefeed between parenthesis     | 
 
 ## bnfTitle
 ```javascript
