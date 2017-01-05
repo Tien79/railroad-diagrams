@@ -58,8 +58,11 @@ The following table, providing one entry by core function, explains the syntax f
 |                       | ``` RailRoad:"(`RailRoad` ,  Show (';' Show )* , `END Railroad`)" ```                                  |
 | Show                  | "Show" is processing a Diagram                                                                         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Show.svg)                        |
-|                       | ``` Show:"(`Show` , ('Show' , '(' , (( Title  , (',' ,  Childs )? , ',' ,  Comment ) |  Title Stack  |  Title Sequence ) , ')') , `END Show`)" ```                                  |
+|                       | ``` Show:"(`Show` , ('Show' , '(' , (( Title  , (',' ,  Childs )? , ',' ,  Comment ) |  Title Stack  |  Title Sequence ) , ')') , `END Show`)" ```   |
 | string                | check against a string regexp pattern (similar to javascript strings)                                  |
-|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/string.svg)                    |
-|                       | ``` string:"(`string` , ('/\'(?:[^\']|.)*\'/' | '/"(?:[^"]|.)*"/' | '/[^\'"]+/') , `END string`)" ```                                  |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/string.svg)                      |
+|                       | ``` string:"(`string` , ('/\'(?:[^\']|.)*\'/' | '/"(?:[^"]|.)*"/' | '/[^\'"]+/') , `END string`)" ```  |
+| ordinal               | check against an ordinal number i.e. Natural number                                                    |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/ordinal.svg)                     |
+|                       | ``` ordinal:"(`ordinal` , ('0' | ('/[1-9]/' , '/[0-9]*/')) , `END ordinal`)" ```                       |
 
