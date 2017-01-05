@@ -141,10 +141,26 @@ conflict-clause:"(`conflict-clause` , ('ON' , 'CONFLICT' , ('ROLLBACK' | 'ABORT'
 
 ```javascript
 /**************************************************************************************************************/ 
+Show(Stack(Title('table-constraint'),Stack(Optional(Sequence(Terminal('CONSTRAINT'),NonTerminal('name'))), 
+                                      Choice(0,Sequence(Choice(0,Sequence(Terminal('PRIMARY'),Terminal('Key')),Terminal('UNIQUE')),Terminal('('), 
+                                                        OneOrMore(NonTerminal('indexed-column'),Terminal(',')),Terminal(')'),NonTerminal('conflict-clause')), 
+                                             Sequence(Terminal('CHECK'),Terminal('('),NonImplemented('expr'),Terminal(')')), 
+                                             Sequence(Terminal('FOREIGN'),Terminal('KEY'),Terminal('('), 
+                                                      OneOrMore(NonTerminal('column-name'),Terminal(',')),Terminal(')'), 
+                                                      NonTerminal('foreign-key-clause')) 
+                                            )                                           
+      ), 
+      Comment('END table-constrainte')) 
+ ); /* table-constraint */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/table-constraint.svg)
 ```
-
+table-constraint:"(`table-constraint` , \n
+(('CONSTRAINT' ,  name )? , \n
+(((('PRIMARY' , 'Key') | 'UNIQUE') , '(' ,  indexed-column (',' indexed-column )* , ')' ,  conflict-clause )
+ | ('CHECK' , '(' , expr , ')') | ('FOREIGN' , 'KEY' , '(' ,  column-name (',' column-name )* , ')' ,  foreign-key-clause )
+)) , \n
+`END table-constrainte`)"
 ```
 
 ```javascript
