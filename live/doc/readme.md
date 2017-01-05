@@ -1,3 +1,9 @@
+# Outline
+
+- [Introduction](#Introduction)
+- [Multiple representations](#Multiple representations)
+- [The Core Functional Basis composition](#The Core Functional Basis composition)
+
 # Introduction
 
 I always have been fascinated by formal languages... I mean computer languages! I just discovered a new way of "representing" those languages and want to share that. 
