@@ -25,8 +25,12 @@ expression:"(`expression` ,  term ('+' term )* , `END expression`)"
 ```
 - SRFB
 ```javascript
-/********************************************************************************************************************************/ 
-  Show(Sequence(Title('expression'),OneOrMore(NonTerminal('term'),Terminal('+')), Comment('END expression')) /* Sequence */ 
+/************************************************************************************************************************/ 
+  Show(
+        Sequence( Title('expression'),
+                  OneOrMore(NonTerminal('term'),Terminal('+')), 
+                  Comment('END expression')
+                 ) /* Sequence */ 
   ); /* expression */ 
 ```
 
