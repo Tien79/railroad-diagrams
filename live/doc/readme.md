@@ -3,7 +3,7 @@
 - [Introduction](#introduction)
 - [Multiple representations](#multiple-representations)
 - [The Core Functional Basis composition](#the-core-functional-basis-composition)
-- [Generating EBNF from SRFB](#generating-ebnf-from-srfb)
+- [Translating SRFB to EBNF](#translating-srfb-to-ebnf)
 
 # Introduction
 
@@ -140,7 +140,7 @@ The following table, providing one entry by core function, explains the syntax f
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Child.svg)                        |
 |                       | ``` Child:"(`Child` , ( Sequence  |  Stack  |  Choice  |  Optional  |  OneOrMore  |  ZeroOrMore  |  Terminal  |  NonTerminal  |  Comment  |  Skip  |  NonImplemented ) , `END Child`)" ``` |
 
-# Generating EBNF from SRFB
+# Translating SRFB to EBNF
 
 | Core Function         | Implementation          | Description                                                                     | 
 | --------------------- |------------------------ | --------------------------------------------------------------------------------| 
