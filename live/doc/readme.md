@@ -152,6 +152,10 @@ The following table, providing one entry by core function, explains the syntax f
 | Optional              | [bnfOptional](#bnfoptional) | Returns Child with appended ?                                               | 
 | OneOrMore             | [bnfOneOrMore](#bnfoneormore) | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
 | ZeroOrMore            | [bnfZeroOrMore](#bnfzeroormore) | Returns Child1 ( Child2 Child1 )\* or  Child\*                          | 
+| Terminal              | [bnfTerminal](#bnfterminal) | Returns single quoted Child                                                 | 
+| NonTerminal           | [bnfNonTerminal](#bnfnonterminal) | Returns Child between leading and trailing space                      | 
+| Comment               | [bnfComment](#bnfcomment) | Returns string between ticks                                                  | 
+| Skip                  | [bnfSkip](#bnfskip) | Returns &lt;Skip&gt;                                                                | 
 
 ## bnfTitle
 ```javascript
