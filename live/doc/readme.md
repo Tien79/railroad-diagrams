@@ -142,11 +142,11 @@ The following table, providing one entry by core function, explains the syntax f
 
 # Generating EBNF from SRFB
 
-| Function              | Link   | Description                                                                                      | 
-| --------------------- |------- | -------------------------------------------------------------------------------------------------| 
-| Title                 | [-](#bnftitle)   | Returns the title string between ticks quote                                              | 
-| Diagram               | [-](#bnfdiagram) | Returns the result string                                                               | 
-| Sequence              | [-](#bnfsequence)| Returns Childs separated by commas between parenthesis                                  | 
+| Function              | Implementation          | Description                                                                     | 
+| --------------------- |------------------------ | --------------------------------------------------------------------------------| 
+| Title                 | [bnfTitle](#bnftitle)   | Returns the title string between ticks quote                                    | 
+| Diagram               | [bnfDiagram](#bnfdiagram) | Returns the result string                                                     | 
+| Sequence              | [bnfSequence](#bnfsequence)| Returns Childs separated by commas between paren thesis                      | 
 
 ## bnfTitle
 ```javascript
