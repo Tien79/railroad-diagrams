@@ -101,4 +101,7 @@ The following table, providing one entry by core function, explains the syntax f
 | OneOrMore             | OneOrMore: A Child followed by an optional sequence of The same kind of Child, separated by a second Child  |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/OneOrMore.svg)                    |
 |                       | ``` OneOrMore:"(`OneOrMore` , 'OneOrMore' , '(' ,  Child  , ',' ,  Child  , ')' , `END OneOrMore`)" ``` |
+| ZeroOrMore            | ZeroOrMore: an optional sequence of a given Child, separated by a second Child                         |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams/live/doc/svg/OneOrMore.svg)                    |
+|                       | ``` ZeroOrMore:"(`ZeroOrMore` , 'ZeroOrMore' , '(' ,  Child  , ',' ,  Child  , ')' , `END ZeroOrMore`)" ``` |
 
