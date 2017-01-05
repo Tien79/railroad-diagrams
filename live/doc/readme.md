@@ -90,4 +90,7 @@ The following table, providing one entry by core function, explains the syntax f
 | Choice                | Choice: Selecting one Child among a list or Skip . The ordinal designate which child in the list is the 'normal' selection         |
 |                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Choice.svg)                      |
 |                       | ``` Choice:"(`Choice` , 'Choice' , '(' ,  ordinal  , ',' ,  TwoOrMoreChilds  , ')' , `END Choice`)" ```  |
+| Optional              | Optional: Select a Child or Skip                                                                       |
+|                       | ![RailRoad](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Optional.svg)                    |
+|                       | ``` Optional:"(`Optional` , 'Optional' , '(' ,  Child  , ')' , `END Optional`)" ```                    |
 
