@@ -150,7 +150,7 @@ The following table, providing one entry by core function, explains the syntax f
 | Stack                 | [bnfStack](#bnfstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
 | Choice                | [bnfChoice](#bnfchoice) | Returns Childs separated by vertical line and linefeed between parenthesis      | 
 | Optional              | [bnfOptional](#bnfoptional) | Return Child with appended ?                                                | 
-| OneOrMore             | [bnfOneOrMore](#bnfoneormore) | Return Child1 (Child2,Child1)%2A                                          | 
+| OneOrMore             | [bnfOneOrMore](#bnfoneormore) | Return Child1 (Child2,Child1)\*                                           | 
 
 
 ## bnfTitle
