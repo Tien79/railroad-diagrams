@@ -307,6 +307,27 @@ function bnfSkip(){
 	return "<Skip>";
 };
 ```	
+# Translating SRFB to Trees
+
+They are all the same except Title which put the title string into a context store.
+When the calls will be made, the returning sequence of object embedded one into the other as the calls are, will make a tree (path of calls) which can be used as a walking tree to validate expression (interpreter way of validating expressions).
+
+| Core Function   | Implementation | Code                                                                                        | 
+| --------------- |--------------- | --------------------------------------------------------------------------------------------| 
+| Title           | pTitle         | `{context.title=arguments[0];return {Title:arguments};};`                                   | 
+| Diagram         | pDiagram       | ` {return {Diagram:arguments};};`                                                           | 
+| Sequence        | pSequence      | ` {return {Sequence:arguments};};`                                                          | 
+| Stack           | pStack         | ` {return {Stack:arguments};};`                                                             | 
+| Choice          | pChoice        | ` {return {Choice:arguments};};`                                                            | 
+| Optional        | pOptional      | ` {return {Optional:arguments};};`                                                          | 
+| OneOrMore       | pOneOrMore     | ` {return {OneOrMore:arguments};};`                                                         | 
+| ZeroOrMore      | pZeroOrMore    | ` {return {ZeroOrMore:arguments};};`                                                        | 
+| Terminal        | pTerminal      | ` {return {Terminal:arguments};};`                                                          | 
+| NonTerminal     | pfNonTerminal  | ` {return {NonTerminal:arguments};};`                                                       | 
+| Comment         | pComment       | ` {return {Comment:arguments};};`                                                           | 
+| Skip            | pSkip          | ` {return {Skip:arguments};};`                                                              | 
+
+
 # Translating SRFB to Generating Functions
 
 We are going to use those generating functions to traverse the grammar graph, using the tokens as a guide through the path.
