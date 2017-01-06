@@ -306,7 +306,11 @@ function bnfSkip(){
 	return "<Skip>";
 };
 ```	
-# Translating SRFB to Walking Functions 
+# Translating SRFB to Walking Functions
+
+We are going to use those walking functions to traverse the grammar graph, using the tokens as a guide through the path.
+Those function don't know the tokens in advance, so, urguments of the walking function cannot be solved before execution: they must be
+functions which are going to be selected using the tokens path at execution time.
 
 | Core Function   | Implementation | Code                                                                                        | 
 | --------------- |--------------- | --------------------------------------------------------------------------------------------| 
@@ -323,3 +327,16 @@ function bnfSkip(){
 | Comment         | gComment       | ` {return "Comment.bind(this,"+quote(arguments[0])+")";};`                                  | 
 | Skip            | gSkip          | ` {return "Skip";};`                                                                        | 
 
+## va_args function
+```javascript
+function va_args(args){  
+    	var res="";
+    	for(var i=0;i<args.length;i++){
+		res +=args[i];
+		if(i<args.length-1){
+			res+=",";
+		}
+    	} 
+	return res;   /* exact same patern as the calling arguments */	
+}
+```
