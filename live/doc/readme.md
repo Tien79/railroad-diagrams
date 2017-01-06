@@ -2,6 +2,8 @@
 
 - [Introduction](#introduction): Why?
 - [Multiple representations](#multiple-representations): It's not new stuff, what is new?
+  - [A basic example]](#a-basic-example)
+  - [Showing equivalence of representation](#showing-equivalence-of-representation)
 - [The Core Functional Basis composition](#the-core-functional-basis-composition): how to write SRFB grammars?
 - [Translating SRFB to EBNF](#translating-srfb-to-ebnf): EBNF translation set of core SRFB functions
 
@@ -80,7 +82,7 @@ SRFB <=> EBNF <=> Syntax Diagram
 
 The final proof would come by writing 
 
-- Syntaxc Diagram => SRFB translator
+- Syntax Diagram => SRFB translator
 - EBNF => SRFB translator
 
 One can see as well that SRFB and Syntax Diagram (as difined in this article context) have one piece of information which is not explicitly sated in EBFN: layout (The 'Stack'). I have imperfectly translated taht adding '\\n' in the EBNF version of the translated SRFB.
