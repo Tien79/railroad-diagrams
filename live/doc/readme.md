@@ -36,6 +36,8 @@ Of course, tabatkins is the genuine inventor as he created the first SRFB transl
 - By creating some more implementation of core functions for different translating purpose.
 - Giving a wider scope abstraction (i.e.: write translators not only for svg Syntax Graph representation)
 
+## A basic example
+
 Here is a simple example of the three equivalent representation of a grammar 'chunck' which meaning is in 'current' language: 
 
 ``` 
