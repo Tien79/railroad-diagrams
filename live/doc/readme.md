@@ -7,6 +7,7 @@
 - [The Core Functional Basis composition](#the-core-functional-basis-composition): how to write SRFB grammars?
 - [Translating SRFB to EBNF](#translating-srfb-to-ebnf): EBNF translation set of core SRFB functions
 - [Translating SRFB to Trees](#translating-srfb-to-trees): Core SRFB functions to generate parsing trees 
+- [Translating SRFB to Walking Functions](#translating-srfb-to-walking-functions): Core SRFB functions to generate walking functions 
 
 # Introduction
 
@@ -305,20 +306,20 @@ function bnfSkip(){
 	return "<Skip>";
 };
 ```	
-# Translating SRFB to Trees
+# Translating SRFB to Walking Functions 
 
 | Core Function   | Implementation | Code                                                                                        | 
 | --------------- |--------------- | --------------------------------------------------------------------------------------------| 
 | Title           | gTitle         | `{context.fname=arguments[0];return "Title.bind(this,"+quote(arguments[0])+")";};`          | 
 | Diagram         | gDiagram       | ` {return "Diagram.bind(this,"+va_args(arguments)+")";};`                                   | 
-| Sequence        | gSequence      | Returns Childs separated by commas between parenthesis                       | 
-| Stack           | gStack         | Returns Childs separated by commas and linefeed between parenthesis             | 
-| Choice          | gChoice        | Returns Childs separated by vertical line and linefeed between parenthesis      | 
-| Optional        | gOptional      | Returns Child with appended ?                                               | 
-| OneOrMore       | gOneOrMore     | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
-| ZeroOrMore      | gZeroOrMore    | Returns Child1 ( Child2 Child1 )\* or  Child\*                          | 
-| Terminal        | gTerminal      | Returns single quoted Child                                                 | 
-| NonTerminal     | gfNonTerminal  | Returns Child between leading and trailing space                      | 
-| Comment         | gComment       | Returns string between ticks                                                  | 
-| Skip            | gSkip          | Returns &lt;Skip&gt;                                                                | 
+| Sequence        | gSequence      | ` Returns Childs separated by commas between parenthesis`                       | 
+| Stack           | gStack         | ` Returns Childs separated by commas and linefeed between parenthesis`             | 
+| Choice          | gChoice        | ` Returns Childs separated by vertical line and linefeed between parenthesis`      | 
+| Optional        | gOptional      | ` Returns Child with appended ?`                                               | 
+| OneOrMore       | gOneOrMore     | ` Returns Child1 ( Child2 Child1 )\*   or  Child+`                           | 
+| ZeroOrMore      | gZeroOrMore    | ` Returns Child1 ( Child2 Child1 )\* or  Child\*`                          | 
+| Terminal        | gTerminal      | ` Returns single quoted Child`                                                 | 
+| NonTerminal     | gfNonTerminal  | ` Returns Child between leading and trailing space`                      | 
+| Comment         | gComment       | ` Returns string between ticks`                                                  | 
+| Skip            | gSkip          | ` Returns &lt;Skip&gt;`                                                                | 
 
