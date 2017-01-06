@@ -309,9 +309,11 @@ function bnfSkip(){
 # Translating SRFB to Generating Functions
 
 We are going to use those generating functions to traverse the grammar graph, using the tokens as a guide through the path.
-Those functions don't know the tokens in advance, so, urguments of the generating functions cannot be solved before execution: they must be functions which are going to be selected using the tokens path at execution time by the validating functions.
+Those functions don't know the tokens in advance, so, arguments of the generating functions cannot be solved before execution: they must be functions which are going to be selected using the tokens path at execution time by the validating functions.
 
-We are using the bind javascript capability to transform all calls to function pointers. Those functions are quite simple and they are two kind: intermediate or structure functions which use the va_args transformation and the terminal functions which will use quoted string argument (single).
+We are using the bind javascript capability to transform all calls to function pointers. 
+
+Those functions are quite simple and belong two categories: intermediate or structure functions which use the va_args transformation and the terminal functions which will use quoted string argument (single).
 
 | Core Function   | Implementation | Code                                                                                        | 
 | --------------- |--------------- | --------------------------------------------------------------------------------------------| 
