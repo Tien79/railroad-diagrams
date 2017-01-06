@@ -67,6 +67,28 @@ But most of the benefits of SRFB is that a javascript compiler understands the s
 
 What tabatkins is actually doing is using a basis definition which allows to 'translate' an SRFB representation to a Syntax Diagram representation in svg: to do so, he has defined a set of functions (the basis) which allows to draw graphs from an SRFB input! Cleaver!
 
+## Showing equivalence of representation
+
+In fact, we just need to 'prove' that all the different representation hold the same kind of information and that we know how to transform mechanically one form to another
+
+```
+SRFB <=> EBNF <=> Syntax Diagram
+```
+
+- tabatkins has written the SRFB => Syntax Diagram
+- I have writte the SRFB => EBNF translator
+
+The final proof would come by writing 
+
+- Syntaxc Diagram => SRFB translator
+- EBNF => SRFB translator
+
+One can see as well that SRFB and Syntax Diagram (as difined in this article context) have one piece of information which is not explicitly sated in EBFN: layout (The 'Stack'). I have imperfectly translated taht adding '\\n' in the EBNF version of the translated SRFB.
+
+This work is still pending to come to a final 'proof' (practical not theoritical).
+
+## Conclusion
+
 My discovery was just to move one step forward: changing the basis definition to get different jobs done. I have implemented Function Basis to
 
 - Generate the EBNF format of the SRFB
