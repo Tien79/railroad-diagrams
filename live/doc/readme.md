@@ -40,7 +40,7 @@ Of course, tabatkins is the genuine inventor as he created the first SRFB transl
 
 ## A basic example
 
-Here is a simple example of the three equivalent representation of a grammar 'chunck' which meaning is in 'current' language: 
+Here is a simple example of the three equivalent representation of a grammar 'chunck' which meaning, in 'current' language, is: 
 
 ``` 
 an expression is a sequence of term(s) separated by '+' sign. 
