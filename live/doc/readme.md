@@ -102,6 +102,7 @@ My discovery was just to move one step forward: changing the basis definition to
 - Generate the EBNF format of the SRFB
 - Generate a tree representation of the grammar (guess it's an AST somehow)
 - Generate a function basis to parse the grammar language and the associated core function basis to actually validate any corresponding statements
+- Written a tree walker (above mentionned tree) to validate expressions as well (2nd form of acceptor)
 
 I also have written the RailRoad grammar in SFRB ([here](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/RailRoad.md)), which is explained in the next paragraph and also two other grammars
 
