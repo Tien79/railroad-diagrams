@@ -368,7 +368,7 @@ root.Railroad = function(root, options, context) {
 			y += item.height;
             
 			if(i !== this.items.length-1) {
-				/*
+				/* this patch comes from Gilbert Brault to avoid href not properly working (hidden by the return path)
 				Path(x, y)
 					.arc('ne').down(Math.max(0, item.down + Diagram.VERTICAL_SEPARATION - Diagram.ARC_RADIUS*2))
 					.arc('es').left(innerWidth)
@@ -933,6 +933,12 @@ root.Railroad = function(root, options, context) {
 		Path(x,y).right(width).addTo(this);
 		return this;
 	}
+	/*******************************************************************************************************************************************************************/
+	/*
+	/* all code from there is originally written by Gilbert Brault (31/12/2016)
+	/* the code before this tag comes from tabatkins original work
+	/*
+	/*******************************************************************************************************************************************************************/
 
 	function Title(text, href) {
 		if(!(this instanceof Title)) return new Title(text, href);
