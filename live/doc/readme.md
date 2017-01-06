@@ -89,7 +89,7 @@ The final proof would come by writing
 
 One can see as well that SRFB and Syntax Diagram (as defined in this article context) have one piece of information which is not explicitly sated in EBFN: layout (The 'Stack'). I have imperfectly translated that adding '\\n' in the EBNF version of the translated SRFB.
 
-This work is still pending to come to a final 'proof' (practical not theoritical).
+Writing those two latest translator is a pending work and a last step to come to a final 'proof' (practical not theoritical).
 
 ## Conclusion
 
