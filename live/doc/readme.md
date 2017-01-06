@@ -358,3 +358,24 @@ function quote(str){
 	return str;
 }
 ```
+
+## storing the generating functions
+
+For each Show call, a generating function is calculated with the following code. The name of the generating function is determine from the grammar name (Title) normalized to fit javascript syntax and make sure their is no "namespce" conflict.
+
+```javascript
+var fname=normalize(this.context.fname); // we have to have a title in a Diagram! 
+eval("var "+fname+"=function(){return "+res+";}")
+this.context.language[fname]=eval(fname);
+```
+The generating function are stored in a user structure which is embedded in the results structure used for interraction with the railroad.js script: results.context.language.
+
+### normalize function
+
+```javascript
+function normalize(str){
+	str=str.replace(/\s/g,'_');
+	str=str.replace(/\-/g,'_');
+	return "RR_"+str;
+}
+```
