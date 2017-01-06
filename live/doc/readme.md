@@ -87,7 +87,7 @@ The final proof would come by writing
 - Syntax Diagram => SRFB translator
 - EBNF => SRFB translator
 
-One can see as well that SRFB and Syntax Diagram (as difined in this article context) have one piece of information which is not explicitly sated in EBFN: layout (The 'Stack'). I have imperfectly translated taht adding '\\n' in the EBNF version of the translated SRFB.
+One can see as well that SRFB and Syntax Diagram (as defined in this article context) have one piece of information which is not explicitly sated in EBFN: layout (The 'Stack'). I have imperfectly translated that adding '\\n' in the EBNF version of the translated SRFB.
 
 This work is still pending to come to a final 'proof' (practical not theoritical).
 
