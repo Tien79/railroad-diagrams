@@ -8,7 +8,7 @@
 - [Translating SRFB to EBNF](#translating-srfb-to-ebnf): EBNF translation set of core SRFB functions
 - [Translating SRFB to Trees](#translating-srfb-to-trees): Core SRFB functions to generate parsing trees 
 - [Translating SRFB to Generating Functions](#translating-srfb-to-generating-functions): Core SRFB functions to generate 'walking' functions
-- [Core Validating functions](#core-validating-functions)
+- [Core Validating functions](#core-validating-functions): Core function to validate an expression of the language based on the underlying grammar.
 
 # Introduction
 
@@ -383,3 +383,5 @@ function normalize(str){
 ## Conclusion
 
 The core of the validating functions are then generated, it's what we call the language structure. This array is an array of function pointers which parameters are function pointers. It means that the actual work (what to compute) is going to take palce during the validating phase and will be acheived by the core validating functions.
+
+# Core Validating functions
