@@ -71,7 +71,9 @@ What tabatkins is actually doing is using a basis definition which allows to 'tr
 
 ## Showing equivalence of representation
 
-In fact, we just need to 'prove' that all the different representation hold the same kind of information and that we know how to transform mechanically one form to another
+In fact, we just need to 'prove' that all the different representations "hold" the same kind of information. 
+
+This can be acheived by creating a way to transform mechanically one form to the other, regardless of the actual content of the grammar, but just respecting the syntax of the three forms.
 
 ```
 SRFB <=> EBNF <=> Syntax Diagram
