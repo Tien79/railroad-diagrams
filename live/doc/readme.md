@@ -15,6 +15,8 @@ By representing I mean learn and test if language expressions I can produce are 
 
 For those who are more experimental than theoritical, one can jump to the live tool accessible [here](https://gbrault.github.io/railroad-diagrams/live/live.html). hit the documentation button to learn how to use the tool and interpret the results.
 
+The others can proceed reading!
+
 # Multiple representations
 
 Representing grammars is a rich field of work since 7 or 8 decades or so (the present article is written in January 2017) and many existing forms have been released so far. You can go and see articles dealing with this matter googleing or wikipediaing... Here is a list of articles to learn more about that (valid 1/5/2017)
