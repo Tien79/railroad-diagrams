@@ -7,7 +7,7 @@
 - [The Core Functional Basis composition](#the-core-functional-basis-composition): how to write SRFB grammars?
 - [Translating SRFB to EBNF](#translating-srfb-to-ebnf): EBNF translation set of core SRFB functions
 - [Translating SRFB to Trees](#translating-srfb-to-trees): Core SRFB functions to generate parsing trees 
-- [Translating SRFB to Walking Functions](#translating-srfb-to-walking-functions): Core SRFB functions to generate walking functions 
+- [Translating SRFB to Generating Functions](#translating-srfb-to-generating-functions): Core SRFB functions to generate 'walking' functions 
 
 # Introduction
 
@@ -306,7 +306,7 @@ function bnfSkip(){
 	return "<Skip>";
 };
 ```	
-# Translating SRFB to Walking Functions
+# Translating SRFB to Generating Functions
 
 We are going to use those walking functions to traverse the grammar graph, using the tokens as a guide through the path.
 Those functions don't know the tokens in advance, so, urguments of the walking function cannot be solved before execution: they must be
