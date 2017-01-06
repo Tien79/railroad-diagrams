@@ -3,7 +3,7 @@
   Show(Sequence(Title('RailRoad'),OneOrMore(NonTerminal('Show'),Terminal(';')),Comment('END Railroad'))); 
  /* Railroad */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/RailRoad.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/RailRoad.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show( 
@@ -20,7 +20,7 @@
       ); 
  /* Show */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Show.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Show.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('string'), 
@@ -34,7 +34,7 @@
   ); 
  /* string */
  ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/string.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/string.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('ordinal'), 
@@ -46,7 +46,7 @@
       ); 
  /* ordinal */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/ordinal.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/ordinal.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('Title'), 
@@ -55,7 +55,7 @@
       ); 
  /* Title */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Title.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('Comment'), 
@@ -64,7 +64,7 @@
       ); 
  /* Comment */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Comment.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Comment.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('Title Stack'), 
@@ -74,7 +74,7 @@
       ); 
  /* Title Stack */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Title Stack.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Title Stack.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('Title Sequence'), 
@@ -90,7 +90,7 @@
   Show(Sequence(Title('Childs'),OneOrMore(NonTerminal('Child'),Terminal(',')),Comment('END Childs'))); 
   /* Childs */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Childs.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Childs.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('TwoOrMoreChilds'),NonTerminal('Child'),Terminal(','),OneOrMore(NonTerminal('Child'),
@@ -104,7 +104,7 @@
 		Comment('END Sequence'))); 
   /* Sequence */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Sequence.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Sequence.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('Stack'),Terminal('Stack'),Terminal('('),NonTerminal('Childs'),Terminal(')'),
@@ -118,28 +118,28 @@
 		NonTerminal('TwoOrMoreChilds'),Terminal(')'),Comment('END Choice'))); 
   /* Choice */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Choice.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Choice.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('Optional'),Terminal('Optional'),Terminal('('),NonTerminal('Child'),Terminal(')'),
 		Comment('END Optional'))); 
   /* Optional */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Optional.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Optional.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('OneOrMore'),Terminal('OneOrMore'),Terminal('('),NonTerminal('Child'),Terminal(','),
 		NonTerminal('Child'),Terminal(')'),Comment('END OneOrMore'))); 
   /* OneOrMore */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/OneOrMore.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/OneOrMore.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('ZeroOrMore'),Terminal('ZeroOrMore'),Terminal('('),NonTerminal('Child'),Terminal(','),
 		NonTerminal('Child'),Terminal(')'),Comment('END ZeroOrMore'))); 
   /* ZeroOrMore */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/ZeroOrMore.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/ZeroOrMore.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('Terminal'), 
@@ -148,7 +148,7 @@
       ); 
  /* Terminal */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Terminal.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Terminal.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('NonTerminal'), 
@@ -157,7 +157,7 @@
       ); 
  /* NonTerminal */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/NonTerminal.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/NonTerminal.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('NonImplemented'), 
@@ -166,7 +166,7 @@
       ); 
  /* NonImplemented */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/NonImplemented.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/NonImplemented.svg)
 ```javascript
 /**************************************************************************************************************/ 
   Show(Sequence(Title('Skip'), 
@@ -175,7 +175,7 @@
       ); 
  /* Skip */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Skip.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Skip.svg)
 ```javascript
 /********************************************************************************************************************/ 
  Show(Sequence(Title('Child'), 
@@ -196,4 +196,4 @@
       ); 
  /* Child */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/Child.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/Child.svg)

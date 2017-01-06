@@ -17,7 +17,7 @@
  Comment('END CREATE TABLE')) /* Stack */ 
  ); /* Create Table */ 
 ``` 
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/CREATE TABLE.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/CREATE TABLE.svg)
 ``` 
 CREATE TABLE: "(`CREATE TABLE` , \n
               ('CREATE' , ('TEMP' | 'TEMPORARY')? , 'TABLE' , ('IF' , 'NOT' , 'EXISTS')?) , \n
@@ -35,7 +35,7 @@ Show(
  )  
  ); /* schema name */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/schema-name.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/schema-name.svg)
 ```
 schema-name:"(`schema-name` ,  name  , `END schema-name`)"
 ```
@@ -47,7 +47,7 @@ Show(
  ) 
  ); /* table name */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/table-name.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/table-name.svg)
 ```
 table-name:"(`table-name` ,  name  , `END table-name`)"
 ```
@@ -60,7 +60,7 @@ table-name:"(`table-name` ,  name  , `END table-name`)"
  ) 
  ); /* column def */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/column-def.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/column-def.svg)
 ```
 column-def:"(`column-def` ,  column-name  ,  type-name ? , ( column-constraint )* , `END column-def`)"
 ```
@@ -72,7 +72,7 @@ Show(
  ) 
  ); /* column name */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/column-name.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/column-name.svg)
 ```
 column-name:"(`column-name` ,  name  , `END column-name`)"
 ```
@@ -90,7 +90,7 @@ column-name:"(`column-name` ,  name  , `END column-name`)"
  ) 
  ); /* name */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/name.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/name.svg)
 ```
 name:"(`name` , ('/(^[A-Za-z][A-Za-z0-9_]*)/' | '/(^"[A-Za-z][A-Za-z0-9_s]*)"/' | '/(^\'[A-Za-z][A-Za-z0-9_s]*)\'/') , `END name`)"
 ```
@@ -113,7 +113,7 @@ Show(Stack(
    ) 
  ); /* column-constraint */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/column-constraint.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/column-constraint.svg)
 ```
 column-constraint:"(`column-constraint` , \n('CONSTRAINT' ,  name )? , \n((('PRIMARY' , 'KEY' , ('ASC' | 'DESC')? ,  conflict-clause  , 'AUTOINCREMENT'?)
  | ('NOT'? , 'NULL' ,  conflict-clause ) | ('UNIQUE' ,  conflict-clause ) | ('CHECK' , '(' , expr , ')') | ('DEFAULT' , ( signed-number  |  literal-value  | ('(' , expr , ')')))
@@ -134,7 +134,7 @@ Show(Sequence(Title('conflict-clause'),
                                        ),Comment('END conflict-clause')) 
      ); /* conflict-clause */
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/conflict-clause.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/conflict-clause.svg)
 ```
 conflict-clause:"(`conflict-clause` , ('ON' , 'CONFLICT' , ('ROLLBACK' | 'ABORT' | 'FAIL' | 'IGNORE' | 'REPLACE'))? , `END conflict-clause`)"
 ```
@@ -153,7 +153,7 @@ Show(Stack(Title('table-constraint'),Stack(Optional(Sequence(Terminal('CONSTRAIN
       Comment('END table-constrainte')) 
  ); /* table-constraint */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/table-constraint.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/table-constraint.svg)
 ```
 table-constraint:"(`table-constraint` , \n
 (('CONSTRAINT' ,  name )? , \n
@@ -172,7 +172,7 @@ table-constraint:"(`table-constraint` , \n
       Comment('END indexed-column')) 
      ); /* indexed-column */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/indexed-column.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/indexed-column.svg)
 ```
 indexed-column:"(`indexed-column` , \n
 (( column-name  | expr) , ('COLLATE' ,  collation-name )? , ('ASC' | 'DESC')?) , \n
@@ -191,7 +191,7 @@ Show(Stack(Title('type-name'),
             Comment('END type-name')) 
      ); /* type-name */  
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/type-name.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/type-name.svg)
 ```
 type-name:"(`type-name` , \n
 ( name  , (('(' ,  signed-number  , ')') | ('(' ,  signed-number  , ',' ,  signed-number  , ')')
@@ -215,7 +215,7 @@ type-name:"(`type-name` , \n
             Comment('END numeric-literal')) 
      ); /* numeric-literal */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/numeric-literal.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/numeric-literal.svg)
 ```
 numeric-literal:"(`numeric-literal` , \n
 (((((('/[0-9]+/' , ('.' , '/[0-9]+/')?) | ('.' , '/[0-9]+/')) , ('E' , ('+' | '-')? , '/[0-9]+/')?)) | 
@@ -228,7 +228,7 @@ numeric-literal:"(`numeric-literal` , \n
 Show(Sequence(Title('signed-number'),Optional(Choice(0,Terminal('+'),Terminal('-'))),NonTerminal('numeric-literal'),Comment('END signed-number')) 
      ); /* signed-number */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/signed-number.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/signed-number.svg)
 ```
 signed-number:"(`signed-number` , ('+' | '-')? ,  numeric-literal  , `END signed-number`)"
 ```
@@ -264,7 +264,7 @@ Show(Stack(Title('foreign-key-clause'),
            ) 
      ); /* foreign-key-clause */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/foreign-key-clause.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/foreign-key-clause.svg)
 ```
 foreign-key-clause:"(`foreign-key-clause` , \n
 ('REFERENCES' ,  foreign-table  , ('(' ,  column-name (',' column-name )* , ')')?) , \n
@@ -279,7 +279,7 @@ foreign-key-clause:"(`foreign-key-clause` , \n
 Show(Sequence(Title('foreign-table'),NonTerminal('table-name'),Comment('END foreign-table')) 
      ); /* foreign-table */ 
 ```
-![alt tag](https://gbrault.github.io/railroad-diagrams//live/doc/svg/foreign-table.svg)
+![alt tag](https://gbrault.github.io/railroad-diagrams/live/doc/svg/foreign-table.svg)
 ```
 foreign-table:"(`foreign-table` ,  table-name  , `END foreign-table`)"
 ```
