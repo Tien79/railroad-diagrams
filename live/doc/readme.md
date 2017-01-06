@@ -31,7 +31,10 @@ My 'discovery' is just to add one more representation, which I call a '**S**ynta
 
 In fact, I have made this 'discovery', looking to tabakins code which was generating 'syntax diagrams' from an SRFB description. I am not sure this 'discovery' is genuine, but so far, I didn't found anything googleing... This might change! 
 
-Of course, tabatkins is the genuine inventor as he created the first SRFB translator (SRFB -> SVG Syntax Diagram). I have just extended the concept by creating some more implementation of core functions for different translating purpose.
+Of course, tabatkins is the genuine inventor as he created the first SRFB translator (SRFB -> SVG Syntax Diagram). I have just extended the concept
+
+- By creating some more implementation of core functions for different translating purpose.
+- Giving a wider scope abstraction (i.e.: write translators not only for svg Syntax Graph representation)
 
 Here is a simple example of the three equivalent representation of a grammar 'chunck' which meaning is in 'current' language: 
 
