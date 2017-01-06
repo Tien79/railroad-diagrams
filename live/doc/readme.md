@@ -312,6 +312,8 @@ We are going to use those walking functions to traverse the grammar graph, using
 Those functions don't know the tokens in advance, so, urguments of the walking function cannot be solved before execution: they must be
 functions which are going to be selected using the tokens path at execution time.
 
+We are using the bind javascript capability to transform all calls to function pointers.
+
 | Core Function   | Implementation | Code                                                                                        | 
 | --------------- |--------------- | --------------------------------------------------------------------------------------------| 
 | Title           | gTitle         | `{context.fname=arguments[0];return "Title.bind(this,"+quote(arguments[0])+")";};`          | 
@@ -328,6 +330,9 @@ functions which are going to be selected using the tokens path at execution time
 | Skip            | gSkip          | ` {return "Skip";};`                                                                        | 
 
 ## va_args function
+
+This function just returns a string composed of the arguments, separated by a comma, like the original call, but arguments are bounded to form a function pointer...
+
 ```javascript
 function va_args(args){  
     	var res="";
@@ -338,5 +343,17 @@ function va_args(args){
 		}
     	} 
 	return res;   /* exact same patern as the calling arguments */	
+}
+```
+## quote
+
+Terminal, NonTerminal, title and Comment are terminals and then have strings as arguments (single). As original strings may have " in their content, special care must be taken to escape this potential " characters. The returned string is surrounded by two enclosing ".
+
+```javascript
+function quote(str){
+	str=str.replace(/\\"/g,'"');
+	str=str.replace(/"/g,'\\"');
+	str='"'+str+'"';
+	return str;
 }
 ```
