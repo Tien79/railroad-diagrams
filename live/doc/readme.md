@@ -76,7 +76,7 @@ SRFB <=> EBNF <=> Syntax Diagram
 ```
 
 - tabatkins has written the SRFB => Syntax Diagram
-- I have writte the SRFB => EBNF translator
+- I have written the SRFB => EBNF translator (much easier...)
 
 The final proof would come by writing 
 
