@@ -2,7 +2,7 @@
 
 - [Introduction](#introduction): Why?
 - [Multiple representations](#multiple-representations): It's not new stuff, what is new?
-- [The Core Functional Basis composition](#the-core-functional-basis-composition): how to right SRFB grammars?
+- [The Core Functional Basis composition](#the-core-functional-basis-composition): how to write SRFB grammars?
 - [Translating SRFB to EBNF](#translating-srfb-to-ebnf): EBNF translation set of core SRFB functions
 
 # Introduction
