@@ -1,9 +1,9 @@
 # Outline
 
-- [Introduction](#introduction)
-- [Multiple representations](#multiple-representations)
-- [The Core Functional Basis composition](#the-core-functional-basis-composition)
-- [Translating SRFB to EBNF](#translating-srfb-to-ebnf)
+- [Introduction](#introduction): Why?
+- [Multiple representations](#multiple-representations): It's not new stuff, what is new?
+- [The Core Functional Basis composition](#the-core-functional-basis-composition): how to right SRFB grammars?
+- [Translating SRFB to EBNF](#translating-srfb-to-ebnf): EBNF translation set of core SRFB functions
 
 # Introduction
 
