@@ -312,14 +312,14 @@ function bnfSkip(){
 | --------------- |--------------- | --------------------------------------------------------------------------------------------| 
 | Title           | gTitle         | `{context.fname=arguments[0];return "Title.bind(this,"+quote(arguments[0])+")";};`          | 
 | Diagram         | gDiagram       | ` {return "Diagram.bind(this,"+va_args(arguments)+")";};`                                   | 
-| Sequence        | gSequence      | ` Returns Childs separated by commas between parenthesis`                       | 
-| Stack           | gStack         | ` Returns Childs separated by commas and linefeed between parenthesis`             | 
-| Choice          | gChoice        | ` Returns Childs separated by vertical line and linefeed between parenthesis`      | 
-| Optional        | gOptional      | ` Returns Child with appended ?`                                               | 
-| OneOrMore       | gOneOrMore     | ` Returns Child1 ( Child2 Child1 )\*   or  Child+`                           | 
-| ZeroOrMore      | gZeroOrMore    | ` Returns Child1 ( Child2 Child1 )\* or  Child\*`                          | 
-| Terminal        | gTerminal      | ` Returns single quoted Child`                                                 | 
-| NonTerminal     | gfNonTerminal  | ` Returns Child between leading and trailing space`                      | 
-| Comment         | gComment       | ` Returns string between ticks`                                                  | 
-| Skip            | gSkip          | ` Returns &lt;Skip&gt;`                                                                | 
+| Sequence        | gSequence      | ` {return "Sequence.bind(this,"+va_args(arguments)+")";};`                                  | 
+| Stack           | gStack         | ` {return "Stack.bind(this,"+va_args(arguments)+")";};`                                     | 
+| Choice          | gChoice        | ` {return "Choice.bind(this,"+va_args(arguments)+")";};`                                    | 
+| Optional        | gOptional      | ` {return "Optional.bind(this,"+va_args(arguments)+")";};`                                  | 
+| OneOrMore       | gOneOrMore     | ` {return "OneOrMore.bind(this,"+va_args(arguments)+")";};`                                 | 
+| ZeroOrMore      | gZeroOrMore    | ` {return "ZeroOrMore.bind(this,"+va_args(arguments)+")";};`                                | 
+| Terminal        | gTerminal      | ` {return "Terminal.bind(this,"+quote(arguments[0])+")";};`                                 | 
+| NonTerminal     | gfNonTerminal  | ` {return "NonTerminal.bind(this,"+quote(arguments[0])+")";};`                              | 
+| Comment         | gComment       | ` {return "Comment.bind(this,"+quote(arguments[0])+")";};`                                  | 
+| Skip            | gSkip          | ` {return "Skip";};`                                                                        | 
 
