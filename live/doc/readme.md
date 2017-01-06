@@ -309,7 +309,7 @@ function bnfSkip(){
 # Translating SRFB to Walking Functions
 
 We are going to use those walking functions to traverse the grammar graph, using the tokens as a guide through the path.
-Those function don't know the tokens in advance, so, urguments of the walking function cannot be solved before execution: they must be
+Those functions don't know the tokens in advance, so, urguments of the walking function cannot be solved before execution: they must be
 functions which are going to be selected using the tokens path at execution time.
 
 | Core Function   | Implementation | Code                                                                                        | 
