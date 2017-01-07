@@ -116,6 +116,32 @@ I also have written the RailRoad grammar in SFRB ([here](https://github.com/gbra
 
 ![alt-tag](https://gbrault.github.io/railroad-diagrams/live/images/architecture.png)
 
+## Refresh phase
+
+During the refresh phase, using the current grammar input in the editor and the various definition of the Core Functions
+
+- Syntax Graph
+- EBNF
+- Tree
+- Genarating
+
+The various output are delivered
+
+- svg Syntax Diagrams
+- ENBF array of nonTerminals
+- Tree structure corresponding to walking calls of the input grammar
+- Generating functions (one per nonTerminal like EBNF) which allow walking for expression validation
+
+## Validate phase
+
+- The input expression is tokenized with a general purpose tokeniser (strings, special chars...)
+- Depending upon the value of the parameters variable "validating" one of the two validation scheme is applied
+ - Tree validation
+ - Function validation
+- Tree validation deliver a tree structure
+- Function validation is taging the tokenized input telling which token correspond to which grammar construct 
+
+
 # The Core Functional Basis composition
 
 The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar to generate SFRB expressions. Any grammar represented according to the following rules defined in this table are likely to be processed by the live tool accessible [here](https://gbrault.github.io/railroad-diagrams/live/live.html).
