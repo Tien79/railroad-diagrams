@@ -440,3 +440,155 @@ function normalize(str){
 The core of the validating functions are then generated, it's what we call the language structure. This array is an array of function pointers which parameters are function pointers. It means that the actual work (what to compute) is going to take palce during the validating phase and will be acheived by the core validating functions.
 
 # Core Validating functions
+
+| Core Function         | Implementation          | Description                                                                     | 
+| --------------------- |------------------------ | --------------------------------------------------------------------------------| 
+| Title                 | [vTitle](#vtitle)   | Returns the title string between ticks quote                                    | 
+| VSSD                  | [vSSD](#vssd) | Returns the result string                                                     | 
+| Diagram               | [vDiagram](#vdiagram) | Returns the result string                                                     | 
+| Sequence              | [vSequence](#vsequence)| Returns Childs separated by commas between parenthesis                       | 
+| Stack                 | [vStack](#vstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
+| Choice                | [vChoice](#vchoice) | Returns Childs separated by vertical line and linefeed between parenthesis      | 
+| Optional              | [vOptional](#voptional) | Returns Child with appended ?                                               | 
+| OneOrMore             | [vOneOrMore](#vfoneormore) | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
+| ZeroOrMore            | [vZeroOrMore](#vzeroormore) | Returns Child1 ( Child2 Child1 )\* or  Child\*                          | 
+| Terminal              | [vTerminal](#vterminal) | Returns single quoted Child                                                 | 
+| NonTerminal           | [vNonTerminal](#vnonterminal) | Returns Child between leading and trailing space                      | 
+| Comment               | [vComment](#vcomment) | Returns string between ticks                                                  | 
+| Skip                  | [vSkip](#vskip) | Returns &lt;Skip&gt;                                                                | 
+
+## vTitle
+```javascript
+function vTitle(){
+	return {type:'Title'};			
+};
+```
+## vSSD
+```javascript
+function vSSD(type,_arguments){
+	/*  All must return no error */
+	var res = {type:type};
+	var tres;
+	var pathindex=context.pathindex;
+	var compiledindex=context.compiledindex;
+	for(var i=0; i<_arguments.length; i++){		
+		tres=execute(_arguments[i]);
+		if(tres.error!==undefined){
+			res.error=tres.error;
+			context.pathindex=pathindex;
+			if(compiledindex>0)
+				context.compiled=context.compiled.slice(0,compiledindex);
+			else
+				context.compiled=[];
+			context.compiledindex=compiledindex;
+			break;
+		} 
+	}
+	return res;
+};
+```
+## vDiagram
+```javascript
+function vDiagram(){
+	var _arguments=arguments;
+	return vSSD('Diagram',arguments);
+};
+```
+## vSequence
+```javascript
+function bnfSequence(){
+	var result="(";				/* opening round bracket */	
+	for(var i=0;i<arguments.length;i++){
+		if(i>0) result+=" , ";		/* comma separated list */
+		result+=arguments[i];
+	}
+	return result+")";			/* closing round bracket */
+};
+```
+## vStack
+```javascript
+function bnfStack(){
+	var result="(";				/* opening round bracket */
+	for(var i=0;i<arguments.length;i++){
+		if(i>0) result+=" , \\n";	/* comma separated list with linefeed */
+		result+=arguments[i];			
+	}
+	return result+")";			/* closing round bracket */
+};
+```
+## vChoice
+```javascript
+function bnfChoice(){
+	var result="(";				/* opening round bracket */
+	var skip=false;
+	for(var i=1;i<arguments.length;i++){
+	if(arguments[i]=="<Skip>"){		/* checking if choice is optional */
+		skip=true;
+	} else {
+		if(!(result=="(")) result+=" | ";  /* vertical line separated list */
+			var temp=arguments[i];
+			if (temp.length>50) temp+="\n";	/* with linefeed if line too big */
+			result+=temp;
+		}
+	}
+	result+=")";				/* closing round bracket */
+	if(skip){
+		result+="?";			/* if skip makes it optional */
+	}
+	return result;
+};
+```
+##vOptional
+```javascript
+function bnfOptional(){
+		return arguments[0]+"?"		/* add a ? to make it optional */
+};
+```
+## vOneOrMore
+```javascript
+function bnfOneOrMore(){
+		var result;
+		if(arguments.length>1){
+			result=arguments[0]+"("+arguments[1]+arguments[0]+")*"; /* if two Childs, use the * iteration */
+		} else {
+			result="("+arguments[0]+")+";			/* if only one Child, use the + iteration */
+		}
+		return result;
+};
+```
+## vZeroOrMore
+```javascript
+function bnfZeroOrMore(){
+		var result;
+		if(arguments.length>1){ 						/* if two Childs, use the * iteration */
+			result=arguments[0]+"?"+"("+arguments[1]+arguments[0]+")*"; 	/* makes first Child optional */
+		} else {
+			result="("+arguments[0]+")*";		/* if only one Child, use the * iteration */
+		}
+		return result;
+};
+```
+## vTerminal
+```javascript
+function bnfTerminal(){
+	return singlequote(arguments[0]);
+};
+```
+## vNonTerminal
+```javascript	
+function bnfNonTerminal(){
+	return " "+arguments[0]+" ";
+};
+```
+## vComment
+```javascript	
+function bnfComment(){
+	return "`"+arguments[0]+"`";
+};
+```
+## vSkip
+```javascript	
+function bnfSkip(){
+	return "<Skip>";
+};
+```	
