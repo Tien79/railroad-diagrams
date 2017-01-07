@@ -450,6 +450,7 @@ The core of the validating functions are then generated, it's what we call the l
 | Stack                 | [vStack](#vstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
 | Choice                | [vChoice](#vchoice) | Returns Childs separated by vertical line and linefeed between parenthesis      | 
 | Optional              | [vOptional](#voptional) | Returns Child with appended ?                                               | 
+| vOrMore               | [vOrMore](#vormore) | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
 | OneOrMore             | [vOneOrMore](#vfoneormore) | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
 | ZeroOrMore            | [vZeroOrMore](#vzeroormore) | Returns Child1 ( Child2 Child1 )\* or  Child\*                          | 
 | Terminal              | [vTerminal](#vterminal) | Returns single quoted Child                                                 | 
@@ -686,21 +687,57 @@ function vTerminal(){
 };
 
 ```
+## getpath
+```javascript
+function getpath(stack){
+	var stmp="";
+	for(var i=0; i<stack.length;i++){
+		if(i>0) stmp +=":";
+		stmp +=stack[i];
+	}
+	return stmp;
+}
+```
 ## vNonTerminal
-```javascript	
-function bnfNonTerminal(){
-	return " "+arguments[0]+" ";
+```javascript
+function vNonTerminal(){
+	if(context.language[context.normalize(arguments[0])]!==undefined){
+		context.stack.push(arguments[0]);
+		var res= execute(context.language[context.normalize(arguments[0])]);
+		context.stack.pop();
+		return res;
+	} else {
+		var error="NonTerminal("+context.path[context.pathindex].value+") not fitting ";
+		if(arguments.length>0)
+			error += "("+arguments[0]+")";
+		error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
+		return {type:'NonTerminal',error};			
+	}
 };
 ```
 ## vComment
 ```javascript	
-function bnfComment(){
-	return "`"+arguments[0]+"`";
+function vComment(){
+	return {type:'Comment'};	
 };
 ```
 ## vSkip
 ```javascript	
-function bnfSkip(){
-	return "<Skip>";
+function vSkip(){
+	return {type:'Skip'};	
 };
-```	
+```
+## execute
+```javascript
+function execute(fun){
+	var tmp=fun;
+	do{
+		if(typeof tmp ==='function'){
+			tmp=tmp();
+		} else {
+			return tmp;
+		}
+	} while(true);
+};
+
+```
