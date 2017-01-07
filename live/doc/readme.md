@@ -16,7 +16,9 @@ I always have been fascinated by formal languages... I mean computer languages! 
 
 By representing I mean learn and test if language expressions I can produce are matching the grammar rules.
 
-For those who are more experimental than theoritical, one can jump to the live tool accessible **[here](https://gbrault.github.io/railroad-diagrams/live/live.html)**, hit the documentation button to learn how to use the tool and interpret the results.
+For those who are more experimental than theoritical, one can jump to the live tool accessible    **[here](https://gbrault.github.io/railroad-diagrams/live/live.html)**, 
+
+hit the help button to learn how to use the tool and what are the results.
 
 The others can proceed reading!
 
