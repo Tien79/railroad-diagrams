@@ -4,6 +4,7 @@
 - [Multiple representations](#multiple-representations): It's not new stuff, what is new?
   - [A basic example](#a-basic-example)
   - [Showing equivalence of representation](#showing-equivalence-of-representation)
+- [Software functional view](#software-functional-view): What is the live demo actually doing?
 - [The Core Functional Basis composition](#the-core-functional-basis-composition): how to write SRFB grammars?
 - [Translating SRFB to EBNF](#translating-srfb-to-ebnf): EBNF translation set of core SRFB functions
 - [Translating SRFB to Trees](#translating-srfb-to-trees): Core SRFB functions to generate parsing trees 
