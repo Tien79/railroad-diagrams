@@ -112,6 +112,10 @@ I also have written the RailRoad grammar in SFRB ([here](https://github.com/gbra
 - expressions grammar as a tutorial [here](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/expression.md)
 - sqlite CREATE TABLE as this was one of my orginial needs for this work [here](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/CREATE%20TABLE.md)
 
+# Software functional view
+
+![alt-tag](https://gbrault.github.io/railroad-diagrams/live/images/architecture.png)
+
 # The Core Functional Basis composition
 
 The following table, providing one entry by core function, explains the syntax for composing those functions to represent a grammar. Names in italic are not functions of the basis per say, as they are composed of core functions, but they enable to better understand the grammar to generate SFRB expressions. Any grammar represented according to the following rules defined in this table are likely to be processed by the live tool accessible [here](https://gbrault.github.io/railroad-diagrams/live/live.html).
