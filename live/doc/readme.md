@@ -437,7 +437,7 @@ function normalize(str){
 ```
 ## Conclusion
 
-The core of the validating functions are then generated, it's what we call the language structure. This array is an array of function pointers which parameters are function pointers. It means that the actual work (what to compute) is going to take palce during the validating phase and will be acheived by the core validating functions.
+The core of the validating functions are then generated, it's what we call the language structure. This array is an array of function pointers which parameters are function pointers. It means that the actual work (what to compute) is going to take place during the validating phase and will be acheived by the core validating functions.
 
 # Core Validating functions
 
