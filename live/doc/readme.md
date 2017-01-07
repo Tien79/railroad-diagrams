@@ -496,83 +496,195 @@ function vDiagram(){
 ```
 ## vSequence
 ```javascript
-function bnfSequence(){
-	var result="(";				/* opening round bracket */	
-	for(var i=0;i<arguments.length;i++){
-		if(i>0) result+=" , ";		/* comma separated list */
-		result+=arguments[i];
-	}
-	return result+")";			/* closing round bracket */
+function vSequence(){
+	var _arguments=arguments;
+	return vSSD('Sequence',arguments);
 };
 ```
 ## vStack
 ```javascript
-function bnfStack(){
-	var result="(";				/* opening round bracket */
-	for(var i=0;i<arguments.length;i++){
-		if(i>0) result+=" , \\n";	/* comma separated list with linefeed */
-		result+=arguments[i];			
-	}
-	return result+")";			/* closing round bracket */
+function vStack(){
+	var _arguments=arguments;
+	return vSSD('Stack',_arguments);
 };
 ```
 ## vChoice
 ```javascript
-function bnfChoice(){
-	var result="(";				/* opening round bracket */
+function vChoice(){
+	/* One at least must return no error (or skip)*/
+	var tres;
 	var skip=false;
-	for(var i=1;i<arguments.length;i++){
-	if(arguments[i]=="<Skip>"){		/* checking if choice is optional */
-		skip=true;
-	} else {
-		if(!(result=="(")) result+=" | ";  /* vertical line separated list */
-			var temp=arguments[i];
-			if (temp.length>50) temp+="\n";	/* with linefeed if line too big */
-			result+=temp;
+	var pathindex=context.pathindex;
+	var compiledindex=context.compiledindex;
+	for(var i=1; i<arguments.length; i++){ // don't care about arguments[0]
+		tres = execute(arguments[i]);
+		if(tres.error===undefined){
+			if(tres.type=='skip'){
+				skip=true;
+			} else {
+				return tres;
+			}			
 		}
+		context.pathindex=pathindex;
+		if(compiledindex>0)
+			context.compiled=context.compiled.slice(0,compiledindex);
+		else
+			context.compiled=[];
+		context.compiledindex=compiledindex;
 	}
-	result+=")";				/* closing round bracket */
 	if(skip){
-		result+="?";			/* if skip makes it optional */
-	}
-	return result;
+		context.pathindex=pathindex;
+		if(compiledindex>0)
+			context.compiled=context.compiled.slice(0,compiledindex);
+		else
+			context.compiled=[];
+		context.compiledindex=compiledindex;
+		return {type:'choice'};
+	} else {
+		context.pathindex=pathindex;
+		if(compiledindex>0)
+			context.compiled=context.compiled.slice(0,compiledindex);
+		else
+			context.compiled=[];
+		context.compiledindex=compiledindex;
+		var error="choice with("+context.path[context.pathindex].value+") not possible";
+		error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
+		return {type:'choice',error};		
+	}		
 };
 ```
 ##vOptional
 ```javascript
-function bnfOptional(){
-		return arguments[0]+"?"		/* add a ? to make it optional */
+function vOptional(){
+	var res = {type:'Optional'};
+	var tres;
+	var pathindex=context.pathindex;
+	var compiledindex=context.compiledindex;
+	if(context.pathindex<context.path.length){
+		tres=execute(arguments[0]);
+		if(tres.error!==undefined){
+			// res.error=tres.error;
+			context.pathindex=pathindex;
+			if(compiledindex>0)
+				context.compiled=context.compiled.slice(0,compiledindex);
+			else
+				context.compiled=[];
+			context.compiledindex=compiledindex;
+		} else {
+			res.type=tres.type;
+		}
+	}
+	return res;		
 };
+```
+## vOrMore
+```javascript
+function vOrMore(zero,_arguments){
+	var tres;
+	var more=true;
+	var error = false;
+	var pathindex=context.pathindex;
+	var compiledindex=context.compiledindex;
+	var first=true;
+	var i=0;
+	do{
+		if(context.pathindex>=context.path.length){
+			error=false;
+			more=false;
+		} else {
+			tres = execute(_arguments[i]);
+			i++;
+			if(i>=_arguments.length) i=0;
+			if(tres.error!==undefined){
+				if((first)&&(!zero)){
+					error=true;
+					more=false;
+				} else {
+					error=false;
+					more=false;					
+				}
+				context.pathindex=pathindex;
+				if(compiledindex>0)
+					context.compiled=context.compiled.slice(0,compiledindex);
+				else
+					context.compiled=[];
+				context.compiledindex=compiledindex;
+			} else{
+				first=false;
+				pathindex=context.pathindex;
+				compiledindex=context.compiledindex;
+			}
+		}
+	} while(more);
+	if(!error){
+		return {type:'oneORmore'};
+	} else{
+		return {type:'oneORmore',error:tres.error};
+	}		
+}
 ```
 ## vOneOrMore
 ```javascript
-function bnfOneOrMore(){
-		var result;
-		if(arguments.length>1){
-			result=arguments[0]+"("+arguments[1]+arguments[0]+")*"; /* if two Childs, use the * iteration */
-		} else {
-			result="("+arguments[0]+")+";			/* if only one Child, use the + iteration */
-		}
-		return result;
+function vOneOrMore(){
+	var _arguments=arguments;
+	return vOrMore(false,_arguments);
 };
 ```
 ## vZeroOrMore
 ```javascript
-function bnfZeroOrMore(){
-		var result;
-		if(arguments.length>1){ 						/* if two Childs, use the * iteration */
-			result=arguments[0]+"?"+"("+arguments[1]+arguments[0]+")*"; 	/* makes first Child optional */
-		} else {
-			result="("+arguments[0]+")*";		/* if only one Child, use the * iteration */
-		}
-		return result;
+function vZeroOrMore(){
+	var _arguments=arguments;
+	return vOrMore(true,_arguments);
 };
 ```
 ## vTerminal
 ```javascript
-function bnfTerminal(){
-	return singlequote(arguments[0]);
+function vTerminal(){
+	var error = false;
+	if(arguments.length==1){
+		if(arguments[0].startsWith("/")){
+			var l = arguments[0].length;
+			const regex = new RegExp(arguments[0].substring(1,l-1));
+			var m;
+			if ((m = regex.exec(context.path[context.pathindex].value)) === null) {
+				error=true;
+			}
+		} else {
+			if(arguments[0]!==context.path[context.pathindex].value){
+				error=true;
+			}			
+		}
+	} else {
+		error=true;
+	}
+	if(error){
+		var error="In "+context.stack[context.stack.length-1]+" Terminal("+context.path[context.pathindex].value+") not fitting ";
+		if(arguments.length>0)
+			error += "("+arguments[0]+")";
+		error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
+		return {type:'terminal',error};
+	} else {
+		if (arguments[0]==context.path[context.pathindex].value){
+			context.compiled.push({	PathItem:context.path[context.pathindex].value,										
+									line:context.lineschars[context.path[context.pathindex].index].line,
+									char:context.lineschars[context.path[context.pathindex].index].char,
+									level:getpath(context.stack)									
+								  });
+		} else{
+			context.compiled.push({	Terminal:arguments[0],
+									PathItem:context.path[context.pathindex].value,										
+									line:context.lineschars[context.path[context.pathindex].index].line,
+									char:context.lineschars[context.path[context.pathindex].index].char,
+									level:getpath(context.stack)									
+								  });
+			
+		}
+		context.compiledindex++;
+		context.pathindex++;
+		return {type:'Terminal'};
+	}
 };
+
 ```
 ## vNonTerminal
 ```javascript	
