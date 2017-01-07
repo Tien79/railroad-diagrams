@@ -1137,7 +1137,7 @@ function dowalk(context){
 						                                            " in: "+context.titles[context.titles.length-1]};
 					}
 		    	} else {
-		    		var feedback = context.walk.Terminal[0]==context.path[context.pathindex];
+		    		var feedback = context.walk.Terminal[0]==context.path[context.pathindex].value;
 		    		if(!feedback){
 		    			context.error={state:true,message:"Terminal "+context.path[context.pathindex].value+"("+context.pathindex+")-lines:"+
 		                                      						context.lineschars[context.path[context.pathindex].index].line+
