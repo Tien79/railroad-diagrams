@@ -118,6 +118,7 @@ I also have written the RailRoad grammar in SFRB ([here](https://github.com/gbra
 # Software functional view
 
 ![alt-tag](https://gbrault.github.io/railroad-diagrams/live/images/architecture.png)
+Click to get a full screen view.
 
 ## Refresh phase
 
