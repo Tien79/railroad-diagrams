@@ -443,24 +443,27 @@ The core of the validating functions are then generated, it's what we call the l
 
 | Core Function         | Implementation          | Description                                                                     | 
 | --------------------- |------------------------ | --------------------------------------------------------------------------------| 
-| Title                 | [vTitle](#vtitle)       | Returns the title string between ticks quote                                    | 
-| VSSD                  | [vSSD](#vssd)           | Returns the result string                                                     | 
-| Diagram               | [vDiagram](#vdiagram)   | Returns the result string                                                     | 
-| Sequence              | [vSequence](#vsequence) | Returns Childs separated by commas between parenthesis                       | 
-| Stack                 | [vStack](#vstack)       | Returns Childs separated by commas and linefeed between parenthesis             | 
-| Choice                | [vChoice](#vchoice)     | Returns Childs separated by vertical line and linefeed between parenthesis      | 
-| Optional              | [vOptional](#voptional) | Returns Child with appended ?                                               | 
-| vOrMore               | [vOrMore](#vormore)     | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
-| OneOrMore             | [vOneOrMore](#vfoneormore) | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
-| ZeroOrMore            | [vZeroOrMore](#vzeroormore) | Returns Child1 ( Child2 Child1 )\* or  Child\*                          | 
-| getpath               | [getpath](#getpath)     | Returns single quoted Child                                                 | 
-| Terminal              | [vTerminal](#vterminal) | Returns single quoted Child                                                 | 
-| NonTerminal           | [vNonTerminal](#vnonterminal) | Returns Child between leading and trailing space                      | 
-| Comment               | [vComment](#vcomment)   | Returns string between ticks                                                  | 
-| Skip                  | [vSkip](#vskip)         | Returns &lt;Skip&gt;                                                            | 
-| execute               | [execute](#execute)     | Returns &lt;Skip&gt;                                                             | 
+| Title                 | [vTitle](#vtitle)       | just return the type                                                            | 
+| VSSD                  | [vSSD](#vssd)           | Helper function for Sequence, Stack, Diagram                                    | 
+| Diagram               | [vDiagram](#vdiagram)   |                                                                                 | 
+| Sequence              | [vSequence](#vsequence) |                                                                                 |
+| Stack                 | [vStack](#vstack)       |                                                                                 |
+| Choice                | [vChoice](#vchoice)     |                                                                                 | 
+| Optional              | [vOptional](#voptional) |                                                                                 |
+| vOrMore               | [vOrMore](#vormore)     | Helper function for OneOrMore and ZeroOrMore                                    | 
+| OneOrMore             | [vOneOrMore](#vfoneormore) |                                                                              |
+| ZeroOrMore            | [vZeroOrMore](#vzeroormore) |                                                                             |
+| getpath               | [getpath](#getpath)     | helper function for Terminal                                                    | 
+| Terminal              | [vTerminal](#vterminal) |                                                                                 |
+| NonTerminal           | [vNonTerminal](#vnonterminal) |                                                                           |
+| Comment               | [vComment](#vcomment)   |                                                                                 |
+| Skip                  | [vSkip](#vskip)         |                                                                                 | 
+| execute               | [execute](#execute)     | Helper function                                                                 | 
 
-VSSD, getpath and execute are Core function helpers.
+- VSSD, vOrMore, getpath and execute are Core function helpers.
+- context is the global variable passed during railroad creation which holds results and errors.
+- every function returns an object with type attribute
+- if the returned object holds an error attribute, this trigger either backtracking or an error
 
 ## vTitle
 ```javascript
@@ -733,7 +736,7 @@ function vSkip(){
 ```
 ## execute
 ```javascript
-function execute(fun){
+function execute(fun){  /* execute fun until result is not a function */
 	var tmp=fun;
 	do{
 		if(typeof tmp ==='function'){
