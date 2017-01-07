@@ -443,20 +443,24 @@ The core of the validating functions are then generated, it's what we call the l
 
 | Core Function         | Implementation          | Description                                                                     | 
 | --------------------- |------------------------ | --------------------------------------------------------------------------------| 
-| Title                 | [vTitle](#vtitle)   | Returns the title string between ticks quote                                    | 
-| VSSD                  | [vSSD](#vssd) | Returns the result string                                                     | 
-| Diagram               | [vDiagram](#vdiagram) | Returns the result string                                                     | 
-| Sequence              | [vSequence](#vsequence)| Returns Childs separated by commas between parenthesis                       | 
-| Stack                 | [vStack](#vstack)   | Returns Childs separated by commas and linefeed between parenthesis             | 
-| Choice                | [vChoice](#vchoice) | Returns Childs separated by vertical line and linefeed between parenthesis      | 
+| Title                 | [vTitle](#vtitle)       | Returns the title string between ticks quote                                    | 
+| VSSD                  | [vSSD](#vssd)           | Returns the result string                                                     | 
+| Diagram               | [vDiagram](#vdiagram)   | Returns the result string                                                     | 
+| Sequence              | [vSequence](#vsequence) | Returns Childs separated by commas between parenthesis                       | 
+| Stack                 | [vStack](#vstack)       | Returns Childs separated by commas and linefeed between parenthesis             | 
+| Choice                | [vChoice](#vchoice)     | Returns Childs separated by vertical line and linefeed between parenthesis      | 
 | Optional              | [vOptional](#voptional) | Returns Child with appended ?                                               | 
-| vOrMore               | [vOrMore](#vormore) | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
+| vOrMore               | [vOrMore](#vormore)     | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
 | OneOrMore             | [vOneOrMore](#vfoneormore) | Returns Child1 ( Child2 Child1 )\*   or  Child+                           | 
 | ZeroOrMore            | [vZeroOrMore](#vzeroormore) | Returns Child1 ( Child2 Child1 )\* or  Child\*                          | 
+| getpath               | [getpath](#getpath)     | Returns single quoted Child                                                 | 
 | Terminal              | [vTerminal](#vterminal) | Returns single quoted Child                                                 | 
 | NonTerminal           | [vNonTerminal](#vnonterminal) | Returns Child between leading and trailing space                      | 
-| Comment               | [vComment](#vcomment) | Returns string between ticks                                                  | 
-| Skip                  | [vSkip](#vskip) | Returns &lt;Skip&gt;                                                                | 
+| Comment               | [vComment](#vcomment)   | Returns string between ticks                                                  | 
+| Skip                  | [vSkip](#vskip)         | Returns &lt;Skip&gt;                                                            | 
+| execute               | [execute](#execute)     | Returns &lt;Skip&gt;                                                             | 
+
+VSSD, getpath and execute are Core function helpers.
 
 ## vTitle
 ```javascript
