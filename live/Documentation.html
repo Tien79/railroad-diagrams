@@ -20,8 +20,8 @@ font-family : Arial, Helvetica, sans-serif;
 						tables: true,
 						prefixHeaderId:""
 						}),
-	options=converter.getOptions();
-    html = converter.makeHtml(documentation),
+	options=converter.getOptions(),
+        html = converter.makeHtml(documentation),
 	md = document.getElementById('md');
 	md.innerHTML=html;
 </script>		
