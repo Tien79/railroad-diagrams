@@ -337,6 +337,137 @@ Show(Sequence(Title('Child'), \n\
  Comment('END Child')) \n\
      ); \n\
 /* Child */";
+var ebnfsource=" \n\
+/*\n\
+\"EBNF\" {\n\
+syntax     = [ title ] \"{\" { production } \"}\" [ comment ].\n\
+production = identifier \"=\" expression ( \".\" | \";\" ) .\n\
+expression = term { \"|\" term } .\n\
+term       = factor { factor } .\n\
+factor     = identifier\n\
+           | literal\n\
+           | \"[\" expression \"]\"\n\
+           | \"(\" expression \")\"\n\
+           | \"{\" expression \"}\" .\n\
+identifier = character { character } .\n\
+title      = literal .\n\
+comment    = literal .\n\
+literal    = \"'\" character { character } \"'\"\n\
+           | '\"' character { character } '\"' .\n\
+}\n\
+*/\n\
+/********************************************************************************************************************************/\n\
+Show(Stack( \n\
+			Title('syntax_'),\n\
+  			Comment('[ title ] \"{\" { production } \"}\" [ comment ]'),\n\
+			Sequence(\n\
+                    Optional(Sequence(NonTerminal('identifier_'),Terminal('='))),\n\
+					Optional(NonTerminal('title_')),\n\
+					Terminal(\"{\"), \n\
+              		ZeroOrMore(NonTerminal('production_')),\n\
+              		Terminal(\"}\"),\n\
+					Optional(NonTerminal('comment_'))\n\
+				),\n\
+			Comment('END syntax_')\n\
+		)\n\
+	); /* syntax_ */\n\
+/********************************************************************************************************************************/\n\
+ Show(Stack( \n\
+   			Title('production_'),\n\
+   			Comment('production = identifier \"=\" expression ( \".\" | \";\" ) '),\n\
+   			Sequence(\n\
+              	Optional(Sequence(NonTerminal('identifier_'),Terminal('='))),\n\
+              	NonTerminal('expression_'),\n\
+              	Choice(0,Terminal('.'),Terminal(';'))\n\
+            ), \n\
+   			Comment('END Production_')\n\
+ 		)\n\
+ 	); /* production_ */\n\
+/********************************************************************************************************************************/\n\
+ Show(Stack( \n\
+   			Title('expression_'),\n\
+   			Comment('expression = term { \"|\" term }'),\n\
+   			Sequence(\n\
+              	Optional(Sequence(NonTerminal('identifier_'),Terminal('='))),\n\
+				OneOrMore(\n\
+					NonTerminal('term_'),\n\
+					Terminal('|')\n\
+				)\n\
+            ), \n\
+   			Comment('END expression_')\n\
+ 		)\n\
+ 	); /* expression_ */\n\
+/********************************************************************************************************************************/\n\
+ Show(Stack( \n\
+   			Title('term_'),\n\
+   			Comment('term  = factor { factor }'),\n\
+   			Sequence(\n\
+              	Optional(Sequence(NonTerminal('identifier_'),Terminal('='))),\n\
+				OneOrMore(\n\
+					NonTerminal('factor_')\n\
+				)\n\
+            ), \n\
+   			Comment('END term_')\n\
+ 		)\n\
+ 	); /* term_ */\n\
+/********************************************************************************************************************************/\n\
+ Show(Stack(\n\
+   			Title('factor_'),\n\
+   			Comment('factor = identifier| literal| \"[\" expression \"]\"| \"(\" expression \")\"| \"{\" expression \"}\"'),\n\
+   			Sequence(\n\
+              	Optional(Sequence(NonTerminal('identifier_'),Terminal('='))),\n\
+				Choice(0,\n\
+					NonTerminal('identifier_'),\n\
+					NonTerminal('literal_'),\n\
+					Sequence(Terminal('['),NonTerminal('expression_'),Terminal(']')),\n\
+					Sequence(Terminal('('),NonTerminal('expression_'),Terminal(')')),\n\
+					Sequence(Terminal('{'),NonTerminal('expression_'),Terminal('}'))\n\
+				)\n\
+            ), \n\
+   			Comment('END factor_')		   \n\
+	       )\n\
+	); /* factor_ */\n\
+/********************************************************************************************************************************/\n\
+Show( \n\
+Sequence(Title('identifier_'),\n\
+         Comment('identifier = character { character }'),\n\
+		Terminal('/(^[A-Za-z][A-Za-z0-9_]*)/'),\n\
+		Comment('END identifier_')\n\
+)\n\
+); /* identifier */\n\
+/********************************************************************************************************************************/\n\
+Show( /* literal    = \"'\" character { character } \"'\" | '\"' character { character } '\"' . */\n\
+Sequence(Title('literal_'),\n\
+Choice(0,\n\
+	Terminal('/(^\"[^\\\"]*)\"/'),\n\
+        Terminal(\"/(^\\'[^\\']*)\\'/\")\n\
+),\n\
+Comment('END literal_')\n\
+)\n\
+); /* literal_ */\n\
+/********************************************************************************************************************************/\n\
+Show( /* title  = literal . */\n\
+Sequence(Title('title_'),\n\
+		NonTerminal('literal_'),\n\
+		Comment('END title_')\n\
+)\n\
+); /* title_ */\n\
+/********************************************************************************************************************************/\n\
+Show( /* comment    = literal . */\n\
+Sequence(Title('comment_'),\n\
+		NonTerminal('literal_'),\n\
+		Comment('END comment_')\n\
+)\n\
+); /* comment_ */\n\
+";
+var ebnfexample="\"Arithmetic Expressions\" {\n\
+expression = term  { (\"+\" | \"-\") term} .\n\
+term       = factor  { (\"*\"|\"/\") factor} .\n\
+factor     = constant | variable | \"(\"  expression  \")\" .\n\
+variable   = \"x\" | \"y\" | \"z\" .\n\
+constant   = digit {digit} .\n\
+digit      = \"0\" | \"1\" | \"...\" | \"9\" .\n\
+}";
 
 /* user application */
 root.context =	{
@@ -455,6 +586,7 @@ footer {
 </a>
 <button id="dosetup" onclick="dosetup();">Setup</button>
 <button id="dorailroard" onclick="dorailroad();">RailRoad Grammar</button>
+<button id="doebnf" onclick="doebnf();">EBNF Grammar</button>
 <button id="createtable" onclick="createtable();">Create Table</button>
 <button id="expression" onclick="expression();">expression</button>
 <button id="showhide" onclick="showhide();">show/hide</button>
@@ -626,6 +758,11 @@ function expression(){
 function dorailroad(){
 	window.editor.getDoc().setValue(window.railroadsource);
 	window.sql.getDoc().setValue(window.expressionsource);
+}
+
+function doebnf(){
+	window.editor.getDoc().setValue(window.ebnfsource);
+	window.sql.getDoc().setValue(window.ebnfexample);
 }
 
 function injectjs(content,error){
@@ -854,7 +991,7 @@ function doc(type,node){
 
 function tokenizer(str){
 /* add characters if more needed*/
-const regex = /"\/.*\/"|'\/.*\/'|\/\*.*\*\/|"[^"]*"|'[^']*'|[A-Za-z][A-Za-z09_]*|[,;\+\*/()]|[0-9]+/gm;
+const regex = /"\/.*\/"|'\/.*\/'|\/\*.*\*\/|"[^"]*"|'[^']*'|[A-Za-z][A-Za-z09_]*|[,;\+\-\\\*\/()=\[\]\{\}\|.]|[0-9]+/gm;
 var m;
 var results=[];
 var tokens=[];
