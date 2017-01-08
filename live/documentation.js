@@ -1,7 +1,7 @@
 var documentation='# RailRoad Live (SRFB): How to use?\n\
 \n\
 <img src="images/expression.png" alt="" usemap="#Map" />\n\
-the number of 'default' grammars may vary upon time\n\
+the number of \'default\' grammars may vary upon time\n\
 <map name="Map" id="Map">\n\
     <area alt="" title="Show/Hide unchecked Diagrams" href="#a-showhide-unchecked-diagrams" shape="poly" coords="2,46,161,49,158,124,7,123" />\n\
     <area alt="" title="Help" href="#b-help" shape="poly" coords="1,136,157,136,159,181,3,189" />\n\
