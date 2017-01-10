@@ -3,6 +3,7 @@
 <title>RailRoad live (SRFB)</title>
 <link rel="stylesheet" href="codemirror.css">
 <link rel="stylesheet" href="foldgutter.css">
+<link rel="stylesheet" href="vis.css">
 <script src="codemirror.js"></script>
 <script src="matchbrackets.js"></script>
 <script src="continuecomment.js"></script>
@@ -15,6 +16,7 @@
 <script src="json-formatter-js.js"></script>
 <script src="railroad.js"></script>
 <script src="jslint.js"></script>
+<script src="vis.js"></script>
 <script>
 window.expressionsource="/********************************************************************************************************************************/ \n\
  Show(Sequence(Title('expression'),OneOrMore(NonTerminal('term'),Terminal('+')), Comment('END expression')) /* Sequence */ \n\
@@ -612,8 +614,14 @@ footer {
 <!-- expression to validate editor -->
 <hr/>
 </div>
+<section>
+<div id="treeresult">
+</div>
+</section>
+<aside>
 <div id="sqlcompiled">
 </div>
+</aside>
 <!-- compiled result -->
 <div id="setup">
 <textarea id="setuptextarea" cols='150' rows='25'>
@@ -638,7 +646,7 @@ footer {
 <!-- a la bnf -->
 <footer>
 <small>Copyright &copy; Gilbert Brault 2016,2017
-&nbsp;&nbsp;&nbsp;license&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativecommons.org/licenses/by/4.0/"><img src="https://creativecommons.org/wp-content/themes/cc/images/cc.logo.white.svg" width="5%"/></a>
+&nbsp;&nbsp;&nbsp;license&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativecommons.org/licenses/by/4.0/"><img src="images/cc.logo.white.svg" width="5%"/></a>
 &nbsp;&nbsp;&nbsp;&nbsp;Original work from tabatkins&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://github.com/tabatkins/railroad-diagrams">(svg graphs)</a>
 <small>
 </footer>
@@ -1061,6 +1069,8 @@ function fillerrorstack(context){
 function doswitch(){
 	var sqlcompiled=document.getElementById('sqlcompiled');
 	sqlcompiled.innerHTML="";
+	var treeresult=document.getElementById('treeresult');
+	treeresult.innerHTML="";
 	var error=document.getElementById('error');
 	error.innerHTML="";
 	var cmsql=document.getElementById("sql");
@@ -1086,6 +1096,8 @@ function doswitch(){
 function dovalidate(){
 	var sqlcompiled=document.getElementById('sqlcompiled');
 	sqlcompiled.innerHTML="";
+	var treeresult=document.getElementById('treeresult');
+	treeresult.innerHTML="";
 	var error=document.getElementById('error');
 	error.innerHTML="";
 	var sql = window.sql.getValue();
@@ -1144,6 +1156,8 @@ function dovalidate(){
 					const formatter = new JSONFormatter(window.results.context.compiled);
 					var elt = formatter.render();
 					sqlcompiled.appendChild(elt);
+					// display associated graph
+					displaygraph(treeresult,window.results.context.compiled);
 				} else{
 					// display error and errorstack
 					error.innerHTML=result.error;
@@ -1152,6 +1166,81 @@ function dovalidate(){
 		}
 	}
 	return false;
+}
+
+function addtotree(ctx){
+    if((ctx.pparent==null)||(ctx.pparent.name!=ctx.datanodes[ctx.j])){
+		var node = {id:(ctx.id++),name:ctx.datanodes[ctx.j],parent:ctx.pparent,childs:[]};
+		ctx.ptree.push(node);
+		ctx.pparent=node;
+		ctx.ptree=node.childs;
+	}
+	addTerminaltoTree(ctx);
+}
+
+function addTerminaltoTree(ctx){
+	if(ctx.j==(ctx.datanodes.length-1)){
+		ctx.ptree.push({id:(ctx.id++),name:ctx.data[ctx.i].PathItem,parent:ctx.pparent});
+	}
+}
+
+function dtreewalk(ctx){
+	ctx.nodes.push({id:ctx.node.id,label:ctx.node.name});
+	if(ctx.node.parent!=null){
+		ctx.edges.push({from:ctx.node.parent.id,to:ctx.node.id,label:ctx.node.id});
+	} 
+	if(ctx.node.childs!==undefined){
+		for(var i=0; i<ctx.node.childs.length; i++){
+			dtreewalk({tree:ctx.tree,nodes:ctx.nodes,edges:ctx.edges,node:ctx.node.childs[i]});
+		}
+	}
+}
+
+function displaygraph(elt,data){
+	// build nodes and edges
+	var tree=[];
+	var edges=[];
+	var nodes=[];
+	var ctx={ptree:null, pparent:null, datanodes:null,j:0,data:data,i:0, id:1};
+	for(var i=0; i<data.length; i++){
+		ctx.datanodes = data[i].level.split(":");
+		ctx.ptree = tree;
+		ctx.pparent=null;
+		for(var j=0; j<ctx.datanodes.length; j++){  // j is the level		
+			if(ctx.ptree.length==0){
+				ctx.i=i;ctx.j=j;
+				addtotree(ctx);				
+			} else if(ctx.ptree[ctx.ptree.length-1].name==ctx.datanodes[j]){
+				ctx.pparent=ctx.ptree[ctx.ptree.length-1];
+				ctx.ptree=ctx.pparent.childs;
+				if(ctx.ptree[ctx.ptree.length-1].childs==undefined){  // terminal node
+					ctx.i=i;ctx.j=j;
+					addtotree(ctx);				
+				} else {
+					if(j==(ctx.datanodes.length-1)){
+						ctx.i=i;ctx.j=j;
+						addtotree(ctx);										
+					}
+				}
+			} else {
+					ctx.i=i;ctx.j=j;
+					addtotree(ctx);				
+			}
+		}		
+	}
+	
+	dtreewalk({tree:tree,nodes:nodes,edges:edges,node:tree[0]});
+	
+	var options={
+		layout: {
+                    hierarchical: {
+						sortMethod:'directed',
+                        direction: 'LR' //'UD'
+                    }
+                }
+	};
+	var datanetwork={nodes,edges};
+	var network=new vis.Network(elt,datanetwork,options);
 }
 
 function fillcompiled(context,compiled,nt){
