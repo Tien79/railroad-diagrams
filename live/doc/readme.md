@@ -766,4 +766,6 @@ You get that screen
 - Down left is the graph made with vis.js excellent graphic library
 - Right: the litteral format of the same tree, node by node
 
+Ypu can play contracting/expanding nodes just clicking on it (it will hide/show all childs and add/suppress a + sign to the label)
+
 ![alt-tab](https://gbrault.github.io/railroad-diagrams/live/doc/svg/expression-results.png)
