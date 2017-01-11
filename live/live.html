@@ -1185,9 +1185,10 @@ function addTerminaltoTree(ctx){
 }
 
 function dtreewalk(ctx){
-	ctx.nodes.push({id:ctx.node.id,label:ctx.node.name});
+	ctx.nodes.push({id:ctx.node.id,label:ctx.node.name,hidden: false});
 	if(ctx.node.parent!=null){
-		ctx.edges.push({from:ctx.node.parent.id,to:ctx.node.id,label:ctx.node.id});
+		var id=""+ctx.node.parent.id+"-"+ctx.node.id;
+		ctx.edges.push({id:id,from:ctx.node.parent.id,to:ctx.node.id,label:ctx.node.id,hidden: false});
 	} 
 	if(ctx.node.childs!==undefined){
 		for(var i=0; i<ctx.node.childs.length; i++){
@@ -1240,8 +1241,65 @@ function displaygraph(elt,data){
                     }
                 }
 	};
+	
+	nodes = new vis.DataSet(nodes);
+	edges = new vis.DataSet(edges);
 	var datanetwork={nodes,edges};
 	var network=new vis.Network(elt,datanetwork,options);
+	
+	network.on("click", function(e) {
+		var node = dtreefind(e.nodes[0],tree);
+		if((node!==undefined)&&(node!=null)){
+			if(node.hidden==undefined){
+				node.hidden=true;
+			} else {
+				node.hidden=!node.hidden;
+			}
+			var ctx={current:node,parent:node,nodes:[],edges:[]};
+			dtreehide(ctx);
+			nodes.update(ctx.nodes);
+			edges.update(ctx.edges);
+		}
+	});
+}
+
+function dtreehide(ctx){
+	if(ctx.current!=ctx.parent){
+		// build nodes and edges
+		ctx.nodes.push({id:ctx.current.id, hidden:ctx.parent.hidden});
+		var id=""+ctx.current.parent.id+"-"+ctx.current.id;
+		ctx.edges.push({id:id,hidden:ctx.parent.hidden});
+	} else {
+		if(ctx.parent.hidden){
+			ctx.nodes.push({id:ctx.parent.id,label:ctx.parent.name+"+"});
+		} else {
+			ctx.nodes.push({id:ctx.parent.id,label:ctx.parent.name});
+		}
+	}
+	// do it for all childs as well
+	var current = ctx.current;
+	if(current.childs!==undefined){
+		for(var i=0; i< current.childs.length; i++){		
+			ctx.current=current.childs[i];
+			dtreehide(ctx);		
+		}
+	}
+	ctx.current = current;
+}
+
+function dtreefind(id,tree){
+	for(var i=0; i<tree.length; i++){
+		if(tree[i].id==id){
+			return tree[i];
+		} else {
+			if(tree[i].childs!==undefined){
+				var node = dtreefind(id,tree[i].childs);
+				if(node!==null)
+					return node;
+			}
+		}
+	}
+	return null;
 }
 
 function fillcompiled(context,compiled,nt){
