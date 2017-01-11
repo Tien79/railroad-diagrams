@@ -10,6 +10,7 @@
 - [Translating SRFB to Trees](#translating-srfb-to-trees): Core SRFB functions to generate parsing trees 
 - [Translating SRFB to Generating Functions](#translating-srfb-to-generating-functions): Core SRFB functions to generate 'walking' functions
 - [Core Validating functions](#core-validating-functions): Core function to validate an expression of the language based on the underlying grammar.
+- [Results Analysis](#results-analysis): How to interpret results?
 
 # Introduction
 
@@ -749,3 +750,9 @@ function execute(fun){  /* execute fun until result is not a function */
 };
 
 ```
+
+# Results Analysis
+
+Just to give a simple example
+
+![alt-tab](https://gbrault.github.io/railroad-diagrams/live/doc/svg/expression-results.png)
