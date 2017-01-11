@@ -757,7 +757,7 @@ Just to give a simple example. To get there with the live tool:
 
 - select the expression grammar - click refresh button
 - switch to validate
-- click on the expression grammar to know load the example expression
+- click on the expression grammar to now load the example expression
 - click validate button
 
 You get that screen
