@@ -753,6 +753,17 @@ function execute(fun){  /* execute fun until result is not a function */
 
 # Results Analysis
 
-Just to give a simple example
+Just to give a simple example. To get there with the live tool:
+
+- select the expression grammar - click refresh button
+- switch to validate
+- click on the expression grammar to know load the example expression
+- click validate button
+
+You get that screen
+
+- Top is the expression
+- Down left is the graph made with vis.js excellent graphic library
+- Right: the litteral format of the same tree, node by node
 
 ![alt-tab](https://gbrault.github.io/railroad-diagrams/live/doc/svg/expression-results.png)
