@@ -1234,8 +1234,9 @@ function displaygraph(elt,data){
 	var options={
 		layout: {
                     hierarchical: {
-						sortMethod:'directed',
-                        direction: 'LR' //'UD'
+			sortMethod:'directed',
+                        direction: 'LR', //'UD'
+			parentCentralization: true
                     }
                 }
 	};
