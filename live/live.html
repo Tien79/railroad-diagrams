@@ -557,7 +557,7 @@ function doc(type,node){
 
 function tokenizer(str){
 /* add characters if more needed*/
-const regex = /'[^']*'|"\/.*\/"|'\/.*\/'|\/\*(?:[^/]*\n?)*\*\/|"[^"]*"|[A-Za-z][A-Za-z0-9_]*|[,;\+\-\\\*\/()=\[\]\{\}\|.\?]|[0-9]+/gm;
+const regex = /'[^']*'|"\/.*\/"|'\/.*\/'|\/\*(?:[^/]*\n?)*\*\/|"[^"]*"|[A-Za-z][A-Za-z0-9_]*|[,;\+\-\\\*\/()=\[\]\{\}\|.\?\:]|[0-9]+/gm;
 var m;
 var results=[];
 var tokens=[];
@@ -783,6 +783,55 @@ function walkEBNF(ctx){
 		}
 		ctx.node=node;
 		break;
+	case "expression_":
+		ctx.node=node.childs[0];  // which is a choice
+		walkEBNF(ctx);
+		ctx.node=node;
+		break;
+	case "term_":
+		ctx.node=node.childs[0];  // which is a sequence
+		walkEBNF(ctx);
+		ctx.node=node;		
+		break;
+	case "group_":
+		ctx.node=node.childs[1];  // which is a sequence or a choice
+		walkEBNF(ctx);
+		ctx.node=node;		
+		break;
+	case "oneormore_":
+		ctx.node=node.childs[1]; 
+		walkEBNF(ctx);
+		ctx.node=node;
+		var send=ctx.result;
+		if(count!=0){
+			if(ctx.result.length>count){
+				send= ctx.result.substr(count);
+			} else {
+				send ="";
+			}				
+			ctx.result=ctx.result.substr(0,count);				
+		} else {
+			ctx.result="";
+		}
+		ctx.result+= "OneOrMore("+send+")";
+		break;
+	case "optional_":
+		ctx.node=node.childs[1]; 
+		walkEBNF(ctx);
+		ctx.node=node;
+		var send=ctx.result;
+		if(count!=0){
+			if(ctx.result.length>count){
+				send= ctx.result.substr(count);
+			} else {
+				send ="";
+			}				
+			ctx.result=ctx.result.substr(0,count);				
+		} else {
+			ctx.result="";
+		}		
+		ctx.result+= "Optional("+send+")";
+		break;
 	case 'production_':
 		for(var i=0; i<node.childs.length; i+=4){
 			for(j=0;j<4;j++){
@@ -864,53 +913,44 @@ function walkEBNF(ctx){
 			ctx.result += arguments;
 		}
 		break;
-	case "expression_":
-	case "term_":
-	case "optional_":
-	case "group_":
-	case "oneormore_":
 	case "factor_":
 	case "identifier_":
 	case "literal_":
 	case "title_":
 	case "comment_":		
 		for(var i=0; i<node.childs.length; i++){
-			ctx.node=node.childs[i];
-			if(i<node.childs.length-1) ctx.result+=",";
+			ctx.node=node.childs[i];			
 			args.push(ctx.result.length);
 			walkEBNF(ctx);
-		}
-		var send=ctx.result;
-		if(count!=0){
-			if(ctx.result.length>count){
-				send= ctx.result.substr(count);
+			var send=ctx.result;
+			if(count!=0){
+				if(ctx.result.length>count){
+					send= ctx.result.substr(count);
+				} else {
+					send ="";
+				}				
+				ctx.result=ctx.result.substr(0,count);				
 			} else {
-				send ="";
-			}				
-			ctx.result=ctx.result.substr(0,count);				
-		} else {
-			ctx.result="";
-		}
-		switch(node.name){
-			case "expression_":
-			case "term_":
-			case "optional_":
-			case "group_":
-			case "oneormore_":
-			case "factor_":
-				ctx.result+=send;
-				break;
-			case "identifier_":
-				ctx.result+="NonTerminal('"+send+"')";
-				break;
-			case "literal_":
-				ctx.result+="Terminal("+send+")";
-				break;
-			case "comment_":
-				ctx.result+="Comment("+send+")";
-				break;
-			case "title_":
-				break;
+				ctx.result="";
+			}
+			switch(node.name){
+				case "factor_":
+					ctx.result+=send;
+					break;
+				case "identifier_":
+					ctx.result+="NonTerminal('"+send+"')";
+					break;
+				case "literal_":
+					ctx.result+="Terminal("+send+")";
+					break;
+				case "comment_":
+					ctx.result+="Comment("+send+")";
+					break;
+				case "title_":
+					break;
+			}
+			if(i<node.childs.length-1) ctx.result+=",";	
+			count = ctx.result.length;			
 		}
 		ctx.node=node;
 		break;
