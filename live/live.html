@@ -199,6 +199,14 @@ footer {
 <small>
 </footer>
 <script>
+window.addEventListener('message', function(event) {
+	if(event.srcElement.location.href==window.location.href){
+		editor.getDoc().setValue(event.data);
+		sql.getDoc().setValue("/*  input your expression */");
+		results.grammar="custom";
+		refresh();
+	}
+});
 
 window.editor = CodeMirror.fromTextArea(document.getElementById("graphin"), {
 		mode: "javascript",
@@ -233,9 +241,13 @@ window.setupeditor = CodeMirror.fromTextArea(document.getElementById("setuptexta
         continueComments: "Enter"       
 });
 window.results={};
-window.editor.getDoc().setValue(grammars.createtable.source);
-window.sql.getDoc().setValue(grammars.createtable.example);
-window.results.grammar="createtable";
+
+var source=grammars.createtable.source;
+var example=grammars.createtable.example;
+var grammar="createtable";
+window.editor.getDoc().setValue(source);
+window.sql.getDoc().setValue(example);
+window.results.grammar=grammar;
 
 var cmsql = document.getElementById("sql");
 cmsql.setAttribute("class","hidden");
@@ -557,7 +569,7 @@ function doc(type,node){
 
 function tokenizer(str){
 /* add characters if more needed*/
-const regex = /'[^']*'|"\/.*\/"|'\/.*\/'|\/\*(?:[^/]*\n?)*\*\/|"[^"]*"|[A-Za-z][A-Za-z0-9_]*|[,;\+\-\\\*\/()=\[\]\{\}\|.\?\:]|[0-9]+/gm;
+const regex = /'[^']*'|"\/.*\/"|'\/.*\/'|\/\*(?:[^/]*\n?)*\*\/|"[^"]*"|[A-Za-z][A-Za-z0-9_]*|:=|[,;\+\-\\\*\/()=\[\]\{\}\|.\?\:]|[0-9]+/gm;
 var m;
 var results=[];
 var tokens=[];
@@ -750,8 +762,13 @@ function dovalidate(){
 					if(window.results.grammar==='ebnf'){
 						// generate SRFB grammar from EBNF
 						// walk context.result_tree to generate the SRFB grammar
-						var SRFBfromEBNF = generateSRFB(window.results.context.result_tree);
-						sqlcompiled.innerHTML="<pre>"+SRFBfromEBNF+"</pre>";
+						window.SRFBfromEBNF = generateSRFB(window.results.context.result_tree);
+						// sqlcompiled.innerHTML="<pre>"+SRFBfromEBNF+"</pre>";
+						var win = window.open(window.location.href, '_blank');	
+						setTimeout(function(){
+									win.postMessage(SRFBfromEBNF,"*")
+							},1000);
+						win.focus();
 					}
 				} else{
 					// display error and errorstack
