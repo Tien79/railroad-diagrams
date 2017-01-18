@@ -18,6 +18,7 @@
 <script src="jslint.js"></script>
 <script src="vis.js"></script>
 <script src="grammars.js"></script>
+<script src="esprima.js"></script>
 <script>
 /* user application */
 root.context =	{
@@ -341,7 +342,10 @@ function doebnf(){
 function injectjs(content,error){
     var scriptref=document.createElement('script');
     scriptref.setAttribute("type","text/javascript");
-    scriptref.innerText= content;
+	var source = "try {\n"+content+"\n} catch(e) {\n";
+	source +="    error.innerHTML='<pre>'+\n   e.stack+\n   '<\pre>'\n}";
+    scriptref.innerText= source;
+	window.error=error;
     if ((typeof scriptref!="undefined") && scriptref!=null){
     	try{
         	document.getElementsByTagName("head")[0].appendChild(scriptref);
@@ -414,9 +418,24 @@ function refresh(){
 	for(var fn=0; fn<root.Railroad.fnames.length;fn++){
 		source+="\nfunction "+root.Railroad.fnames[fn]+"(){}\n";
 	}
-	var jscheck = jslint(source);
+	
+	/* verify javascript */
+	var eresult;
+	var options={};
+	var jserror=false;
+	// var jscheck = jslint(source);  => using jslint library
+	// error = jscheck.stop;
+	
+	/* using esprima */
+	try {
+		eresult = esprima.parse(source, options);
+	} catch (e) {
+		jserror=true;
+		error.innerHTML  = e.name + ': ' + e.message;;
+	}
+	/* end using esprima */
 
-	if(!jscheck.stop){
+	if(!jserror){
 
 	// prepare graphing
 	results.state='graphing';
@@ -517,7 +536,8 @@ function refresh(){
 			result.appendChild(section);
     } 
 	} else {
-		// display warnings
+		// display warnings (//jslint)
+		/*
 		var content="<pre>";		
 		for(var i=0; i<jscheck.warnings.length; i++){
 			var w = jscheck.warnings[i];
@@ -525,6 +545,7 @@ function refresh(){
 		}
 		content+="</pre>";
 		error.innerHTML=content;
+		*/
 	}        
 }
 
