@@ -830,7 +830,7 @@ function walkEBNF(ctx){
 		} else {
 			ctx.result="";
 		}
-		ctx.result+= "OneOrMore("+send+")";
+		ctx.result+= "ZeroOrMore("+send+")";  // in fact it's ZeroOrMore
 		break;
 	case "optional_":
 		ctx.node=node.childs[1]; 
