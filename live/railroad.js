@@ -1352,7 +1352,7 @@ root.Railroad = function(root, options, context) {
 
     function bnfTitle(){
 		context.fname=arguments[0];
-		return "`"+arguments[0]+"`";
+		return "/* "+arguments[0]+" */"; // "`";
 	};
     function bnfDiagram(){
 		return arguments[0];
@@ -1363,7 +1363,7 @@ root.Railroad = function(root, options, context) {
     function bnfSequence(){
 		var result="(";
 		for(var i=0;i<arguments.length;i++){
-			if(i>0) result+=" , ";
+			if(i>0) result+=" ";
 			result+=arguments[i];
 		}
 		return result+")";
@@ -1371,7 +1371,7 @@ root.Railroad = function(root, options, context) {
     function bnfStack(){
 		var result="(";
 		for(var i=0;i<arguments.length;i++){
-			if(i>0) result+=" , \\n";
+			if(i>0) result+=" \\n";
 			result+=arguments[i];			
 		}
 		return result+")";
@@ -1429,7 +1429,7 @@ root.Railroad = function(root, options, context) {
 		return " "+arguments[0]+" ";
 	};
     function bnfComment(){
-		return "`"+arguments[0]+"`";
+		return "/* "+arguments[0]+" */";   // "`";
 	};
     function bnfSkip(){
 		return "<Skip>";
