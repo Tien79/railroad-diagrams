@@ -491,7 +491,7 @@ expression = term  { (\"+\" | \"-\") term} .\n\
 term       = factor  { (\"*\"|\"/\") factor} .\n\
 factor     = constant | variable | \"(\"  expression  \")\" .\n\
 variable   = \"/[A-Za-z]/\" .\n\
-constant   = \"[0-9]+\" .\n\
+constant   = \"/[0-9]+/\" .\n\
 }";
 window.grammars={
 	expression : {source:expressionsource,example:expressionexample},
