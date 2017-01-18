@@ -1394,7 +1394,7 @@ root.Railroad = function(root, options, context) {
 		}
 		result+=")";
 		if(skip){
-			result+="?";
+			result="["+result+"]";
 		}
 		return result;
 	};
@@ -1402,12 +1402,12 @@ root.Railroad = function(root, options, context) {
 		return "<<MultipleChoice not implemented>>";
 	};
     function bnfOptional(){
-		return arguments[0]+"?";
+		return "["+arguments[0]+"]";
 	};
     function bnfOneOrMore(){
 		var result;
 		if(arguments.length>1){
-			result=arguments[0]+"("+arguments[1]+arguments[0]+")*";
+			result=arguments[0]+"{"+arguments[1]+arguments[0]+"}";
 		} else {
 			result="("+arguments[0]+")+";
 		}
@@ -1416,7 +1416,7 @@ root.Railroad = function(root, options, context) {
     function bnfZeroOrMore(){
 		var result;
 		if(arguments.length>1){
-			result=arguments[0]+"?"+"("+arguments[1]+arguments[0]+")*";
+			result="["+arguments[0]+"]"+"{"+arguments[1]+arguments[0]+"}";
 		} else {
 			result="("+arguments[0]+")*";
 		}
