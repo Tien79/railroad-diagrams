@@ -1250,10 +1250,12 @@ root.Railroad = function(root, options, context) {
 				}
 			}
 		} while(more);
-		if(!error){
-			return {type:'oneORmore'};
+		var type='OneORmore';
+		if(zero) type='ZeroORmore';
+		if(!error){			
+			return {type};
 		} else{
-			return {type:'oneORmore',error:tres.error};
+			return {type,error:tres.error};
 		}		
 	}
 	
