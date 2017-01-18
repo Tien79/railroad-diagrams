@@ -1407,18 +1407,18 @@ root.Railroad = function(root, options, context) {
     function bnfOneOrMore(){
 		var result;
 		if(arguments.length>1){
-			result=arguments[0]+"{"+arguments[1]+arguments[0]+"}";
+			result=arguments[0]+" {"+arguments[1]+arguments[0]+"} ";
 		} else {
-			result="("+arguments[0]+")+";
+			result=arguments[0]+" {"+arguments[0]+"} ";
 		}
 		return result;
 	};
     function bnfZeroOrMore(){
 		var result;
 		if(arguments.length>1){
-			result="["+arguments[0]+"]"+"{"+arguments[1]+arguments[0]+"}";
+			result="["+arguments[0]+"]"+" {"+arguments[1]+arguments[0]+"} ";
 		} else {
-			result="("+arguments[0]+")*";
+			result="{"+arguments[0]+"}";
 		}
 		return result;
 	};
