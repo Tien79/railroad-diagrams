@@ -805,7 +805,7 @@ Generate and use a validator that will accept expressions conforming with the in
 6. Input your EBNF grammar or use the proposed one
 7. Click on Validate
 8. A second window is opened on the next tab and the SRFB representation of your EBNF grammar input is present in the editor portion
-9. One can review the generated grammar: look to the railroad representation and have a look (at the end of the screen) to the generated EBNF (it should look very similar to what is input)
+9. One can review the generated grammar: look at the railroad representation and have a look (end of the screen) at the generated EBNF (it should look very similar to what is input)
 10. Click on switch
 11. Click on the editor to refresh: /*  input your expression */ should show then
 12. Enter an expression conforming to the EBNF grammar
