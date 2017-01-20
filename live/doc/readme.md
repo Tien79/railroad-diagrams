@@ -813,3 +813,17 @@ Generate and use a validator that will accept expressions conforming with the in
 14. The result should be the parsed tree of the input expression
 
 ## EBNF syntax conventions
+
+```
+"Arithmetic Expressions" {
+expression = term  { ("+" | "-") term} .
+term       = factor  { ("*"|"/") factor} .
+factor     = constant | variable | "("  expression  ")" .
+variable   = "/[A-Za-z]/" .
+constant   = "/[0-9]+/" .
+}
+```
+
+ 1. General EBNF input format: [ title ] "{" { production } "}" [ comment ]
+  1.1. [] means an Optional section
+  1.2. {} means can be repeated zero or more times
