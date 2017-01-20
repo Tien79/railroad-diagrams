@@ -788,7 +788,7 @@ You can play contracting/expanding nodes just clicking on it (it will hide/show 
 
 Generate and use a validator that will accept expressions conforming with the input EBNF grammar
 
-** Main Steps **
+**Main Steps**
 
 - Enter an EBNF Grammar compling with Niklaus Wirth conventions
 - Validate it
