@@ -838,3 +838,4 @@ constant   = "/[0-9]+/" .
   -   _number = digit { digit }_
  - Is not going to work and should be replaced by
   -   _number = "/[0-9]+/"._
+ - Regular expressions are quoted strings, starting and ending with "/" character 
