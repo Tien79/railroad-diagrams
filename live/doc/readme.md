@@ -833,8 +833,8 @@ constant   = "/[0-9]+/" .
   - regular expressions like: _variable   = "/[A-Za-z]/" or constant   = "/[0-9]+/"_
  - As the tockenizer is greedy, it group sequence of characters separated by spaces
   - No EBNF constructs should then take characters sequences
-  - For example
-   -   _digit = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"_
-   -   _number = digit { digit }_
-  - Is not going to work and should be replaced by
-   -   _number = "/[0-9]+/"._
+ - For example
+  -   _digit = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"_
+  -   _number = digit { digit }_
+ - Is not going to work and should be replaced by
+  -   _number = "/[0-9]+/"._
