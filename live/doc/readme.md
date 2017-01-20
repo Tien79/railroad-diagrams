@@ -790,7 +790,7 @@ Generate and use a validator that will accept expressions conforming with the in
 
 **Main Steps**
 
-- Enter an EBNF Grammar compling with Niklaus Wirth conventions
+- Enter an EBNF Grammar compling with Niklaus Wirth conventions (with some small modifications see thereafter)
 - Validate it
 - Translate it into the SRFB equivalent grammar
 - Validate expressions compliant with the input EBNF grammar
@@ -812,3 +812,4 @@ Generate and use a validator that will accept expressions conforming with the in
 13. Click on validate
 14. The result should be the parsed tree of the input expression
 
+## EBNF syntax conventions
