@@ -3,8 +3,10 @@
 - Define a grammar using a "functional representation"
 - Display the railroad diagrams of a grammar
 - Display an EBNF textual representation of this grammar
-- validate expressions written for this grammar
-- tag associated tokens with corresponding grammar chunks
+- Validate expressions written for this grammar
+- Tag associated tokens with corresponding grammar chunks
+- Transform an EBNF grammar into a SRFB grammar format (railroad grammar)
+- Validate expressions compliant with the above EBNF grammar
 
 # Where to start
 
