@@ -102,6 +102,16 @@ One can see as well that SRFB and Syntax Diagram (as defined in this article con
 
 Writing those two latest translator is a pending work and a last step to come to a final 'proof' (practical not theoritical).
 
+Note: since the first version of this documentation (end of 2016), I have written an EBNF => SRFB translator. I took the EBNF flavor of Wirth, except that leaves are tokens validated by regular expressions.
+
+For example
+
+The EBNF construct number := digit { digit } sould be transformed as number := "/[0-9]\*/".
+In Niklaus Wirth grammar representation
+
+ - {} stands for ZeroOrMore
+ - [] stands for Optional
+
 ## Conclusion
 
 My discovery was just to move one step forward: changing the basis definition to get different jobs done. I have implemented Function Basis to
@@ -110,6 +120,7 @@ My discovery was just to move one step forward: changing the basis definition to
 - Generate a tree representation of the grammar (guess it's an AST somehow)
 - Generate a function basis to parse the grammar language and the associated core function basis to actually validate any corresponding statements
 - Written a tree walker (above mentionned tree) to validate expressions as well (2nd form of acceptor)
+- Written an EBNF to SRFB generator, using the resulting grammar to validate expression conforming the EBNF grammar
 
 I also have written the RailRoad grammar in SFRB ([here](https://github.com/gbrault/railroad-diagrams/blob/gh-pages/live/doc/RailRoad.md)), which is explained in the next paragraph and also two other grammars
 
