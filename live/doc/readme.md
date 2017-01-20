@@ -11,7 +11,7 @@
 - [Translating SRFB to Generating Functions](#translating-srfb-to-generating-functions): Core SRFB functions to generate 'walking' functions
 - [Core Validating functions](#core-validating-functions): Core function to validate an expression of the language based on the underlying grammar.
 - [Results Analysis](#results-analysis): How to interpret results?
-- [EBNF => SRFB](#ebnf_=>_srfb): Quick 'User Guide'
+- [EBNF => SRFB](#ebnf--srfb): Quick 'User Guide'
 
 # Introduction
 
