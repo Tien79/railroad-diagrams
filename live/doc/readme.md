@@ -784,4 +784,27 @@ You can play contracting/expanding nodes just clicking on it (it will hide/show 
 
 # EBNF => SRFB
 
+## Purpose
+
+- Enter an EBNF Grammar compling with Niklaus Wirth conventions
+- Validate it
+- Translate it into the SRFB equivalent grammar
+- Validate expressions compliant with the input EBNF grammar
+
+## List of operations
+
+1- Open the live tool [here](https://gbrault.github.io/railroad-diagrams/live/live.html)
+2- Click on the "EBNF Grammar" button to select the SRFB grammar validator for EBNF input
+3- Click on "refresh" to generate the EBNF validator
+4- Click on the switch button to now input an EBNF grammar to validate
+5- Click on the editor to refresh the screen, a default EBNF Grammar (simplified "Arithmetic Expressions") is proposed
+6- Input your EBNF grammar or use the proposed one
+7- Click on Validate
+8- A second window is opened on the next tab and the SRFB representation of your EBNF grammar input is present in the editor portion
+9- One can review the generated grammar: look to the railroad representation and have a look (at the end of the screen) to the generated EBNF (it should look very similar to what is input)
+10- Click on switch
+11- Click on the editor to refresh: /*  input your expression */ should show then
+12- Enter an expression conforming to the EBNF grammar
+13- Click on validate
+14- The result should be the parsed tree of the input expression
 
