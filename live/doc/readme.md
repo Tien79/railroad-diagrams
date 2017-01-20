@@ -824,6 +824,17 @@ constant   = "/[0-9]+/" .
 }
 ```
 
- 1. General EBNF input format: [ title ] "{" { production } "}" [ comment ]
-  1.1. [] means an Optional section
-  1.2. {} means can be repeated zero or more times
+ - General EBNF input format: [ title ] "{" { production } "}" [ comment ]
+  - [] means an Optional section
+  - {} means can be repeated zero or more times
+ - A grammar is a sequence of productions: production = identifier "=" expression ( "." | ";" )
+ - Terminals are specified giving
+  - literal strings (like "+","-","\*","/")
+  - regular expressions like: variable   = "/[A-Za-z]/" or constant   = "/[0-9]+/"
+ - As the tockenizer is greedy, it group sequence of characters separated by spaces
+  - No EBNF constructs should then take characters sequences
+  - For example
+   - digit = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"
+   - number = digit { digit }
+  - Is not going to work and should be replaced by
+   - number = "/[0-9]+/".
