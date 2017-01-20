@@ -839,4 +839,6 @@ constant   = "/[0-9]+/" .
  - Is not going to work and should be replaced by
   -   _number = "/[0-9]+/"._
  - Regular expressions are quoted strings, starting and ending with "/" character
- - Comments comply with c comment syntax /* */ (but not //)
+ - Comments comply with c comment syntax _/* this is a comment! */_ (but not //)
+ 
+ To have the full understanding of EBNF syntax, as understood by this program, one can see the railroad diagram of the "EBNF Grammar".
