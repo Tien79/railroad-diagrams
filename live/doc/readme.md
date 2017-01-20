@@ -824,17 +824,17 @@ constant   = "/[0-9]+/" .
 }
 ```
 
- - General EBNF input format: [ title ] "{" { production } "}" [ comment ]
+ - General EBNF input format: _[ title ] "{" { production } "}" [ comment ]_
   - [] means an Optional section
   - {} means can be repeated zero or more times
- - A grammar is a sequence of productions: production = identifier "=" expression ( "." | ";" )
+ - A grammar is a sequence of productions: _production = identifier "=" expression ( "." | ";" )_
  - Terminals are specified giving
-  - literal strings (like "+","-","\*","/")
-  - regular expressions like: variable   = "/[A-Za-z]/" or constant   = "/[0-9]+/"
+  - literal strings (like _"+","-","\*","/"_)
+  - regular expressions like: _variable   = "/[A-Za-z]/" or constant   = "/[0-9]+/"_
  - As the tockenizer is greedy, it group sequence of characters separated by spaces
   - No EBNF constructs should then take characters sequences
   - For example
-   - digit = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"
-   - number = digit { digit }
+   - _digit = "0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"_
+   - _number = digit { digit }_
   - Is not going to work and should be replaced by
-   - number = "/[0-9]+/".
+   - _number = "/[0-9]+/"._
