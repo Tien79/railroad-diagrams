@@ -11,6 +11,7 @@
 - [Translating SRFB to Generating Functions](#translating-srfb-to-generating-functions): Core SRFB functions to generate 'walking' functions
 - [Core Validating functions](#core-validating-functions): Core function to validate an expression of the language based on the underlying grammar.
 - [Results Analysis](#results-analysis): How to interpret results?
+- [EBNF => SRFB](#ebnf_=>_srfb): Quick 'User Guide'
 
 # Introduction
 
@@ -780,3 +781,7 @@ You get that screen
 You can play contracting/expanding nodes just clicking on it (it will hide/show all childs and add/suppress a + sign to the label)
 
 ![alt-tab](https://gbrault.github.io/railroad-diagrams/live/doc/svg/expression-results.png)
+
+# EBNF => SRFB
+
+
