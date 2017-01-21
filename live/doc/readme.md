@@ -12,6 +12,7 @@
 - [Core Validating functions](#core-validating-functions): Core function to validate an expression of the language based on the underlying grammar.
 - [Results Analysis](#results-analysis): How to interpret results?
 - [EBNF => SRFB](#ebnf--srfb): Quick 'User Guide'
+- [Some EBNF grammars](#some-ebnf-grammars): few examples of EBNF grammar compatible with this tool
 
 # Introduction
 
@@ -842,3 +843,17 @@ constant   = "/[0-9]+/" .
  - Comments comply with c comment syntax _/* this is a comment! */_ (but not //)
  
  To have the full understanding of EBNF syntax, as understood by this program, one can see the railroad diagram of the "EBNF Grammar".
+ 
+# Some EBNF grammars
+
+## JSON
+```
+"JSON"{
+object = "{" [attribute] { "," attribute } "}" ;
+attribute = string ":" value ;
+array = "[" [value]{"," value}"]" ;
+value = string | number | object | array | "true" | "false" | "null" ;
+string = '/"(?:[^"\\]|(?:\\[^u]["\\/bfnrt])|[\\]u[A-Z0-9]{4})*"/' ;
+number =  ["-"] "/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/" "/[0-9]+/" ] ; 
+}
+```
