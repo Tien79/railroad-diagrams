@@ -1035,6 +1035,7 @@ function addTerminaltoTree(ctx){
 }
 
 function dtreewalk(ctx){
+	if(ctx.node===undefined) return;
 	ctx.nodes.push({id:ctx.node.id,label:ctx.node.name,hidden: false,title:ctx.node.title});
 	if(ctx.node.parent!=null){
 		var id=""+ctx.node.parent.id+"-"+ctx.node.id;
