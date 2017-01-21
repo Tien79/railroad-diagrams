@@ -955,7 +955,8 @@ function walkEBNF(ctx){
 	case "identifier_":
 	case "literal_":
 	case "title_":
-	case "comment_":		
+	case "comment_":
+		var index = ctx.result.length;
 		for(var i=0; i<node.childs.length; i++){
 			ctx.node=node.childs[i];			
 			args.push(ctx.result.length);
@@ -989,6 +990,20 @@ function walkEBNF(ctx){
 			}
 			if(i<node.childs.length-1) ctx.result+=",";	
 			count = ctx.result.length;			
+		}
+		if(node.childs.length>1){
+			var send=ctx.result;
+			if(index!=0){
+				if(ctx.result.length>index){
+					send= ctx.result.substr(index);
+				} else {
+					send ="";
+				}				
+				ctx.result=ctx.result.substr(0,index);				
+			} else {
+				ctx.result="";
+			}
+			ctx.result+="Sequence("+send+")";
 		}
 		ctx.node=node;
 		break;
