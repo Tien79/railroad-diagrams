@@ -258,7 +258,7 @@ validate.setAttribute("class","hidden");
 var setup = document.getElementById("setup");
 setup.setAttribute("class","hidden");
 
-var setupblob={validating:"function"};
+var setupblob={validating:"function",graph:true};
 
 window.editor.on("cursorActivity",function(instance){
 	updatecursor(instance);
@@ -779,7 +779,7 @@ function dovalidate(){
 					var elt = formatter.render();
 					sqlcompiled.appendChild(elt);
 					// display associated graph
-					displaygraph(treeresult,window.results.context);
+					displaygraph(treeresult,window.results.context,setupblob.graph);					
 					if(window.results.grammar==='ebnf'){
 						// generate SRFB grammar from EBNF
 						// walk context.result_tree to generate the SRFB grammar
@@ -1060,7 +1060,7 @@ function dtreewalk(ctx){
 	}
 }
 
-function displaygraph(elt,context){
+function displaygraph(elt,context,graphing){
 	// build nodes and edges
 	var data = context.compiled
 	var tree=[];
@@ -1107,25 +1107,27 @@ function displaygraph(elt,context){
                 }
 	};
 	
-	nodes = new vis.DataSet(nodes);
-	edges = new vis.DataSet(edges);
-	var datanetwork={nodes,edges};
-	var network=new vis.Network(elt,datanetwork,options);
-	
-	network.on("click", function(e) {
-		var node = dtreefind(e.nodes[0],tree);
-		if((node!==undefined)&&(node!=null)){
-			if(node.hidden==undefined){
-				node.hidden=true;
-			} else {
-				node.hidden=!node.hidden;
+	if(graphing){
+		nodes = new vis.DataSet(nodes);
+		edges = new vis.DataSet(edges);
+		var datanetwork={nodes,edges};
+		var network=new vis.Network(elt,datanetwork,options);
+		
+		network.on("click", function(e) {
+			var node = dtreefind(e.nodes[0],tree);
+			if((node!==undefined)&&(node!=null)){
+				if(node.hidden==undefined){
+					node.hidden=true;
+				} else {
+					node.hidden=!node.hidden;
+				}
+				var ctx={current:node,parent:node,nodes:[],edges:[]};
+				dtreehide(ctx);
+				nodes.update(ctx.nodes);
+				edges.update(ctx.edges);
 			}
-			var ctx={current:node,parent:node,nodes:[],edges:[]};
-			dtreehide(ctx);
-			nodes.update(ctx.nodes);
-			edges.update(ctx.edges);
-		}
-	});
+		});
+	}
 }
 
 function dtreehide(ctx){
