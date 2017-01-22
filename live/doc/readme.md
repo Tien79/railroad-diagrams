@@ -785,6 +785,16 @@ You can play contracting/expanding nodes just clicking on it (it will hide/show 
 
 # EBNF => SRFB
 
+## Wraning
+
+If a grammar contains a left recursive rules, i.e a rule like
+
+```
+expr = ... expr "TERMINAL" ...
+```
+It will not generate a working validator (same for the SRFB grammar by the way).
+Grammar must be reworked to transform all rules like that.
+
 ## Purpose
 
 Generate and use a validator that will accept expressions conforming with the input EBNF grammar
