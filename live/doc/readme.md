@@ -881,15 +881,11 @@ sql_stmt	=	[ "EXPLAIN" [ "QUERY" "PLAN" ] ] ( alter_table_stmt | analyze_stmt | 
 
 alter_table_stmt	=	"ALTER" "TABLE" [ database_name "." ] table_name ("RENAME" "TO" new_table_name | "ADD" [ "COLUMN" ] column_def ).
 
-
 analyze_stmt	=	"ANALYZE" ( database_name | table_or_index_name | database_name "." table_or_index_name ).
-
 
 attach_stmt	=	"ATTACH" [ "DATABASE" ] expr "AS" database_name.
 
-
 begin_stmt	=	"BEGIN" [ "DEFERRED" | "IMMEDIATE" | "EXCLUSIVE" ] [ "TRANSACTION" ].
-
 
 commit_stmt	=	("COMMIT" | "END") [ "TRANSACTION" ].
 
@@ -929,8 +925,6 @@ with_clause	=	"WITH" [ "RECURSIVE" ] cte_table_name "AS" "(" select_stmt ")" { "
 
 cte_table_name	=	table_name [ "(" column_name { "," column_name } ")" ].
 
-recursive_cte	=	cte_table_name "AS" ( initial_select ( "UNION" | "UNION" "ALL" ) recursive_select ).
-
 common_table_expression	=	table_name [ "(" column_name { "," column_name } ")" ] "AS" ( select_stmt ).
 
 delete_stmt	=	[ with_clause ] "DELETE" "FROM" qualified_table_name [ "WHERE" expr ].
@@ -947,7 +941,10 @@ drop_trigger_stmt	=	"DROP" "TRIGGER" [ "IF" "EXISTS" ] [ database_name "." ] tri
 
 drop_view_stmt	=	"DROP" "VIEW" [ "IF" "EXISTS" ] [ database_name "." ] view_name.
 
-expr	=	literal_value | bind_parameter | [ [ database_name "." ] table_name "."] column_name | unary_operator expr | expr binary_operator expr | function_name "(" [ [ "DISTINCT" ] expr { "," expr } | "*" ] ")" | "(" expr ")" | "CAST" "(" expr "AS" type_name ")" | expr "COLLATE" collation_name | expr [ "NOT" ] ( "LIKE" | "GLOB" | "REGEXP" | "MATCH" ) expr [ "ESCAPE" expr ] | expr ("ISNULL" | "NOTNULL" | "NOT" "NULL" ) | expr "IS" [ "NOT" ] expr | expr [ "NOT" ] "BETWEEN" expr "AND" expr | expr [ "NOT" ] "IN" ( ("(" ( select_stmt | expr { "," expr } ) ")") | [ database_name "." ] table_name ) | [ [ "NOT" ] "EXISTS" ] select_stmt | "CASE" [ expr ] "WHEN" expr "THEN" expr [ "ELSE" expr ] "END" | raise_function .
+/* expr	=	literal_value | bind_parameter | [ [ database_name "." ] table_name "."] column_name | unary_operator expr | expr binary_operator expr | function_name "(" [ [ "DISTINCT" ] expr { "," expr } | "*" ] ")" | "(" expr ")" | "CAST" "(" expr "AS" type_name ")" | expr "COLLATE" collation_name | expr [ "NOT" ] ( "LIKE" | "GLOB" | "REGEXP" | "MATCH" ) expr [ "ESCAPE" expr ] | expr ("ISNULL" | "NOTNULL" | "NOT" "NULL" ) | expr "IS" [ "NOT" ] expr | expr [ "NOT" ] "BETWEEN" expr "AND" expr | expr [ "NOT" ] "IN" ( ("(" ( select_stmt | expr { "," expr } ) ")") | [ database_name "." ] table_name ) | [ [ "NOT" ] "EXISTS" ] select_stmt | "CASE" [ expr ] "WHEN" expr "THEN" expr [ "ELSE" expr ] "END" | raise_function . */
+expr = term {binary_operator term}.
+
+term = literal_value | unary_operator term | function_name "(" [ [ "DISTINCT" ] expr { "," expr } | "*" ] ")" | "CAST" "(" expr "AS" type_name ")" | "(" expr ")"| [ [ database_name "." ] table_name "."] column_name.
 
 raise_function	=	"RAISE" ( "IGNORE" | ( "ROLLBACK" | "ABORT" | "FAIL" ) "," error_message ).
 
@@ -955,7 +952,9 @@ literal_value	=	numeric_literal | string_literal | blob_literal | "NULL" | "CURR
 
 numeric_literal	=	"/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/" "/[0-9]+/" ] .
 
-insert_stmt	=	[ with_clause ] ( "INSERT" | "REPLACE" | "INSERT" "OR" "REPLACE" | "INSERT" "OR" "ROLLBACK" | "INSERT" "OR" "ABORT" | "INSERT" "OR" "FAIL" | "INSERT" "OR" "IGNORE" ) "INTO" [ database_name "." ] table_name [ ( column_name { "," column_name } ) ] ( "VALUES" "(" expr { "," expr } ")" { "," "(" expr { "," expr } ")" } | select_stmt | "DEFAULT" "VALUES" ).
+string_literal = "/'[^']*'/" | "/\u0022[^\u0022]*\u0022/" | "/[^'\u0022]*/".
+
+insert_stmt	=	[ with_clause ] ( "INSERT" | "REPLACE" | "INSERT" "OR" "REPLACE" | "INSERT" "OR" "ROLLBACK" | "INSERT" "OR" "ABORT" | "INSERT" "OR" "FAIL" | "INSERT" "OR" "IGNORE" ) "INTO" [ database_name "." ] table_name [ "(" column_name { "," column_name } ")" ] ( "VALUES" "(" expr { "," expr } ")" { "," "(" expr { "," expr } ")" } | select_stmt | "DEFAULT" "VALUES" ).
 
 pragma_stmt	=	"PRAGMA" [ database_name "." ] pragma_name [ "=" pragma_value | pragma_value ].
 
@@ -963,13 +962,13 @@ pragma_value	=	signed_number | name | string_literal.
 
 reindex_stmt	=	"REINDEX" [ collation_name | [ database_name "." ] ( table_name | index_name ) ].
 
-select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] ("SELECT" [ "DISTINCT" | "ALL" ] result_column { "," result_column } ["FROM" ( table_or_subquery {"," table_or_subquery } | join_clause ) [ "WHERE" expr ] [ "GROUP" "BY" expr { "," expr } [ "HAVING" expr ] ]] | "VALUES" "(" expr { "," expr } ")" { compound_operator "VALUES" "(" expr { "," expr } ")"} ) [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ("OFFSET" | "," ) expr ] ].
-
-join_clause	=	table_or_subquery [ join_operator table_or_subquery join_constraint ].
+select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] (select_core { compound_operator select_core}) [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ("OFFSET" | "," ) expr ] ].
 
 select_core	=	("SELECT" [ "DISTINCT" | "ALL" ] result_column { "," result_column } [ "FROM" ( table_or_subquery { "," table_or_subquery } | join_clause ) ] [ "WHERE" expr ] [ "GROUP" "BY" expr { "," expr } [ "HAVING" expr ] ]) |("VALUES" "(" expr { "," expr } ")" ).
 
-factored_select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] select_core { compound_operator select_core } [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
+recursive_cte	=	cte_table_name "AS" "(" select_stmt ")".
+
+join_clause	=	table_or_subquery [ join_operator table_or_subquery join_constraint ].
 
 simple_select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] select_core [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
 
@@ -977,7 +976,7 @@ compound_select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," co
 
 table_or_subquery	=	[ database_name "." ] table_name [ [ "AS" ] table_alias ] [ "INDEXED" "BY" index_name | "NOT" "INDEXED" ] | "(" (table_or_subquery { "," table_or_subquery } | join_clause) ")" | "(" select_stmt ")" [ [ "AS" ] table_alias ].
 
-result_column	=	"*" | table_name "." "*" | expr [ [ "AS" ] column_alias ].
+result_column	=	"*" | table_name "." "*" | expr [  "AS"  column_alias ].
 
 join_operator	=	"," | [ "NATURAL" ] [ "LEFT" [ "OUTER" ] | "INNER" | "CROSS" ] "JOIN".
 
@@ -985,7 +984,7 @@ join_constraint	=	[ "ON" expr | "USING" "(" column_name { "," column_name } ")" 
 
 ordering_term	=	expr [ "COLLATE" collation_name ] [ "ASC" | "DESC" ].
 
-compound_operator	=	"UNION" | "UNION" "ALL" | "INTERSECT" |	"EXCEPT".
+compound_operator	=	"UNION" "ALL" | "UNION" | "INTERSECT" |	"EXCEPT".
 
 update_stmt	=	[ with_clause ] "UPDATE" [ "OR" "ROLLBACK" | "OR" "ABORT" | "OR" "REPLACE" | "OR" "FAIL" | "OR" "IGNORE" ] qualified_table_name "SET" column_name "=" expr { "," column_name "=" expr } [ "WHERE" expr ].
 
@@ -1070,5 +1069,7 @@ function_name = "abs" | "changes" | "char" | "coalesce" | "glob" | "hex" | "ifnu
 				"round" | "rtrim" | "soundex" | "sqlite_compileoption_get" | "sqlite_compileoption_used" | "sqlite_source_id" | "sqlite_version" |
 				"substr" | "total_changes" | "trim" | "typeof" | "unicode" | "unlikely" | "upper" | "zeroblob" | "avg" | "count" | "group_concat" |
 				"max" | "min" | "sum" | "total" | "date" | "time" | "datetime" | "julianday" | "strftime".
+
+column_alias = name.
 }
 ```
