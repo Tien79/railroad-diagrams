@@ -1323,7 +1323,7 @@ root.Railroad = function(root, options, context) {
 		} else {
 			var error="NonTerminal("+context.path[context.pathindex].value+") not fitting ";
 			if(arguments.length>0)
-				error += "("+arguments[0]+")";
+				error += "not existing("+arguments[0]+")";
 			error+= "-lines:"+context.lineschars[context.path[context.pathindex].index].line+" chars:"+context.lineschars[context.path[context.pathindex].index].char+"-";
 			return {type:'NonTerminal',error};			
 		}
