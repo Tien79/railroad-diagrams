@@ -790,7 +790,7 @@ You can play contracting/expanding nodes just clicking on it (it will hide/show 
 If a grammar contains left recursive rules, i.e a rule like
 
 ```
-expr = ... expr "TERMINAL" ...
+expr = ... | expr "TERMINAL" | ...
 ```
 It will not generate a working validator (same for the SRFB grammar by the way).
 Grammar must be reworked to transform all rules like that.
