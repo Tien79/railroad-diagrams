@@ -837,21 +837,27 @@ function walkEBNF(ctx){
 		ctx.node=node;		
 		break;
 	case "oneormore_":
-		ctx.node=node.childs[1]; 
-		walkEBNF(ctx);
-		ctx.node=node;
-		var send=ctx.result;
-		if(count!=0){
-			if(ctx.result.length>count){
-				send= ctx.result.substr(count);
+		for(var i=0; i< node.childs.length; i+=3){
+			count = ctx.result.length;
+			ctx.node=node.childs[i+1]; 
+			walkEBNF(ctx);
+			ctx.node=node;
+			var send=ctx.result;
+			if(count!=0){
+				if(ctx.result.length>count){
+					send= ctx.result.substr(count);
+				} else {
+					send ="";
+				}				
+				ctx.result=ctx.result.substr(0,count);				
 			} else {
-				send ="";
-			}				
-			ctx.result=ctx.result.substr(0,count);				
-		} else {
-			ctx.result="";
+				ctx.result="";
+			}
+			if(i>0){
+				ctx.result+=",";
+			}
+			ctx.result+= "ZeroOrMore("+send+")";  // in fact it's ZeroOrMore
 		}
-		ctx.result+= "ZeroOrMore("+send+")";  // in fact it's ZeroOrMore
 		break;
 	case "optional_":
 		for(var i=0; i< node.childs.length; i+=3){
