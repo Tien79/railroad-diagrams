@@ -787,7 +787,7 @@ You can play contracting/expanding nodes just clicking on it (it will hide/show 
 
 ## Warning
 
-If a grammar contains a left recursive rules, i.e a rule like
+If a grammar contains left recursive rules, i.e a rule like
 
 ```
 expr = ... expr "TERMINAL" ...
