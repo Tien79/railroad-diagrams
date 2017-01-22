@@ -871,7 +871,7 @@ number =  ["-"] "/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/" "
 ```
 ## SQLITE
 
-expr, the expression rule must be revised as it's left recursive and then doesn't work!
+**Work under progress not fully functional**
 
 ```
 "SQLITE"{
