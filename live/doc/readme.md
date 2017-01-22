@@ -798,6 +798,8 @@ Generate and use a validator that will accept expressions conforming with the in
 
 ## List of operations
 
+**Just works with Chrome**
+
 1. Open the live tool [here](https://gbrault.github.io/railroad-diagrams/live/live.html)
 2. Click on the "EBNF Grammar" button to select the SRFB grammar validator for EBNF input
 3. Click on "refresh" to generate the EBNF validator
@@ -855,5 +857,208 @@ array = "[" [value]{"," value}"]" ;
 value = string | number | object | array | "true" | "false" | "null" ;
 string = '/"(?:[^"\\]|(?:\\[^u]["\\/bfnrt])|[\\]u[A-Z0-9]{4})*"/' ;
 number =  ["-"] "/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/" "/[0-9]+/" ] ; 
+}
+```
+## SQLITE
+
+expr, the expression rule must be revised as it's left recursive and then doesn't work!
+
+```
+"SQLITE"{
+sql_stmt_list	=	[ sql_stmt ] { ";" [ sql_stmt ] }.
+
+sql_stmt	=	[ "EXPLAIN" [ "QUERY" "PLAN" ] ] ( alter_table_stmt | analyze_stmt | attach_stmt | begin_stmt | commit_stmt | create_index_stmt | create_table_stmt | create_trigger_stmt | create_view_stmt | create_virtual_table_stmt | delete_stmt | delete_stmt_limited | detach_stmt | drop_index_stmt | drop_table_stmt | drop_trigger_stmt | drop_view_stmt | insert_stmt | pragma_stmt | reindex_stmt | release_stmt | rollback_stmt | savepoint_stmt | select_stmt | update_stmt | update_stmt_limited | vacuum_stmt ).
+
+alter_table_stmt	=	"ALTER" "TABLE" [ database_name "." ] table_name ("RENAME" "TO" new_table_name | "ADD" [ "COLUMN" ] column_def ).
+
+
+analyze_stmt	=	"ANALYZE" ( database_name | table_or_index_name | database_name "." table_or_index_name ).
+
+
+attach_stmt	=	"ATTACH" [ "DATABASE" ] expr "AS" database_name.
+
+
+begin_stmt	=	"BEGIN" [ "DEFERRED" | "IMMEDIATE" | "EXCLUSIVE" ] [ "TRANSACTION" ].
+
+
+commit_stmt	=	("COMMIT" | "END") [ "TRANSACTION" ].
+
+rollback_stmt	=	"ROLLBACK" [ "TRANSACTION" ] [ "TO" [ "SAVEPOINT" ] savepoint_name ].
+
+savepoint_stmt	=	"SAVEPOINT" savepoint_name.
+
+release_stmt	=	"RELEASE" [ "SAVEPOINT" ] savepoint_name.
+
+create_index_stmt	=	"CREATE" [ "UNIQUE" ] "INDEX" [ "IF" "NOT" "EXISTS" ] [ database_name "." ] index_name "ON" table_name "(" indexed_column { ","  indexed_column  } ")" [ "WHERE" expr ].
+
+indexed_column	=	column_name [ "COLLATE" collation_name ] [ "ASC" | "DESC" ].
+
+create_table_stmt	=	"CREATE" [ "TEMP" | "TEMPORARY" ] "TABLE" [ "IF" "NOT" "EXISTS" ] [ database_name "." ] table_name ["(" column_def { "," column_def } { "," table_constraint } ")" ["WITHOUT" "ROWID" ] | "AS" select_stm].
+
+column_def	=	column_name [ type_name ] { column_constraint }.
+
+type_name	=	name [ signed_number | ( signed_number "," signed_number ) ].
+
+column_constraint	=	[ "CONSTRAINT" name ] ( "PRIMARY" "KEY" [ "ASC" | "DESC" ] conflict_clause [ "AUTOINCREMENT" ] | ["NOT"] "NULL" conflict_clause | "UNIQUE" conflict_clause | "CHECK" "(" expr ")" | "DEFAULT" ( signed_number | literal_value | "(" expr ")" ) | "COLLATE" collation_name | foreign_key_clause ).
+
+signed_number	=	[ "+" | "-" ] numeric_literal.
+
+table_constraint	=	[ "CONSTRAINT" name ] ( ( "PRIMARY" "KEY" | "UNIQUE" ) ( indexed_column { "," indexed_column } ) conflict_clause | "CHECK" "(" expr ")" | "FOREIGN" "KEY" "(" column_name { "," column_name } ")" foreign_key_clause ).
+
+foreign_key_clause	=	"REFERENCES" foreign_table [ "(" column_name { "," column_name } ")" ] [ "ON" ("DELETE" | "UPDATE" ) ( "SET" "NULL" | "SET" "DEFAULT" | "CASCADE" | "RESTRICT" | "NO" "ACTION" ) | "MATCH" name ] [ [ "NOT" ] "DEFERRABLE" [ "INITIALLY" "DEFERRED" | "INITIALLY" "IMMEDIATE" ] ].
+
+conflict_clause	=	[ "ON" "CONFLICT" ("ROLLBACK" | "ABORT" | "FAIL" | "IGNORE" | "REPLACE" ) ].
+
+create_trigger_stmt	=	"CREATE" [ "TEMP" | "TEMPORARY" ] "TRIGGER" [ "IF" "NOT" "EXISTS" ] [ database_name "." ] trigger_name [ "BEFORE" | "AFTER" | "INSTEAD" "OF" ] ( "DELETE" | "INSERT" | "UPDATE" [ "OF" column_name { "," column_name } ] ) "ON" table_name [ "FOR" "EACH" "ROW" ] [ "WHEN" expr ] "BEGIN" ( update_stmt | insert_stmt | delete_stmt | select_stmt ) ";" "END".
+
+create_view_stmt	=	"CREATE" [ "TEMP" | "TEMPORARY" ] "VIEW" [ "IF" "NOT" "EXISTS" ] [ database_name "." ] view_name "AS" select_stmt.
+
+create_virtual_table_stmt	=	"CREATE" "VIRTUAL" "TABLE" [ "IF" "NOT" "EXISTS" ] [ database_name "." ] table_name "USING" module_name [ "(" module_argument { "," module_argument } ")" ].
+
+with_clause	=	"WITH" [ "RECURSIVE" ] cte_table_name "AS" "(" select_stmt ")" { "," cte_table_name "AS" "(" select_stmt ")" }.
+
+cte_table_name	=	table_name [ "(" column_name { "," column_name } ")" ].
+
+recursive_cte	=	cte_table_name "AS" ( initial_select ( "UNION" | "UNION" "ALL" ) recursive_select ).
+
+common_table_expression	=	table_name [ "(" column_name { "," column_name } ")" ] "AS" ( select_stmt ).
+
+delete_stmt	=	[ with_clause ] "DELETE" "FROM" qualified_table_name [ "WHERE" expr ].
+
+delete_stmt_limited	=	[ with_clause ] "DELETE" "FROM" qualified_table_name [ "WHERE" expr ] [ [ "ORDER" "BY" ordering_term { "," ordering_term } ] "LIMIT" expr ( ("OFFSET" | ",") expr ) ].
+
+detach_stmt	=	"DETACH" [ "DATABASE" ] database_name.
+
+drop_index_stmt	=	"DROP" "INDEX" [ "IF" "EXISTS" ] [ database_name "." ] index_name.
+
+drop_table_stmt	=	"DROP" "TABLE" [ "IF" "EXISTS" ] [ database_name "." ] table_name.
+
+drop_trigger_stmt	=	"DROP" "TRIGGER" [ "IF" "EXISTS" ] [ database_name "." ] trigger_name.
+
+drop_view_stmt	=	"DROP" "VIEW" [ "IF" "EXISTS" ] [ database_name "." ] view_name.
+
+expr	=	literal_value | bind_parameter | [ [ database_name "." ] table_name "."] column_name | unary_operator expr | expr binary_operator expr | function_name "(" [ [ "DISTINCT" ] expr { "," expr } | "*" ] ")" | "(" expr ")" | "CAST" "(" expr "AS" type_name ")" | expr "COLLATE" collation_name | expr [ "NOT" ] ( "LIKE" | "GLOB" | "REGEXP" | "MATCH" ) expr [ "ESCAPE" expr ] | expr ("ISNULL" | "NOTNULL" | "NOT" "NULL" ) | expr "IS" [ "NOT" ] expr | expr [ "NOT" ] "BETWEEN" expr "AND" expr | expr [ "NOT" ] "IN" ( ("(" ( select_stmt | expr { "," expr } ) ")") | [ database_name "." ] table_name ) | [ [ "NOT" ] "EXISTS" ] select_stmt | "CASE" [ expr ] "WHEN" expr "THEN" expr [ "ELSE" expr ] "END" | raise_function .
+
+raise_function	=	"RAISE" ( "IGNORE" | ( "ROLLBACK" | "ABORT" | "FAIL" ) "," error_message ).
+
+literal_value	=	numeric_literal | string_literal | blob_literal | "NULL" | "CURRENT_TIME" | "CURRENT_DATE" | "CURRENT_TIMESTAMP".
+
+numeric_literal	=	"/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/" "/[0-9]+/" ] .
+
+insert_stmt	=	[ with_clause ] ( "INSERT" | "REPLACE" | "INSERT" "OR" "REPLACE" | "INSERT" "OR" "ROLLBACK" | "INSERT" "OR" "ABORT" | "INSERT" "OR" "FAIL" | "INSERT" "OR" "IGNORE" ) "INTO" [ database_name "." ] table_name [ ( column_name { "," column_name } ) ] ( "VALUES" "(" expr { "," expr } ")" { "," "(" expr { "," expr } ")" } | select_stmt | "DEFAULT" "VALUES" ).
+
+pragma_stmt	=	"PRAGMA" [ database_name "." ] pragma_name [ "=" pragma_value | pragma_value ].
+
+pragma_value	=	signed_number | name | string_literal.
+
+reindex_stmt	=	"REINDEX" [ collation_name | [ database_name "." ] ( table_name | index_name ) ].
+
+select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] ("SELECT" [ "DISTINCT" | "ALL" ] result_column { "," result_column } ["FROM" ( table_or_subquery {"," table_or_subquery } | join_clause ) [ "WHERE" expr ] [ "GROUP" "BY" expr { "," expr } [ "HAVING" expr ] ]] | "VALUES" "(" expr { "," expr } ")" { compound_operator "VALUES" "(" expr { "," expr } ")"} ) [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ("OFFSET" | "," ) expr ] ].
+
+join_clause	=	table_or_subquery [ join_operator table_or_subquery join_constraint ].
+
+select_core	=	("SELECT" [ "DISTINCT" | "ALL" ] result_column { "," result_column } [ "FROM" ( table_or_subquery { "," table_or_subquery } | join_clause ) ] [ "WHERE" expr ] [ "GROUP" "BY" expr { "," expr } [ "HAVING" expr ] ]) |("VALUES" "(" expr { "," expr } ")" ).
+
+factored_select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] select_core { compound_operator select_core } [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
+
+simple_select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] select_core [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
+
+compound_select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] select_core ( "UNION" | "UNION" "ALL" | "INTERSECT" | "EXCEPT" ) select_core [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
+
+table_or_subquery	=	[ database_name "." ] table_name [ [ "AS" ] table_alias ] [ "INDEXED" "BY" index_name | "NOT" "INDEXED" ] | "(" (table_or_subquery { "," table_or_subquery } | join_clause) ")" | "(" select_stmt ")" [ [ "AS" ] table_alias ].
+
+result_column	=	"*" | table_name "." "*" | expr [ [ "AS" ] column_alias ].
+
+join_operator	=	"," | [ "NATURAL" ] [ "LEFT" [ "OUTER" ] | "INNER" | "CROSS" ] "JOIN".
+
+join_constraint	=	[ "ON" expr | "USING" "(" column_name { "," column_name } ")" ].
+
+ordering_term	=	expr [ "COLLATE" collation_name ] [ "ASC" | "DESC" ].
+
+compound_operator	=	"UNION" | "UNION" "ALL" | "INTERSECT" |	"EXCEPT".
+
+update_stmt	=	[ with_clause ] "UPDATE" [ "OR" "ROLLBACK" | "OR" "ABORT" | "OR" "REPLACE" | "OR" "FAIL" | "OR" "IGNORE" ] qualified_table_name "SET" column_name "=" expr { "," column_name "=" expr } [ "WHERE" expr ].
+
+update_stmt_limited	=	[ with_clause ] "UPDATE" [ "OR" "ROLLBACK" | "OR" "ABORT" | "OR" "REPLACE" | "OR" "FAIL" | "OR" "IGNORE" ] qualified_table_name "SET" column_name "=" expr { "," column_name "=" expr } [ "WHERE" expr ] [ [ "ORDER" "BY" ordering_term { "," ordering_term } ] "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
+
+qualified_table_name	=	[ database_name "." ] table_name [ "INDEXED" "BY" index_name | "NOT" "INDEXED" ].
+
+vacuum_stmt	=	"VACUUM".
+
+name = "/(?:[A-Za-z][A-Za-z0-9_]*)|(?:'[A-Za-z][A-Za-z0-9_]*')|(?:\u0022[A-Za-z][A-Za-z0-9_]*\u0022)/" .
+
+database_name = name.
+
+table_name = name.
+
+column_name = name.
+
+index_name = name.
+
+trigger_name = name.
+
+pragma_name = "application_id" |
+			"auto_vacuum" |
+			"automatic_index" |
+			"busy_timeout" |
+			"cache_size" |
+			"cache_spill" |
+			"case_sensitive_like" |
+			"cell_size_check" |
+			"checkpoint_fullfsync" |
+			"collation_list" |
+			"compile_options" |
+			"data_version" |
+			"database_list" |
+			"defer_foreign_keys" |
+			"encoding" |
+			"foreign_key_check" |
+			"foreign_key_list" |
+			"foreign_keys" |
+			"freelist_count" |
+			"fullfsync" |
+			"ignore_check_constraints" |
+			"incremental_vacuum" |
+			"index_info" |
+			"index_list" |
+			"index_xinfo" |
+			"integrity_check" |
+			"journal_mode" |
+			"journal_size_limit" |
+			"legacy_file_format" |
+			"locking_mode" |
+			"max_page_count" |
+			"mmap_size" |
+			"page_count" |
+			"page_size" |
+			"parser_trace" |
+			"query_only" |
+			"quick_check" |
+			"read_uncommitted" |
+			"recursive_triggers" |
+			"reverse_unordered_selects" |
+			"schema_version" |
+			"secure_delete" |
+			"shrink_memory" |
+			"soft_heap_limit" |
+			"stats" |
+			"synchronous" |
+			"table_info" |
+			"temp_store" |
+			"threads" |
+			"user_version" |
+			"wal_autocheckpoint" |
+			"wal_checkpoint".
+
+binary_operator = "|" "|" | "*" | "/" | "%" | "+" | "-" | "<" "<" | "<" "=" | "<" | ">" ">" | ">" "=" | ">" |
+				 "IS" "NOT" | "IS" | "IN" | "LIKE" | "GLOB" | " MATCH" | "REGEXP" | "AND" | "OR".
+                 
+unary_operator = "-" | "+" | "~" | "NOT".
+
+function_name = "abs" | "changes" | "char" | "coalesce" | "glob" | "hex" | "ifnull" | "instr" | "last_insert_rowid" | "length" | "like" | "likelihood" |
+				"likely" | "load_extension" | "lower" | "ltrim" | "max" | "min" | "nullif" | "printf" | "quote" | "random" | "randomblob" | "replace" |
+				"round" | "rtrim" | "soundex" | "sqlite_compileoption_get" | "sqlite_compileoption_used" | "sqlite_source_id" | "sqlite_version" |
+				"substr" | "total_changes" | "trim" | "typeof" | "unicode" | "unlikely" | "upper" | "zeroblob" | "avg" | "count" | "group_concat" |
+				"max" | "min" | "sum" | "total" | "date" | "time" | "datetime" | "julianday" | "strftime".
 }
 ```
