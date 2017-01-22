@@ -785,7 +785,7 @@ You can play contracting/expanding nodes just clicking on it (it will hide/show 
 
 # EBNF => SRFB
 
-## Wraning
+## Warning
 
 If a grammar contains a left recursive rules, i.e a rule like
 
