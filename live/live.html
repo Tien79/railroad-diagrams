@@ -1107,7 +1107,7 @@ function displaygraph(elt,context,graphing){
                 }
 	};
 	
-	if(graphing){
+	if(graphing && nodes.length<1000){
 		nodes = new vis.DataSet(nodes);
 		edges = new vis.DataSet(edges);
 		var datanetwork={nodes,edges};
