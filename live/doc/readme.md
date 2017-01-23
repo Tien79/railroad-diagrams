@@ -230,6 +230,8 @@ The following table, providing one entry by core function, explains the syntax f
 
 # Translating SRFB to EBNF
 
+I have made some modifications, using Niklaus Wirth notation {} for zeroOrMore and [] for optional.
+
 | Core Function         | Implementation          | Description                                                                     | 
 | --------------------- |------------------------ | --------------------------------------------------------------------------------| 
 | Title                 | [bnfTitle](#bnftitle)   | Returns the title string between ticks quote                                    | 
