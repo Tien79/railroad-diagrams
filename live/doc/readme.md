@@ -871,7 +871,7 @@ number =  ["-"] "/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/" "
 ```
 ## SQLITE
 
-**Work under progress not fully functional**
+**Work under progress with a 'good' starting point**
 
 ```
 "SQLITE"{
