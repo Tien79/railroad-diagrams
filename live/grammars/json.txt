@@ -1,0 +1,8 @@
+"JSON"{
+object = "{" [attribute] { "," attribute } "}" ;
+attribute = string ":" value ;
+array = "[" [value]{"," value}"]" ;
+value = string | number | object | array | "true" | "false" | "null" ;
+string = '/"(?:[^"\\]|(?:\\[^u]["\\/bfnrt])|[\\]u[A-Z0-9]{4})*"/' ;
+number =  ["-"] "/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/" "/[0-9]+/" ] ; 
+}
