@@ -1000,6 +1000,8 @@ index_name = name.
 
 trigger_name = name.
 
+view_name = name.
+
 pragma_name = "application_id" |
 			"auto_vacuum" |
 			"automatic_index" |
