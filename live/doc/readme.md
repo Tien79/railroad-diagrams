@@ -903,7 +903,7 @@ create_table_stmt	=	"CREATE" [ "TEMP" | "TEMPORARY" ] "TABLE" [ "IF" "NOT" "EXIS
 
 column_def	=	column_name [ type_name ] { column_constraint }.
 
-type_name	=	name [ signed_number | ( signed_number "," signed_number ) ].
+type_name	=	name [ "(" signed_number ")" | "(" signed_number "," signed_number ")" ].
 
 column_constraint	=	[ "CONSTRAINT" name ] ( "PRIMARY" "KEY" [ "ASC" | "DESC" ] conflict_clause [ "AUTOINCREMENT" ] | ["NOT"] "NULL" conflict_clause | "UNIQUE" conflict_clause | "CHECK" "(" expr ")" | "DEFAULT" ( signed_number | literal_value | "(" expr ")" ) | "COLLATE" collation_name | foreign_key_clause ).
 
@@ -988,7 +988,7 @@ qualified_table_name	=	[ database_name "." ] table_name [ "INDEXED" "BY" index_n
 
 vacuum_stmt	=	"VACUUM".
 
-name = "/(?:[A-Za-z][A-Za-z0-9_]*)|(?:'[A-Za-z][A-Za-z0-9_]*')|(?:\u0022[A-Za-z][A-Za-z0-9_]*\u0022)/" .
+name = "/(?:[A-Za-z][A-Za-z0-9_]*)|(?:'[A-Za-z][A-Za-z0-9_]*')|(?:\u0022[A-Za-z][A-Za-z0-9_]*\u0022)|(?:`[^`]+`)/" .
 
 database_name = name.
 
