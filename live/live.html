@@ -590,7 +590,7 @@ function doc(type,node){
 
 function tokenizer(str){
 /* add characters if more needed*/
-const regex = /\/\*.*\*\/|'[^']*'|\/\*(?:[^/]*\n?)*\*\/|"[^"]*"|[A-Za-z][A-Za-z0-9_]*|:=|[,;\+\-\\\*\/()=\[\]\{\}\|.\?\:<>&!]|[0-9]+/gm;
+const regex = /\/\*.*\*\/|`(?:[^`]|[\s\t])+`|'[^']*'|\/\*(?:[^/]*\n?)*\*\/|"[^"]*"|[A-Za-z][A-Za-z0-9_]*|:=|[,;\+\-\\\*\/()=\[\]\{\}\|.\?\:<>&!]|[0-9]+/gm;
 var m;
 var results=[];
 var tokens=[];
