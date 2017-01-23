@@ -877,7 +877,7 @@ number =  ["-"] "/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/" "
 "SQLITE"{
 sql_stmt_list	=	[ sql_stmt ] { ";" [ sql_stmt ] }.
 
-sql_stmt	=	[ "EXPLAIN" [ "QUERY" "PLAN" ] ] ( alter_table_stmt | analyze_stmt | attach_stmt | begin_stmt | commit_stmt | create_index_stmt | create_table_stmt | create_trigger_stmt | create_view_stmt | create_virtual_table_stmt | delete_stmt | delete_stmt_limited | detach_stmt | drop_index_stmt | drop_table_stmt | drop_trigger_stmt | drop_view_stmt | insert_stmt | pragma_stmt | reindex_stmt | release_stmt | rollback_stmt | savepoint_stmt | select_stmt | update_stmt | update_stmt_limited | vacuum_stmt ).
+sql_stmt	=	[ "EXPLAIN" [ "QUERY" "PLAN" ] ] ( siud_stmt | alter_table_stmt | analyze_stmt | attach_stmt | begin_stmt | commit_stmt | create_index_stmt | create_table_stmt | create_trigger_stmt | create_view_stmt | create_virtual_table_stmt | detach_stmt | drop_index_stmt | drop_table_stmt | drop_trigger_stmt | drop_view_stmt | insert_stmt | pragma_stmt | reindex_stmt | release_stmt | rollback_stmt | savepoint_stmt | vacuum_stmt ).
 
 alter_table_stmt	=	"ALTER" "TABLE" [ database_name "." ] table_name ("RENAME" "TO" new_table_name | "ADD" [ "COLUMN" ] column_def ).
 
@@ -921,15 +921,7 @@ create_view_stmt	=	"CREATE" [ "TEMP" | "TEMPORARY" ] "VIEW" [ "IF" "NOT" "EXISTS
 
 create_virtual_table_stmt	=	"CREATE" "VIRTUAL" "TABLE" [ "IF" "NOT" "EXISTS" ] [ database_name "." ] table_name "USING" module_name [ "(" module_argument { "," module_argument } ")" ].
 
-with_clause	=	"WITH" [ "RECURSIVE" ] cte_table_name "AS" "(" select_stmt ")" { "," cte_table_name "AS" "(" select_stmt ")" }.
-
-cte_table_name	=	table_name [ "(" column_name { "," column_name } ")" ].
-
 common_table_expression	=	table_name [ "(" column_name { "," column_name } ")" ] "AS" ( select_stmt ).
-
-delete_stmt	=	[ with_clause ] "DELETE" "FROM" qualified_table_name [ "WHERE" expr ].
-
-delete_stmt_limited	=	[ with_clause ] "DELETE" "FROM" qualified_table_name [ "WHERE" expr ] [ [ "ORDER" "BY" ordering_term { "," ordering_term } ] "LIMIT" expr ( ("OFFSET" | ",") expr ) ].
 
 detach_stmt	=	"DETACH" [ "DATABASE" ] database_name.
 
@@ -944,7 +936,7 @@ drop_view_stmt	=	"DROP" "VIEW" [ "IF" "EXISTS" ] [ database_name "." ] view_name
 /* expr	=	literal_value | bind_parameter | [ [ database_name "." ] table_name "."] column_name | unary_operator expr | expr binary_operator expr | function_name "(" [ [ "DISTINCT" ] expr { "," expr } | "*" ] ")" | "(" expr ")" | "CAST" "(" expr "AS" type_name ")" | expr "COLLATE" collation_name | expr [ "NOT" ] ( "LIKE" | "GLOB" | "REGEXP" | "MATCH" ) expr [ "ESCAPE" expr ] | expr ("ISNULL" | "NOTNULL" | "NOT" "NULL" ) | expr "IS" [ "NOT" ] expr | expr [ "NOT" ] "BETWEEN" expr "AND" expr | expr [ "NOT" ] "IN" ( ("(" ( select_stmt | expr { "," expr } ) ")") | [ database_name "." ] table_name ) | [ [ "NOT" ] "EXISTS" ] select_stmt | "CASE" [ expr ] "WHEN" expr "THEN" expr [ "ELSE" expr ] "END" | raise_function . */
 expr = term {binary_operator term}.
 
-term = literal_value | unary_operator term | function_name "(" [ [ "DISTINCT" ] expr { "," expr } | "*" ] ")" | "CAST" "(" expr "AS" type_name ")" | "(" expr ")"| [ [ database_name "." ] table_name "."] column_name.
+term = unary_operator term | "CAST" "(" expr "AS" type_name ")" | "(" expr ")"| database_name "." table_name "." column_name | table_name "." column_name | function_name "(" [ [ "DISTINCT" ] expr { "," expr } | "*" ] ")" | literal_value.
 
 raise_function	=	"RAISE" ( "IGNORE" | ( "ROLLBACK" | "ABORT" | "FAIL" ) "," error_message ).
 
@@ -954,25 +946,31 @@ numeric_literal	=	"/[0]|(?:[1-9][0-9]*)/" ["."] ["/[0-9]+/"] [ "/[eE]/" "/[-+]/"
 
 string_literal = "/'[^']*'/" | "/\u0022[^\u0022]*\u0022/" | "/[^'\u0022]*/".
 
-insert_stmt	=	[ with_clause ] ( "INSERT" | "REPLACE" | "INSERT" "OR" "REPLACE" | "INSERT" "OR" "ROLLBACK" | "INSERT" "OR" "ABORT" | "INSERT" "OR" "FAIL" | "INSERT" "OR" "IGNORE" ) "INTO" [ database_name "." ] table_name [ "(" column_name { "," column_name } ")" ] ( "VALUES" "(" expr { "," expr } ")" { "," "(" expr { "," expr } ")" } | select_stmt | "DEFAULT" "VALUES" ).
-
 pragma_stmt	=	"PRAGMA" [ database_name "." ] pragma_name [ "=" pragma_value | pragma_value ].
 
 pragma_value	=	signed_number | name | string_literal.
 
 reindex_stmt	=	"REINDEX" [ collation_name | [ database_name "." ] ( table_name | index_name ) ].
 
-select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] (select_core { compound_operator select_core}) [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ("OFFSET" | "," ) expr ] ].
+siud_stmt = [ with_clause ] (select_stmt | insert_stmt | (update_stmt | delete_stmt) [ "ORDER" "BY" ordering_term { "," ordering_term } ] ["LIMIT" expr ( ("OFFSET" | ",") expr )] )  .
+
+with_clause	=	"WITH" [ "RECURSIVE" ] cte_table_name "AS" "(" select_stmt ")" { "," cte_table_name "AS" "(" select_stmt ")" }.
+
+cte_table_name	=	table_name [ "(" column_name { "," column_name } ")" ].
+
+insert_stmt	=	( "REPLACE" | "INSERT" "OR" "REPLACE" | "INSERT" "OR" "ROLLBACK" | "INSERT" "OR" "ABORT" | "INSERT" "OR" "FAIL" | "INSERT" "OR" "IGNORE" | "INSERT") "INTO" [ database_name "." ] table_name [ "(" column_name { "," column_name } ")" ] ( "VALUES" "(" expr { "," expr } ")" { "," "(" expr { "," expr } ")" } | select_stmt | "DEFAULT" "VALUES" ).
+
+update_stmt	=	"UPDATE" [ "OR" "ROLLBACK" | "OR" "ABORT" | "OR" "REPLACE" | "OR" "FAIL" | "OR" "IGNORE" ] qualified_table_name "SET" column_name "=" expr { "," column_name "=" expr } [ "WHERE" expr ].
+
+delete_stmt	=	"DELETE" "FROM" qualified_table_name [ "WHERE" expr ].
+
+select_stmt	=	(ext_select_stmt { compound_operator ext_select_stmt}).
+
+ext_select_stmt = select_core [ "ORDER" "BY" ordering_term { "," ordering_term } ] ["LIMIT" expr [("OFFSET" | ",") expr ]] .
 
 select_core	=	("SELECT" [ "DISTINCT" | "ALL" ] result_column { "," result_column } [ "FROM" ( table_or_subquery { "," table_or_subquery } | join_clause ) ] [ "WHERE" expr ] [ "GROUP" "BY" expr { "," expr } [ "HAVING" expr ] ]) |("VALUES" "(" expr { "," expr } ")" ).
 
-recursive_cte	=	cte_table_name "AS" "(" select_stmt ")".
-
 join_clause	=	table_or_subquery [ join_operator table_or_subquery join_constraint ].
-
-simple_select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] select_core [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
-
-compound_select_stmt	=	[ "WITH" [ "RECURSIVE" ] common_table_expression { "," common_table_expression } ] select_core ( "UNION" | "UNION" "ALL" | "INTERSECT" | "EXCEPT" ) select_core [ "ORDER" "BY" ordering_term { "," ordering_term } ] [ "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
 
 table_or_subquery	=	[ database_name "." ] table_name [ [ "AS" ] table_alias ] [ "INDEXED" "BY" index_name | "NOT" "INDEXED" ] | "(" (table_or_subquery { "," table_or_subquery } | join_clause) ")" | "(" select_stmt ")" [ [ "AS" ] table_alias ].
 
@@ -985,10 +983,6 @@ join_constraint	=	[ "ON" expr | "USING" "(" column_name { "," column_name } ")" 
 ordering_term	=	expr [ "COLLATE" collation_name ] [ "ASC" | "DESC" ].
 
 compound_operator	=	"UNION" "ALL" | "UNION" | "INTERSECT" |	"EXCEPT".
-
-update_stmt	=	[ with_clause ] "UPDATE" [ "OR" "ROLLBACK" | "OR" "ABORT" | "OR" "REPLACE" | "OR" "FAIL" | "OR" "IGNORE" ] qualified_table_name "SET" column_name "=" expr { "," column_name "=" expr } [ "WHERE" expr ].
-
-update_stmt_limited	=	[ with_clause ] "UPDATE" [ "OR" "ROLLBACK" | "OR" "ABORT" | "OR" "REPLACE" | "OR" "FAIL" | "OR" "IGNORE" ] qualified_table_name "SET" column_name "=" expr { "," column_name "=" expr } [ "WHERE" expr ] [ [ "ORDER" "BY" ordering_term { "," ordering_term } ] "LIMIT" expr [ ( "OFFSET" | "," ) expr ] ].
 
 qualified_table_name	=	[ database_name "." ] table_name [ "INDEXED" "BY" index_name | "NOT" "INDEXED" ].
 
@@ -1059,8 +1053,8 @@ pragma_name = "application_id" |
 			"wal_autocheckpoint" |
 			"wal_checkpoint".
 
-binary_operator = "|" "|" | "*" | "/" | "%" | "+" | "-" | "<" "<" | "<" "=" | "<" | ">" ">" | ">" "=" | ">" |
-				 "IS" "NOT" | "IS" | "IN" | "LIKE" | "GLOB" | " MATCH" | "REGEXP" | "AND" | "OR".
+binary_operator = "|" "|" | "*" | "/" | "%" | "+" | "-" | "<" "<" | "<" "=" | "<" | ">" ">" | ">" "=" | ">" | "=" |
+				 "IS" "NOT" | "IS" | "IN" | "LIKE" | "GLOB" | "MATCH" | "REGEXP" | "AND" | "OR".
                  
 unary_operator = "-" | "+" | "~" | "NOT".
 
