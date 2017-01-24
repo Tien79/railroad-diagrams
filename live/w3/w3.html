@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+<script src="w3.js"></script>
+<body>
+
+<nav class="w3-sidenav w3-light-grey" style="display:none" id="mySidenav">
+  <a href="javascript:void(0)" 
+  onclick="w3_close()"
+  class="w3-closenav w3-large">Close &times;</a>
+<a href="http://www.w3schools.com/w3js/default.asp" target="_blank">W3.js</a>
+<a href="http://www.w3schools.com/w3css/default.asp" target="_blank">W3.css</a>
+</nav>
+
+<header class="w3-container w3-teal">
+  <span class="w3-opennav w3-xlarge w3-layout-cell" onclick="w3_open()">&#9776;</span>    
+  <h1 class="w3-layout-cell" >&nbsp;W3</h1>
+</header>
+
+<div class="w3-container">
+  <p>In this example, the sidenav is hidden (style="display:none") and is only shown when you click on the menu icon in the top left corner. 
+  When it is opened, it hides the page content (it lays on top of it (20% width and 100% height)).</p>
+</div>
+
+<footer class="w3-container w3-teal">
+<small>Copyright &copy; Gilbert Brault 2016,2017
+&nbsp;&nbsp;&nbsp;license&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativecommons.org/licenses/by/4.0/"><img src="images/cc.logo.white.svg" width="5%"/></a>
+</footer>
+     
+<script>
+function w3_open() {
+    document.getElementById("mySidenav").style.width = "20%";
+    document.getElementById("mySidenav").style.display = "block";
+}
+function w3_close() {
+    document.getElementById("mySidenav").style.display = "none";
+}
+</script>
+     
+</body>
+</html> 

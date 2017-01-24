@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<title>SQLITE Grammar</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3/w3.css">
+<link rel="stylesheet" href="railroad.css">
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="codemirror/codemirror.css">
+<link rel="stylesheet" href="codemirror/foldgutter.css">
+<script src="w3/w3.js"></script>
+<script src="codemirror/codemirror.js"></script>
+<script src="codemirror/matchbrackets.js"></script>
+<script src="codemirror/continuecomment.js"></script>
+<script src="codemirror/comment.js"></script>
+<script src="codemirror/foldcode.js"></script>
+<script src="codemirror/javascript.js"></script>
+<script src="codemirror/sql.js"></script>
+<script src="codemirror/foldgutter.js"></script>
+<script src="codemirror/brace-fold.js"></script>
+<script src="railroad.js"></script>
+<script src="SRFB.js"></script>
+<script src="esprima.js"></script>
+<style type="text/css">
+  .border {
+    border: 1px solid #f7f7f7;
+  }
+</style>
+<body>
+
+<nav class="w3-sidenav w3-light-grey" style="display:none" id="mySidenav">
+  <a href="javascript:void(0)" 
+  onclick="w3_close()"
+  class="w3-closenav w3-large">Close &times;</a>
+<a id="a_ebnfsrfb" href="#" onclick="toggleShow('ebnfsrfb')">{{ebnfsrfb}}</a>
+<a id="a_ebnfsqlite" href="#" onclick="toggleShow('ebnfsqlite')">{{ebnfsqlite}}</a>
+<a id="a_sqlite" href="#" onclick="toggleShow('sqlite')">{{sqlite}}</a>
+<a id="a_refresh" href="#" onclick="refresh()">refresh</a>
+</nav>
+
+<header class="w3-container w3-teal">
+  <span class="w3-opennav w3-xlarge w3-layout-cell" onclick="w3_open()">&#9776;</span>    
+  <h1 class="w3-layout-cell" >&nbsp;SQLITE Grammar</h1>
+</header>
+<div class="w3-container">
+	<div id="d_ebnfsrfb" class="w3-container border">
+		<textarea id="ebnfsrfb" cols='150' rows='25'>
+		</textarea>
+	</div>
+	<div id="d_ebnfsqlite" class="w3-container border">
+		<textarea id="ebnfsqlite" cols='150' rows='25'>
+		</textarea>
+	</div>
+	<div id="d_sqlite" class="w3-container border">
+		<textarea id="sqlite" cols='150' rows='25'>
+		</textarea>
+	</div>
+	<div id="error" class="w3-container border">
+	</div>
+	<!-- errors output -->
+	<div id="result" class="w3-container border">
+	</div>
+<!-- results -->
+
+</div>
+
+<footer class="w3-container w3-teal">
+<small>Copyright &copy; Gilbert Brault 2016,2017
+&nbsp;&nbsp;&nbsp;license&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativecommons.org/licenses/by/4.0/"><img src="images/cc.logo.white.svg" width="5%"/></a>
+</small>
+</footer>
+     
+<script>
+function w3_open() {
+    document.getElementById("mySidenav").style.width = "20%";
+    document.getElementById("mySidenav").style.display = "block";
+}
+function w3_close() {
+    document.getElementById("mySidenav").style.display = "none";
+}
+
+window.e_ebnfsrfb = CodeMirror.fromTextArea(document.getElementById("ebnfsrfb"), {
+		mode: "javascript",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter",	
+});
+
+w3.getHttpData("ebnf.js", function(text){
+	window.e_ebnfsrfb.getDoc().setValue(text);
+});
+w3.displayObject("a_ebnfsrfb",{ebnfsrfb:"hide EBNF SRFB Editor"});
+var ebnfsrfb=true;
+
+window.e_ebnfsqlite = CodeMirror.fromTextArea(document.getElementById("ebnfsqlite"), {
+		mode: "javascript",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: false,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter",	
+});
+
+w3.getHttpData("ebnfsqlite.txt", function(text){
+	window.e_ebnfsqlite.getDoc().setValue(text);
+});
+w3.displayObject("a_ebnfsqlite",{ebnfsqlite:"hide EBNF SQLITE Editor"});
+var ebnfsqlite=true;
+
+window.e_sqlite = CodeMirror.fromTextArea(document.getElementById("sqlite"), {
+		mode: "sql",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: false,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter",	
+});
+
+w3.getHttpData("sqlite.txt", function(text){
+	window.e_sqlite.getDoc().setValue(text);
+});
+w3.displayObject("a_sqlite",{sqlite:"hide SQLITE Editor"});
+var sqlite=true;
+
+function toggleShow(id){
+	switch(id){
+		case 'ebnfsrfb':
+			w3.toggleShow("#d_"+id);
+			ebnfsrfb = !ebnfsrfb;
+			if(ebnfsrfb){
+				w3.displayObject("a_"+id,{ebnfsrfb:"hide EBNF SRFB Editor"});
+			} else {
+				w3.displayObject("a_"+id,{ebnfsrfb:"show EBNF SRFB Editor"});
+			}
+			break;
+		case 'ebnfsqlite':
+			w3.toggleShow("#d_"+id);
+			ebnfsqlite = !ebnfsqlite;
+			if(ebnfsqlite){
+				w3.displayObject("a_"+id,{ebnfsqlite:"hide EBNF SQLITE Editor"});
+			} else {
+				w3.displayObject("a_"+id,{ebnfsqlite:"show EBNF SQLITE Editor"});
+			}
+			break;
+		case 'sqlite':
+			w3.toggleShow("#d_"+id);
+			sqlite = !sqlite;
+			if(sqlite){
+				w3.displayObject("a_"+id,{sqlite:"hide SQLITE Editor"});
+			} else {
+				w3.displayObject("a_"+id,{sqlite:"show SQLITE Editor"});
+			}
+			break;
+	}
+}
+
+/* start railroad processing */
+/* user application */
+root.context =	{
+		title:"notset",
+		href:true,
+		dochref:"doc"
+	};
+root.Railroad.call(this,root,
+	{ // those will be Diagram options
+	VERTICAL_SEPARATION: 8,
+	ARC_RADIUS: 10,
+	DIAGRAM_CLASS: 'railroad-diagram',
+	STROKE_ODD_PIXEL_LENGTH: true,
+	INTERNAL_ALIGNMENT: 'center',
+	},
+	root.context
+);
+window.results={};
+var setupblob={validating:"function",graph:true};
+
+function refresh(){
+	var error=document.getElementById('error');
+	var result=document.getElementById('result');
+	root.context.language={};
+	root.context.bnf=[];
+	window.results.title=[];
+	window.results.graph=[];
+	window.results.walk=[];
+	window.results.context=root.context;
+	window.results.state="notset";
+	window.results.error=error;
+	window.results.context.normalize=SRFB.normalize;
+	window.Show=SRFB.Show.bind(window.results);
+	result.innerHTML="";
+	error.innerHTML="";
+	var diags = window.e_ebnfsrfb.getValue();
+	var scriptref;
+
+	//jslint for errors
+	var source = diags;
+	source+="\nfunction Show(){}\n";
+	for(var fn=0; fn<root.Railroad.fnames.length;fn++){
+		source+="\nfunction "+root.Railroad.fnames[fn]+"(){}\n";
+	}
+	
+	/* verify javascript */
+	var eresult;
+	var options={};
+	var jserror=false;
+	// var jscheck = jslint(source);  => using jslint library
+	// error = jscheck.stop;
+	
+	/* using esprima */
+	try {
+		eresult = esprima.parse(source, options);
+	} catch (e) {
+		jserror=true;
+		error.innerHTML  = e.name + ': ' + e.message;;
+	}
+	/* end using esprima */
+
+	if(!jserror){
+
+	// prepare graphing
+	results.state='graphing';
+	root.Railroad.SetExports(root.Railroad.graphing,root.Railroad.fnames);
+	// comments should be within /* */  double // don't work
+	try{
+		scriptref = SRFB.injectjs(diags,error);
+	} catch(e){
+		error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+		return;
+	}      
+	scriptref.outerHTML="";
+
+	// prepare json
+	results.state='walking';
+    root.Railroad.SetExports(root.Railroad.walking,root.Railroad.fnames);
+    try{
+		scriptref = SRFB.injectjs(diags,error);
+	} catch(e){
+		error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+		return;
+	}
+	scriptref.outerHTML="";
+
+	// prepare generating
+	results.state='generating';
+	root.Railroad.SetExports(root.Railroad.generating,root.Railroad.fnames);
+	try{
+		scriptref = SRFB.injectjs(diags,error);
+	} catch(e){
+		error.innerHTML="<pre>"+
+					    e.stack+"\n"+
+						"</pre>";
+		return;
+	}
+	scriptref.outerHTML="";
+
+    // render results
+    for(var i=0; i<results.graph.length;i++){
+    		var graphout = document.createElement('section');
+            graphout.appendChild(results.graph[i].toSVG());
+            result.appendChild(graphout);    				
+    } 
+	} else {
+		// display warnings (//jslint)
+		/*
+		var content="<pre>";		
+		for(var i=0; i<jscheck.warnings.length; i++){
+			var w = jscheck.warnings[i];
+			content+=w.line+":"+w.column+" "+w.message+"\n";
+		}
+		content+="</pre>";
+		error.innerHTML=content;
+		*/
+	}        
+}
+
+</script>
+     
+</body>
+</html> 
