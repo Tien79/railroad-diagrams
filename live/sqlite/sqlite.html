@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
-<title>SQLITE Grammar</title>
+<title>SQLITE Grammar and Syntax validation</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="w3/w3.css">
+<link rel="stylesheet" href="vis/vis.css">
 <link rel="stylesheet" href="railroad.css">
 <link rel="icon" href="favicon.ico" type="image/x-icon" />
 <link rel="stylesheet" href="codemirror/codemirror.css">
@@ -17,12 +19,13 @@
 <script src="codemirror/sql.js"></script>
 <script src="codemirror/foldgutter.js"></script>
 <script src="codemirror/brace-fold.js"></script>
+<script src="vis/vis.js"></script>
 <script src="railroad.js"></script>
 <script src="SRFB.js"></script>
 <script src="esprima.js"></script>
 <style type="text/css">
   .border {
-    border: 1px solid #f7f7f7;
+    border: 1px solid #d7d4f0;
   }
 </style>
 <body>
@@ -33,34 +36,51 @@
   class="w3-closenav w3-large">Close &times;</a>
 <a id="a_ebnfsrfb" href="#" onclick="toggleShow('ebnfsrfb')">{{ebnfsrfb}}</a>
 <a id="a_ebnfsqlite" href="#" onclick="toggleShow('ebnfsqlite')">{{ebnfsqlite}}</a>
+<a id="a_sqlitesrfb" href="#" onclick="toggleShow('sqlitesrfb')">{{sqlitesrfb}}</a>
 <a id="a_sqlite" href="#" onclick="toggleShow('sqlite')">{{sqlite}}</a>
-<a id="a_refresh" href="#" onclick="refresh()">refresh</a>
+<a id="a_refresh" href="#" onclick="refreshebnf()">refresh ebnf</a>
+<a id="a_validate" href="#" onclick="validate()">validate sqlite grammar</a>
+<a id="a_refresh" href="#" onclick="refreshsqlite()">refresh sqlite</a>
+<a id="a_validatesql" href="#" onclick="validatesql()">validate sqlite expression</a>
 </nav>
 
 <header class="w3-container w3-teal">
   <span class="w3-opennav w3-xlarge w3-layout-cell" onclick="w3_open()">&#9776;</span>    
-  <h1 class="w3-layout-cell" >&nbsp;SQLITE Grammar</h1>
+  <h1 class="w3-layout-cell" >&nbsp;SQLITE Grammar and Syntax validation</h1>
 </header>
 <div class="w3-container">
+	<!-- errors output -->
+	<div id="error" class="w3-container border">
+	</div>	
+	<!-- ebnf srfb grammar editor (read from file) -->
 	<div id="d_ebnfsrfb" class="w3-container border">
 		<textarea id="ebnfsrfb" cols='150' rows='25'>
 		</textarea>
 	</div>
+	<!-- sqlite ebnf grammar editor (read from file) -->
 	<div id="d_ebnfsqlite" class="w3-container border">
 		<textarea id="ebnfsqlite" cols='150' rows='25'>
 		</textarea>
 	</div>
+	<!-- EBNF Railroad (generated) -->
+	<div id="EBNFRailroad" class="w3-container border w3-responsive">
+	</div>
+	<!-- sqlite srfb grammar editor (generated) -->
+	<div id="d_sqlitesrfb" class="w3-container border">
+		<textarea id="sqlitesrfb" cols='150' rows='25'>
+		</textarea>
+	</div>
+	<!-- SQLITE Railroad (generated) -->
+	<div id="SQLITERailroad" class="w3-container border w3-responsive">
+	</div>
+	<!-- sqlite editor (read from file) -->
 	<div id="d_sqlite" class="w3-container border">
 		<textarea id="sqlite" cols='150' rows='25'>
 		</textarea>
 	</div>
-	<div id="error" class="w3-container border">
-	</div>
-	<!-- errors output -->
-	<div id="result" class="w3-container border">
-	</div>
-<!-- results -->
-
+	<!-- SQLITE validation (generated) -->
+	<div id="VSQLITE" class="w3-container border w3-responsive">
+	</div>	
 </div>
 
 <footer class="w3-container w3-teal">
@@ -71,7 +91,7 @@
      
 <script>
 function w3_open() {
-    document.getElementById("mySidenav").style.width = "20%";
+    document.getElementById("mySidenav").style.width = "30%";
     document.getElementById("mySidenav").style.display = "block";
 }
 function w3_close() {
@@ -112,6 +132,20 @@ w3.getHttpData("ebnfsqlite.txt", function(text){
 w3.displayObject("a_ebnfsqlite",{ebnfsqlite:"hide EBNF SQLITE Editor"});
 var ebnfsqlite=true;
 
+window.e_sqlitesrfb = CodeMirror.fromTextArea(document.getElementById("sqlitesrfb"), {
+		mode: "javascript",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: false,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter",	
+});
+
+w3.displayObject("a_sqlitesrfb",{sqlitesrfb:"hide SQLITE SRFB grammar Editor"});
+var sqlitesrfb=true;
+
 window.e_sqlite = CodeMirror.fromTextArea(document.getElementById("sqlite"), {
 		mode: "sql",
         lineNumbers: true,
@@ -149,6 +183,15 @@ function toggleShow(id){
 				w3.displayObject("a_"+id,{ebnfsqlite:"show EBNF SQLITE Editor"});
 			}
 			break;
+		case 'sqlitesrfb':
+			w3.toggleShow("#d_"+id);
+			sqlite = !sqlite;
+			if(sqlite){
+				w3.displayObject("a_"+id,{sqlitesrfb:"hide SQLITE SRFB Grammar Editor"});
+			} else {
+				w3.displayObject("a_"+id,{sqlitesrfb:"show SQLITE SRFB grammar Editor"});
+			}
+			break;
 		case 'sqlite':
 			w3.toggleShow("#d_"+id);
 			sqlite = !sqlite;
@@ -181,9 +224,26 @@ root.Railroad.call(this,root,
 window.results={};
 var setupblob={validating:"function",graph:true};
 
-function refresh(){
+function refreshebnf(){
 	var error=document.getElementById('error');
-	var result=document.getElementById('result');
+	var result=document.getElementById('EBNFRailroad');
+	refresh(result,error,e_ebnfsrfb,'EBNFRailroad');
+}
+
+function refreshsqlite(){
+	var error=document.getElementById('error');
+	var result=document.getElementById('SQLITERailroad');
+	refresh(result,error,e_sqlitesrfb,'SQLITERailroad');
+}
+
+function doc(type,node){
+	if(type==="NonTerminal"){
+		window.location.href = "#";
+		window.location.href = "#"+node;
+	}
+}
+
+function refresh(result,error,editor,resultid){
 	root.context.language={};
 	root.context.bnf=[];
 	window.results.title=[];
@@ -196,7 +256,7 @@ function refresh(){
 	window.Show=SRFB.Show.bind(window.results);
 	result.innerHTML="";
 	error.innerHTML="";
-	var diags = window.e_ebnfsrfb.getValue();
+	var diags = editor.getValue();
 	var scriptref;
 
 	//jslint for errors
@@ -266,7 +326,18 @@ function refresh(){
 
     // render results
     for(var i=0; i<results.graph.length;i++){
-    		var graphout = document.createElement('section');
+    		var graphout = window.document.createElement('section');
+			// <i class="material-icons">home</i>
+			var a = window.document.createElement('a');
+			a.setAttribute('href','#'+resultid);
+			a.setAttribute('id',results.title[i]);
+			var icon = window.document.createElement('i'); 
+			icon.setAttribute('class','material-icons w3-tiny');
+			var ih = window.document.createTextNode('home');
+			icon.appendChild(ih);
+			a.appendChild(icon);
+			result.appendChild(a);			
+			graphout.setAttribute('class','w3-responsive');
             graphout.appendChild(results.graph[i].toSVG());
             result.appendChild(graphout);    				
     } 
@@ -282,6 +353,20 @@ function refresh(){
 		error.innerHTML=content;
 		*/
 	}        
+}
+
+function validate(){
+	var error=document.getElementById('error');
+	var expression = window.e_ebnfsqlite.getValue();
+	SRFB.validate('syntax_', results, error, expression, null, false,true);
+	window.e_sqlitesrfb.getDoc().setValue(results.context.SRFBfromEBNF);
+}
+
+function validatesql(){
+	var error=document.getElementById('error');
+	var expression = window.e_sqlite.getValue();
+	var VSQLITE = window.document.getElementById("VSQLITE");
+	SRFB.validate('sql_stmt', results, error, expression, VSQLITE, true,false);
 }
 
 </script>

@@ -191,4 +191,11 @@ function_name = "abs" | "changes" | "char" | "coalesce" | "glob" | "hex" | "ifnu
                 "max" | "min" | "sum" | "total" | "date" | "time" | "datetime" | "julianday" | "strftime".
 
 column_alias = name.
+new_table_name = name.
+savepoint_name = name.
+table_or_index_name = name.
+module_name = name.
+module_argument = name.
+collation_name = name.
+
 }
