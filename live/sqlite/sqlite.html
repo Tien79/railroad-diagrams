@@ -23,6 +23,7 @@
 <script src="railroad.js"></script>
 <script src="SRFB.js"></script>
 <script src="esprima.js"></script>
+<script src="showdown.js"></script>
 <style type="text/css">
   .border {
     border: 1px solid #d7d4f0;
@@ -258,6 +259,16 @@ var sqlite=true;
 w3.displayObject("a_compilegraph",{compilegraph:"Grow"});
 var compilegraph=true;
 
+window.md={};
+
+w3.getHttpData("ebnf.json", function(text){
+	window.md.ebnf=JSON.parse(text);
+});
+
+w3.getHttpData("sqlite.json", function(text){
+	window.md.sqlite=JSON.parse(text);
+});
+
 function growshrink(id){
 	eval("var a=window."+id+";");
 	// w3.toggleShow("#d_"+id);
@@ -354,23 +365,23 @@ function toggleShow(id){
 function refreshebnf(){
 	var error=document.getElementById('error');
 	var result=document.getElementById('EBNFRailroad');
-	refresh(result,error,e_ebnfsrfb,'EBNFRailroad');
+	refresh('ebnf',result,error,e_ebnfsrfb,'EBNFRailroad');
 }
 
 function refreshsqlite(){
 	var error=document.getElementById('error');
 	var result=document.getElementById('SQLITERailroad');
-	refresh(result,error,e_sqlitesrfb,'SQLITERailroad');
+	refresh('sqlite',result,error,e_sqlitesrfb,'SQLITERailroad');
 }
 
 function doc(type,node){
 	if(type==="NonTerminal"){
 		window.location.href = "#";
-		window.location.href = "#"+node;
+		window.location.href = "#"+"title_"+node;
 	}
 }
 
-function refresh(result,error,editor,resultid){
+function refresh(name,result,error,editor,resultid){
 	root.context.language={};
 	root.context.bnf=[];
 	window.results.title=[];
@@ -453,20 +464,72 @@ function refresh(result,error,editor,resultid){
 
     // render results
     for(var i=0; i<results.graph.length;i++){
-    		var graphout = window.document.createElement('section');
-			// <i class="material-icons">home</i>
+			var d = window.md[name][results.title[i]];
+			if(d===undefined){
+				d={"title":results.title[i],doc:results.title[i]}
+				window.md[name][results.title[i]]=d;
+			}
+			// home icon link
+			var section = window.document.createElement('div');
+			section.setAttribute('class','w3-container');
 			var a = window.document.createElement('a');
 			a.setAttribute('href','#'+resultid);
-			a.setAttribute('id',results.title[i]);
+			a.setAttribute('id',"a_"+results.title[i]);
+			a.setAttribute('class','w3-layout-cell');
 			var icon = window.document.createElement('i'); 
 			icon.setAttribute('class','material-icons w3-tiny');
 			var ih = window.document.createTextNode('home');
 			icon.appendChild(ih);
 			a.appendChild(icon);
-			result.appendChild(a);			
-			graphout.setAttribute('class','w3-responsive');
+			section.appendChild(a);
+			// edit link
+			var a = window.document.createElement('a');
+			a.setAttribute('href','#');
+			a.setAttribute('id',"e_"+results.title[i]);
+			a.setAttribute('class','w3-layout-cell');
+			a.setAttribute('onclick','edit("'+name+'","'+results.title[i]+'");return false;');
+			var icon = window.document.createElement('i'); 
+			icon.setAttribute('class','material-icons w3-tiny');
+			var ih = window.document.createTextNode('edit');
+			icon.appendChild(ih);
+			a.appendChild(icon);
+			section.appendChild(a);			
+			// title
+			var dtitle = window.document.createElement('div');
+			dtitle.setAttribute('id',"title_"+results.title[i]);
+			dtitle.setAttribute('class','w3-layout-cell');
+			var span = window.document.createElement('span');
+			span.setAttribute('class','w3-margin-left');
+			span.setAttribute('id',"span_"+name+"_"+results.title[i]);
+			var tspan = window.document.createTextNode(d.title);
+			span.appendChild(tspan)
+			dtitle.appendChild(span);
+			section.appendChild(dtitle);
+            var div = window.document.createElement('div');
+			div.setAttribute('class','w3-container');	
+			div.setAttribute('class','w3-responsive');	
+			// documentation
+			var txt = window.document.createElement('textarea');
+			txt.setAttribute('id',"txt_"+name+"_"+results.title[i]);
+			txt.setAttribute('hidden','');			
+			if((d.doc===undefined)||(d.doc===null)||(d.doc.length==0)) d.doc=results.title[i];
+			txt.innerText=d.doc;
+			div.appendChild(txt);
+			var converter = new showdown.Converter();
+			converter.setFlavor('github');
+			var html = converter.makeHtml(d.doc);
+			var doc = window.document.createElement('section');
+			doc.setAttribute('id',"doc_"+name+"_"+results.title[i]);
+			doc.setAttribute('class','w3-layout-cell w3-layout-middle');
+			doc.innerHTML=html;
+			div.appendChild(doc);
+			// railroad
+			var graphout = window.document.createElement('aside');
+			graphout.setAttribute('class','w3-layout-cell');
             graphout.appendChild(results.graph[i].toSVG());
-            result.appendChild(graphout);    				
+            div.appendChild(graphout);
+			section.appendChild(div);
+			result.appendChild(section);
     } 
 	} else {
 		// display warnings (//jslint)
@@ -482,6 +545,43 @@ function refresh(result,error,editor,resultid){
 	}        
 }
 
+function edit(grammar,item){
+	// toggle title contenteditable
+	var span = window.document.getElementById("span_"+grammar+"_"+item);
+	var editable = span.contentEditable;
+	if((editable===undefined)||(editable===null)||(editable=="inherit")){
+		span.contentEditable="true";
+		span.focus();
+		window.needToConfirm=true;
+		// span.scrollIntoView(true);
+		window.editor = CodeMirror.fromTextArea(window.document.getElementById("txt_"+grammar+"_"+item), {
+				mode: 'gfm',
+				lineNumbers: true,
+				theme: "default"
+			});
+	} else {
+		window.md[grammar][item].title = span.innerText;
+		window.md[grammar][item].doc=window.editor.getValue();
+		var converter = new showdown.Converter();
+		converter.setFlavor('github');
+		var html = converter.makeHtml(window.editor.getValue());
+		var doc = window.document.getElementById("doc_"+grammar+"_"+item);
+		doc.innerHTML=html;
+		span.contentEditable="inherit";
+		window.editor.toTextArea();
+	}	
+}
+
+function download(content, filename, contentType)
+{
+    if(!contentType) contentType = 'application/octet-stream';
+        var a = document.createElement('a');
+        var blob = new Blob([content], {'type':contentType});
+        a.href = window.URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+}
+
 function validate(){
 	var error=document.getElementById('error');
 	var expression = window.e_ebnfsqlite.getValue();
@@ -495,6 +595,18 @@ function validatesql(){
 	var VSQLITE = window.document.getElementById("VSQLITE");
 	SRFB.validate('sql_stmt', results, error, expression, VSQLITE, true,false);
 }
+
+var needToConfirm=false;
+window.onbeforeunload = function() {
+    if (needToConfirm) {
+		var error = window.document.getElementById('error');
+		error.innerText="You might want to save your changes";
+		download(JSON.stringify(window.md.ebnf),"ebnf.json","application/json");
+		download(JSON.stringify(window.md.sqlite),"sqlite.json","application/json");
+		return "do you want to save?";
+    }
+	
+};
 
 </script>
      
