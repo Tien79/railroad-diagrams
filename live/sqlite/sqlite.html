@@ -17,6 +17,10 @@
 <script src="codemirror/foldcode.js"></script>
 <script src="codemirror/javascript.js"></script>
 <script src="codemirror/sql.js"></script>
+<script src="codemirror/markdown.js"></script>
+<script src="codemirror/meta.js"></script>
+<script src="codemirror/overlay.js"></script>
+<script src="codemirror/gfm.js"></script>
 <script src="codemirror/foldgutter.js"></script>
 <script src="codemirror/brace-fold.js"></script>
 <script src="vis/vis.js"></script>
@@ -263,11 +267,21 @@ window.md={};
 
 w3.getHttpData("ebnf.json", function(text){
 	window.md.ebnf=JSON.parse(text);
+	// replace(window.md.ebnf,"\\n","  \n");
 });
 
 w3.getHttpData("sqlite.json", function(text){
 	window.md.sqlite=JSON.parse(text);
+	// replace(window.md.sqlite,"\\n","  \n");
 });
+
+function replace(o,regx,s){
+	var keys=Object.keys(o);
+	var r = new RegExp(regx,"gm");
+	for(var k in keys){
+		o[keys[k]].doc=o[keys[k]].doc.replace(r,s);
+	}
+}
 
 function growshrink(id){
 	eval("var a=window."+id+";");
@@ -469,7 +483,7 @@ function refresh(name,result,error,editor,resultid){
 				d={"title":results.title[i],doc:results.title[i]}
 				window.md[name][results.title[i]]=d;
 			}
-			// home icon link
+	// home icon link
 			var section = window.document.createElement('div');
 			section.setAttribute('class','w3-container');
 			var a = window.document.createElement('a');
@@ -482,7 +496,7 @@ function refresh(name,result,error,editor,resultid){
 			icon.appendChild(ih);
 			a.appendChild(icon);
 			section.appendChild(a);
-			// edit link
+	// edit link
 			var a = window.document.createElement('a');
 			a.setAttribute('href','#');
 			a.setAttribute('id',"e_"+results.title[i]);
@@ -494,7 +508,7 @@ function refresh(name,result,error,editor,resultid){
 			icon.appendChild(ih);
 			a.appendChild(icon);
 			section.appendChild(a);			
-			// title
+	// title
 			var dtitle = window.document.createElement('div');
 			dtitle.setAttribute('id',"title_"+results.title[i]);
 			dtitle.setAttribute('class','w3-layout-cell');
@@ -508,12 +522,12 @@ function refresh(name,result,error,editor,resultid){
             var div = window.document.createElement('div');
 			div.setAttribute('class','w3-container');	
 			div.setAttribute('class','w3-responsive');	
-			// documentation
+	// documentation
 			var txt = window.document.createElement('textarea');
 			txt.setAttribute('id',"txt_"+name+"_"+results.title[i]);
 			txt.setAttribute('hidden','');			
 			if((d.doc===undefined)||(d.doc===null)||(d.doc.length==0)) d.doc=results.title[i];
-			txt.innerText=d.doc;
+			txt.value=d.doc;
 			div.appendChild(txt);
 			var converter = new showdown.Converter();
 			converter.setFlavor('github');
@@ -523,7 +537,7 @@ function refresh(name,result,error,editor,resultid){
 			doc.setAttribute('class','w3-layout-cell w3-layout-middle');
 			doc.innerHTML=html;
 			div.appendChild(doc);
-			// railroad
+	// railroad
 			var graphout = window.document.createElement('aside');
 			graphout.setAttribute('class','w3-layout-cell');
             graphout.appendChild(results.graph[i].toSVG());
