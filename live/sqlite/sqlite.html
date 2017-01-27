@@ -50,7 +50,7 @@
 	<div class="w3-panel w3-card-2">
 		<nav class="w3-navbar" >
 			<small>
-				<a id="a_error" href="#" onclick="toggleShow('error')" class="w3-btn w3-grey w3-text-white">{{error}}</a>
+				<a id="a_error" href="#" onclick="toggleShow('error');return false;" class="w3-btn w3-grey w3-text-white">{{error}}</a>
 			</small>
 		</nav>		
 		<!-- errors output -->
@@ -61,7 +61,7 @@
 	<div class="w3-panel w3-card-2">
 		<nav class="w3-navbar" >
 			<small>
-				<a id="a_ebnfsrfb" href="#" onclick="toggleShow('ebnfsrfb')" class="w3-btn w3-grey w3-text-white">{{ebnfsrfb}}</a>
+				<a id="a_ebnfsrfb" href="#" onclick="toggleShow('ebnfsrfb');return false;" class="w3-btn w3-grey w3-text-white">{{ebnfsrfb}}</a>
 			</small>
 		</nav>	
 		<!-- ebnf srfb grammar editor (read from file) -->
@@ -74,8 +74,8 @@
 	<div class="w3-panel w3-card-2">
 		<nav class="w3-navbar" >
 			<small>
-				<a id="a_ebnfsh" href="#" onclick="toggleShow('ebnfsh')" class="w3-btn w3-grey w3-text-white">{{ebnfsh}}</a>
-				<a id="a_refresh" href="#" onclick="refreshebnf()" class="w3-btn w3-grey w3-text-white">refresh ebnf</a>
+				<a id="a_ebnfsh" href="#" onclick="toggleShow('ebnfsh');return false;" class="w3-btn w3-grey w3-text-white">{{ebnfsh}}</a>
+				<a id="a_refresh" href="#" onclick="refreshebnf();return false;" class="w3-btn w3-grey w3-text-white">refresh ebnf</a>
 			</small>
 		</nav>
 		<!-- EBNF Railroad (generated) -->
@@ -87,7 +87,7 @@
 	<div class="w3-panel w3-card-2">
 		<nav class="w3-navbar" >
 			<small>
-				<a id="a_ebnfsqlite" href="#" onclick="toggleShow('ebnfsqlite')" class="w3-btn w3-grey w3-text-white">{{ebnfsqlite}}</a>
+				<a id="a_ebnfsqlite" href="#" onclick="toggleShow('ebnfsqlite');return false;" class="w3-btn w3-grey w3-text-white">{{ebnfsqlite}}</a>
 			</small>
 		</nav>	
 		<!-- sqlite ebnf grammar editor (read from file) -->
@@ -100,8 +100,8 @@
 	<div class="w3-panel w3-card-2">
 		<nav class="w3-navbar" >
 			<small>
-				<a id="a_sqlitesrfb" href="#" onclick="toggleShow('sqlitesrfb')" class="w3-btn w3-grey w3-text-white">{{sqlitesrfb}}</a>
-				<a id="a_validate" href="#" onclick="validate()" class="w3-btn w3-grey w3-text-white">validate sqlite grammar</a>
+				<a id="a_sqlitesrfb" href="#" onclick="toggleShow('sqlitesrfb');return false;" class="w3-btn w3-grey w3-text-white">{{sqlitesrfb}}</a>
+				<a id="a_validate" href="#" onclick="validate();return false;" class="w3-btn w3-grey w3-text-white">validate sqlite grammar</a>
 			</small>
 		</nav>	
 		<!-- sqlite srfb grammar editor (generated) -->
@@ -114,8 +114,8 @@
 	<div class="w3-panel w3-card-2">
 		<nav class="w3-navbar" >
 			<small>	
-				<a id="a_sqlitesh" href="#" onclick="toggleShow('sqlitesh')" class="w3-btn w3-grey w3-text-white">{{sqlitesh}}</a>
-				<a id="a_refresh" href="#" onclick="refreshsqlite()" class="w3-btn w3-grey w3-text-white">refresh sqlite</a>
+				<a id="a_sqlitesh" href="#" onclick="toggleShow('sqlitesh');return false;" class="w3-btn w3-grey w3-text-white">{{sqlitesh}}</a>
+				<a id="a_refresh" href="#" onclick="refreshsqlite();return false;" class="w3-btn w3-grey w3-text-white">refresh sqlite</a>
 			</small>
 		</nav>	
 		<!-- SQLITE Railroad (generated) -->
@@ -126,7 +126,7 @@
 	<div class="w3-panel w3-card-2">	
 		<nav class="w3-navbar" >
 			<small>
-				<a id="a_sqlite" href="#" onclick="toggleShow('sqlite')" class="w3-btn w3-grey w3-text-white">{{sqlite}}</a>
+				<a id="a_sqlite" href="#" onclick="toggleShow('sqlite');return false;" class="w3-btn w3-grey w3-text-white">{{sqlite}}</a>
 			</small>
 		</nav>	
 		<!-- sqlite editor (read from file) -->
@@ -138,8 +138,8 @@
 	<div id="de_compilegraph" class="w3-panel w3-card-2">	
     	<nav class="w3-navbar" >
 			<small>
-				<a id="a_validatesql" href="#" onclick="validatesql()" class="w3-btn w3-grey w3-text-white">validate sqlite expression</a>
-				<a id="a_compilegraph" href="#" onclick="growshrink('compilegraph')" class="w3-btn w3-grey w3-text-white">{{compilegraph}}</a>
+				<a id="a_validatesql" href="#" onclick="validatesql();return false;" class="w3-btn w3-grey w3-text-white">validate sqlite expression</a>
+				<a id="a_compilegraph" href="#" onclick="growshrink('compilegraph');return false;" class="w3-btn w3-grey w3-text-white">{{compilegraph}}</a>
 			</small>
 		</nav>
 		<div id="d_compilegraph" style="width:100%;height:100%;" >
