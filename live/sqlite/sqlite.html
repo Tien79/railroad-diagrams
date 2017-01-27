@@ -539,7 +539,7 @@ function refresh(name,result,error,editor,resultid){
 			div.appendChild(doc);
 	// railroad
 			var graphout = window.document.createElement('aside');
-			graphout.setAttribute('class','w3-layout-cell');
+			graphout.setAttribute('class','w3-layout-cell  w3-layout-middle');
             graphout.appendChild(results.graph[i].toSVG());
             div.appendChild(graphout);
 			section.appendChild(div);
