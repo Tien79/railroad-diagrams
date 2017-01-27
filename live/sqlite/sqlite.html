@@ -116,6 +116,7 @@
 			<small>	
 				<a id="a_sqlitesh" href="#" onclick="toggleShow('sqlitesh');return false;" class="w3-btn w3-grey w3-text-white">{{sqlitesh}}</a>
 				<a id="a_refresh" href="#" onclick="refreshsqlite();return false;" class="w3-btn w3-grey w3-text-white">refresh sqlite</a>
+				<a id="a_print" href="#" onclick="printsqlite();return false;" class="w3-btn w3-grey w3-text-white">print sqlite railroad</a>
 			</small>
 		</nav>	
 		<!-- SQLITE Railroad (generated) -->
@@ -398,6 +399,7 @@ function doc(type,node){
 function refresh(name,result,error,editor,resultid){
 	root.context.language={};
 	root.context.bnf=[];
+	root.context.grammar=name;
 	window.results.title=[];
 	window.results.graph=[];
 	window.results.walk=[];
@@ -488,7 +490,7 @@ function refresh(name,result,error,editor,resultid){
 			section.setAttribute('class','w3-container');
 			var a = window.document.createElement('a');
 			a.setAttribute('href','#'+resultid);
-			a.setAttribute('id',"a_"+results.title[i]);
+			a.setAttribute('id',"a_"+name+"_"+results.title[i]);
 			a.setAttribute('class','w3-layout-cell');
 			var icon = window.document.createElement('i'); 
 			icon.setAttribute('class','material-icons w3-tiny');
@@ -499,7 +501,7 @@ function refresh(name,result,error,editor,resultid){
 	// edit link
 			var a = window.document.createElement('a');
 			a.setAttribute('href','#');
-			a.setAttribute('id',"e_"+results.title[i]);
+			a.setAttribute('id',"e_"+name+"_"+results.title[i]);
 			a.setAttribute('class','w3-layout-cell');
 			a.setAttribute('onclick','edit("'+name+'","'+results.title[i]+'");return false;');
 			var icon = window.document.createElement('i'); 
@@ -510,14 +512,16 @@ function refresh(name,result,error,editor,resultid){
 			section.appendChild(a);			
 	// title
 			var dtitle = window.document.createElement('div');
-			dtitle.setAttribute('id',"title_"+results.title[i]);
+			dtitle.setAttribute('id',"title_"+name+"_"+results.title[i]);
 			dtitle.setAttribute('class','w3-layout-cell');
+			var bold = window.document.createElement('b');
 			var span = window.document.createElement('span');
 			span.setAttribute('class','w3-margin-left');
 			span.setAttribute('id',"span_"+name+"_"+results.title[i]);
 			var tspan = window.document.createTextNode(d.title);
 			span.appendChild(tspan)
-			dtitle.appendChild(span);
+			bold.appendChild(span);
+			dtitle.appendChild(bold);
 			section.appendChild(dtitle);
             var div = window.document.createElement('div');
 			div.setAttribute('class','w3-container');	
@@ -621,7 +625,54 @@ window.onbeforeunload = function() {
     }
 	
 };
+function printsqlite(){
+	var div = "SQLITERailroad";
+	var title = "SQLITE Syntax"
+	printdoc(div,title)
+}
 
+function printdoc(div,title){
+	// get railroad and w3 css file content
+	// get grammar railroad content
+	// do some pruning
+	// put all that in an html file
+	// donwload this file
+	w3.getHttpData("railroad.css", function(div,title,text){
+		var html="<!DOCTYPE html>\n<html>\n<head>\n\<title>"+title+"</title>\n";
+		var css = text;
+		w3.getHttpData("w3/w3.css", function(div,title,css,text){
+		    html +="<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">";
+			html +="<style>"+css+text+"</style>";
+			html +="</head>\n</body>\n";
+			var sqlite = window.document.getElementById(div);
+			var div = window.document.createElement('div');
+			div.innerHTML = sqlite.outerHTML;
+			// prune div
+			var alla = div.getElementsByTagName("a");
+			for(var i=0; i<alla.length; i++){
+				if (alla[i].id.startsWith("e_")){
+					alla[i].remove();
+				}
+			}
+			// add a nice header
+			var header ="<header class=\"w3-container w3-teal\"> \n";
+			header +="<h1 class=\"w3-layout-cell\">&nbsp;"+title+"</h1> \n";
+			header +="</header>\n";
+			html += header;
+			html+=div.innerHTML;
+			div.remove();
+			// add the doc function
+			html+="\n<script>\n"+doc.toString()+"</"+"script>\n";
+			var footer = "<footer class=\"w3-container w3-teal\">\n";
+			footer += "<small>Copyright &copy; Gilbert Brault 2016,2017\n";
+			footer += "</small>\n";
+			footer+="</footer>\n";
+			html += footer;
+			html+="</body>\n</html>\n";
+			download(html,"sqliterailroad.html","text/html");
+		}.bind(null,div,title,css));
+	}.bind(null,div,title));	
+}
 </script>
      
 </body>
