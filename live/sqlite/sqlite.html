@@ -479,6 +479,39 @@ function refresh(name,result,error,editor,resultid){
 	scriptref.outerHTML="";
 
     // render results
+	// header general documentation
+			var spang = window.document.createElement('a');
+			spang.setAttribute('id',"span_"+name);
+			spang.setAttribute('style','display:none;');
+			result.appendChild(spang);
+	// edit link
+			var a = window.document.createElement('a');
+			a.setAttribute('href','#');
+			a.setAttribute('id',"e_"+name);
+			a.setAttribute('class','w3-layout-cell');
+			a.setAttribute('onclick','editgen("'+name+'");return false;');
+			var icon = window.document.createElement('i'); 
+			icon.setAttribute('class','material-icons w3-tiny');
+			var ih = window.document.createTextNode('edit');
+			icon.appendChild(ih);
+			a.appendChild(icon);
+			result.appendChild(a);			
+	// general documentation
+			var txt = window.document.createElement('textarea');
+			txt.setAttribute('id',"txt_"+name);
+			txt.setAttribute('hidden','');
+			var gd = window.md[name]			
+			if((gd.gendoc===undefined)||(gd.gendoc===null)||(gd.gendoc.length==0)) gd.gendoc=name;
+			txt.value=gd.gendoc;
+			result.appendChild(txt);
+			var converter = new showdown.Converter();
+			converter.setFlavor('github');
+			var html = converter.makeHtml(gd.gendoc);
+			var doc = window.document.createElement('section');
+			doc.setAttribute('id',"doc_"+name);
+			doc.setAttribute('class','w3-layout-cell w3-layout-middle');
+			doc.innerHTML=html;
+			result.appendChild(doc);	
     for(var i=0; i<results.graph.length;i++){
 			var d = window.md[name][results.title[i]];
 			if(d===undefined){
@@ -568,16 +601,17 @@ function edit(grammar,item){
 	var span = window.document.getElementById("span_"+grammar+"_"+item);
 	var editable = span.contentEditable;
 	if((editable===undefined)||(editable===null)||(editable=="inherit")){
+		if((window.editor!==undefined)&&(window.editor!==null)) return;
 		span.contentEditable="true";
-		span.focus();
 		window.needToConfirm=true;
+		span.focus();
 		// span.scrollIntoView(true);
 		window.editor = CodeMirror.fromTextArea(window.document.getElementById("txt_"+grammar+"_"+item), {
 				mode: 'gfm',
 				lineNumbers: true,
 				theme: "default"
 			});
-	} else {
+	} else {		
 		window.md[grammar][item].title = span.innerText;
 		window.md[grammar][item].doc=window.editor.getValue();
 		var converter = new showdown.Converter();
@@ -587,6 +621,35 @@ function edit(grammar,item){
 		doc.innerHTML=html;
 		span.contentEditable="inherit";
 		window.editor.toTextArea();
+		window.editor=null;
+	}	
+}
+
+function editgen(grammar){	
+	// toggle title contenteditable
+	var span = window.document.getElementById("span_"+grammar);
+	var editable = span.contentEditable;
+	if((editable===undefined)||(editable===null)||(editable=="inherit")){
+		if((window.editor!==undefined)&&(window.editor!==null)) return;
+		span.contentEditable="true";
+		span.focus();
+		window.needToConfirm=true;
+		// span.scrollIntoView(true);
+		window.editor = CodeMirror.fromTextArea(window.document.getElementById("txt_"+grammar), {
+				mode: 'gfm',
+				lineNumbers: true,
+				theme: "default"
+			});
+	} else {
+		window.md[grammar].gendoc=window.editor.getValue();
+		var converter = new showdown.Converter();
+		converter.setFlavor('github');
+		var html = converter.makeHtml(window.editor.getValue());
+		var doc = window.document.getElementById("doc_"+grammar);
+		doc.innerHTML=html;
+		span.contentEditable="inherit";
+		window.editor.toTextArea();
+		window.editor=null;
 	}	
 }
 
