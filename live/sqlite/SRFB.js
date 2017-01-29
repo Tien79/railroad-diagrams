@@ -307,6 +307,8 @@ SRFB.walkEBNF = function(ctx){
 			}
 			ctx.node=node;
 			var arguments='Sequence(';
+			if(node.childs[0].childs.length>5)
+					arguments='Stack(';
 			for(var i=0; i<node.childs[0].childs.length; i++){
 				arguments+=(ctx.result.substr(args[i],args[i+1]-args[i]));
 				if(i<node.childs[0].childs.length-1) 
