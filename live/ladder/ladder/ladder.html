@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<title>Ladder Scanner</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="w3/w3.css">
+<link rel="stylesheet" href="vis/vis.css">
+<link rel="stylesheet" href="railroad.css">
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="codemirror/codemirror.css">
+<link rel="stylesheet" href="codemirror/foldgutter.css">
+<script src="w3/w3.js"></script>
+<script src="codemirror/codemirror.js"></script>
+<script src="codemirror/matchbrackets.js"></script>
+<script src="codemirror/continuecomment.js"></script>
+<script src="codemirror/comment.js"></script>
+<script src="codemirror/foldcode.js"></script>
+<script src="codemirror/javascript.js"></script>
+<script src="codemirror/sql.js"></script>
+<script src="codemirror/markdown.js"></script>
+<script src="codemirror/meta.js"></script>
+<script src="codemirror/overlay.js"></script>
+<script src="codemirror/gfm.js"></script>
+<script src="codemirror/foldgutter.js"></script>
+<script src="codemirror/brace-fold.js"></script>
+<script src="vis/vis.js"></script>
+<script src="railroad.js"></script>
+<script src="SRFB.js"></script>
+<script src="esprima.js"></script>
+<script src="showdown.js"></script>
+<script src="json-formatter-js.js"></script>
+<style type="text/css">
+  .border {
+    border: 1px solid #d7d4f0;
+  }
+</style>
+<body>
+<!--
+<nav class="w3-sidenav w3-light-grey" style="display:none" id="mySidenav">
+  <a href="javascript:void(0)" 
+  onclick="w3_close()"
+  class="w3-closenav w3-large">Close &times;</a>
+</nav>
+-->
+
+<header class="w3-container w3-teal">
+  <!-- <span class="w3-opennav w3-xlarge w3-layout-cell" onclick="w3_open()">&#9776;</span> -->   
+  <h1 class="w3-layout-cell" >&nbsp;Ladder Scanner</h1>
+</header>
+<div class="w3-container">
+	<div class="w3-panel w3-card-2">
+		<nav class="w3-navbar" >
+			<small>
+				<a id="a_error" href="#" onclick="toggleShow('error');return false;" class="w3-btn w3-grey w3-text-white">{{error}}</a>
+			</small>
+		</nav>		
+		<!-- errors output -->
+		<div id="error" class="w3-container border">
+		</div>
+	</div>
+
+	<div class="w3-panel w3-card-2">
+		<nav class="w3-navbar" >
+			<small>
+				<a id="a_ladder" href="#" onclick="toggleShow('ladder');return false;" class="w3-btn w3-grey w3-text-white">{{ladder}}</a>
+				<a id="a_ladderscan" href="#" onclick="ladderscan();return false;" class="w3-btn w3-grey w3-text-white">ladder scan</a>
+			</small>
+		</nav>	
+		<!-- ebnf srfb grammar editor (read from file) -->
+		<div id="d_ladder" class="w3-container">
+			<textarea id="ladder" cols='150' rows='25'>
+			</textarea>
+		</div>
+	</div>
+	<div id="result" class="w3-panel w3-card-2">
+	</div>
+</div>
+
+<footer class="w3-container w3-teal">
+<small>Copyright &copy; Gilbert Brault 2016,2017
+&nbsp;&nbsp;&nbsp;license&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://creativecommons.org/licenses/by/4.0/"><img src="images/cc.logo.white.svg" width="5%"/></a>
+</small>
+</footer>
+     
+<script>
+/* start railroad processing */
+/* user application */
+root.context =	{
+		title:"notset",
+		href:true,
+		dochref:"doc"
+	};
+root.Railroad.call(this,root,
+	{ // those will be Diagram options
+	VERTICAL_SEPARATION: 8,
+	ARC_RADIUS: 10,
+	DIAGRAM_CLASS: 'railroad-diagram',
+	STROKE_ODD_PIXEL_LENGTH: true,
+	INTERNAL_ALIGNMENT: 'center',
+	},
+	root.context
+);
+window.results={};
+/*
+function w3_open() {
+    document.getElementById("mySidenav").style.width = "30%";
+    document.getElementById("mySidenav").style.display = "block";
+}
+function w3_close() {
+    document.getElementById("mySidenav").style.display = "none";
+}
+*/
+var derror=true;
+w3.displayObject("a_error",{error:"hide Error panel"});
+
+window.e_ladder = CodeMirror.fromTextArea(document.getElementById("ladder"), {
+		mode: "javascript",
+        lineNumbers: true,
+        lineWrapping: true,
+        matchBrackets: true,
+        foldGutter: true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+        extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+        continueComments: "Enter",	
+});
+
+var ladder=true;
+w3.displayObject("a_ladder",{ladder:"hide ladder Editor"});
+
+e_ladder.setValue(`   ||                                                                    ||
+   ||      Rosc            Tosc_on         Tosc_off           Rosc       ||
+ 1 ||-------] [--------[TON 250.0 ms]---[TOF 250.0 ms]---------(/)-------||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||     Xbutton                                            Cstate      ||
+ 2 ||-------] [---------------------------------------------{CTC 0:2}----||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||   [Cstate ==]                                           Yled       ||
+ 3 ||---[ 1       ]-------------------+------------------------( )-------||
+   ||                                 |                                  ||
+   ||   [Cstate ==]         Rosc      |                                  ||
+   ||---[ 2       ]----------] [------+                                  ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||     XMarche          XArret                              YK1       ||
+ 4 ||-------] [------+-------]/[-------------------------------( )-------||
+   ||                |                                                   ||
+   ||       YK1      |                                                   ||
+   ||-------] [------+                                                   ||
+   ||                |                                                   ||
+   ||       Rz       |                                                   ||
+   ||-------] [------+                                                   ||
+   ||                |                                                   ||
+   ||       Rt       |                                                   ||
+   ||-------] [------+                                                   ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||                                                                    ||
+   ||------[END]---------------------------------------------------------||
+   ||                                                                    ||
+   ||                                                                    ||`);
+
+
+function toggleShow(id){
+	switch(id){
+		case 'error':
+			w3.toggleShow("#d_"+id);
+			derror = !derror;
+			if(derror){
+				w3.displayObject("a_"+id,{error:"hide Error panel"});
+			} else {
+				w3.displayObject("a_"+id,{error:"show Error panel"});
+			}
+			break;
+		case 'ladder':
+			w3.toggleShow("#d_"+id);
+			ladder = !ladder;
+			if(ladder){
+				w3.displayObject("a_"+id,{ladder:"hide ladder Editor"});
+			} else {
+				w3.displayObject("a_"+id,{ladder:"show ladder Editor"});
+			}
+			break;
+	}
+}
+
+function ladderscan(){
+var lines = [];
+var items=[];
+var rungids=[];
+var rungs={};
+const regex = /\|\||\||[\[\]\(\)\/{}=:\+\.]|[-]+|[A-Z][A-Za-z0-9_]*|([0]|(?:[1-9][0-9]*))|[a-z]+/gm;
+var source = e_ladder.getValue();
+var state = false;
+var m;
+var line=0,column,lastnl=0;
+	while ((m = regex.exec(source)) !== null) {
+		// This is necessary to avoid infinite loops with zero-width matches
+		if (m.index === regex.lastIndex) {
+			regex.lastIndex++;
+		}
+    
+		// The result can be accessed through the `m`-variable.
+		m.forEach((match, groupIndex, index) => {
+			// console.log(`Found match, group ${groupIndex}: ${match}`);
+			if((match!==undefined)&&(match=="||")){
+				state =!state;
+				if(!state){
+					if(items.length!=0){
+						lines.push(items);
+					}
+					items=[];
+				}
+				var inl=source.substr(0,index.index).lastIndexOf('\n');
+				if(inl>lastnl){
+					line++;
+					lastnl=inl;
+				}
+				column = index.index-lastnl;				
+			} else {
+				if((state) && (match!==undefined) && (groupIndex==0)){
+					var inl=source.substr(0,index.index).lastIndexOf('\n');
+				    if(inl>lastnl){
+						line++;
+						lastnl=inl;
+					}
+					column = index.index-lastnl;
+					items.push({token:match,index:index.index,line:(line+1),column:(column)});
+				}
+			}
+			if(!state){
+				if ((match!==undefined)&&(groupIndex==1)){
+					rungids.push(match);
+					if(rungids.length>1){
+						var first = lines.pop();
+						rungs[rungids[rungids.length-2]]=lines;
+						lines=[];
+						lines.push(first);
+					}
+				}
+			}
+		});
+	}
+	lines.pop(); // supposed to be the END line...
+	rungs[rungids[rungids.length-1]]=lines;
+	window.rungs=rungs;
+	const formatter = new JSONFormatter(window.rungs);
+	var elt = formatter.render();
+	var result=window.document.getElementById("result");
+	result.appendChild(elt);
+}
+</script>
+     
+</body>
+</html> 
